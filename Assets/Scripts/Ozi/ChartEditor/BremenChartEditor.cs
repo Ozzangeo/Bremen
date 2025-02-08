@@ -1,4 +1,6 @@
 using Ookii.Dialogs;
+using Ozi.ChartPlayer;
+using System;
 using System.IO;
 using System.Windows.Forms;
 using UnityEngine;
@@ -9,12 +11,15 @@ namespace Ozi.ChartEditor {
         private const string EDITOR_EXTENSION = ".bremen";
 
         private string DataPath => Path.Combine(UnityEngine.Application.persistentDataPath, "editor_data.json");
-        
+
+        [Header("Require")]
+        [SerializeField] private BremenChartPlayer _chart_player;
+
+        [Header("Debug")]
         [SerializeField] private BremenChartEditorData _data;
         [SerializeField] private BremenChart _chart;
-
+        [SerializeField] private AudioClip _song_clip;
         [SerializeField] private bool _dirty;
-        [SerializeField] private AudioSource _source;
 
         private VistaOpenFileDialog _chart_load_dialog;
         private VistaSaveFileDialog _chart_save_dialog;
@@ -48,18 +53,34 @@ namespace Ozi.ChartEditor {
             _song_load_dialog = new VistaOpenFileDialog {
                 Title = $"{EDITOR_TITLE} Song Load",
                 Filter = "mp3 files (*.mp3)|*.mp3|ogg files (*.ogg)|*.ogg",
-                FilterIndex = 2,
+                FilterIndex = 1,
             };
         }
 
+        private void OnEnable() {
+            if (_chart_player == null) {
+                _chart_player = GameObject.FindAnyObjectByType<BremenChartPlayer>();
+            }
+        }
         private void OnDestroy() {
             var json = JsonUtility.ToJson(_data, true);
             
             File.WriteAllText(DataPath, json);
         }
 
+        public bool PlayChart(float time = 0.0f) {
+            if (_chart_player == null) {
+                return false;
+            }
+
+            _chart_player.LoadChart(_chart, _song_clip);
+            _chart_player.Play(time);
+
+            return true;
+        }
+
         public bool ResetChart() {
-            _chart = new();
+            _chart = BremenChart.Generate();
             _data.work_space_path = null;
             _dirty = false;
 
@@ -83,10 +104,25 @@ namespace Ozi.ChartEditor {
 
             string song_filename = Path.GetFileName(_song_load_dialog.FileName);
 
-            File.Copy(_song_load_dialog.FileName, Path.Combine(_data.work_space_path, song_filename), true);
+            try {
+                var path = Path.Combine(_data.work_space_path, song_filename);
 
-            _chart.song_filename = song_filename;
-            _dirty = true;
+                if (!File.Exists(path)) {
+                    File.Copy(_song_load_dialog.FileName, path);
+                }
+            }
+            catch (Exception e) {
+                Debug.LogException(e);
+            }
+            finally {
+                _chart.song_filename = song_filename;
+                _dirty = true;
+            }
+            
+            _song_clip = BremenChartAudioLoader.LoadAudioClip(_song_load_dialog.FileName);
+            if (_song_clip == null) {
+                return false;
+            }
 
             return true;
         }
@@ -138,8 +174,16 @@ namespace Ozi.ChartEditor {
 
             _chart = chart;
 
+            _data.work_space_path = Path.GetDirectoryName(path);
             _data.last_open_file_path = path;
-            _data.work_space_path = path;
+            _dirty = false;
+
+            if (_chart.song_filename is not null
+                && _chart.song_filename != "") {
+                var song_path = Path.Combine(_data.work_space_path, _chart.song_filename);
+
+                _song_clip = BremenChartAudioLoader.LoadAudioClip(song_path);
+            }
 
             return true;
         }

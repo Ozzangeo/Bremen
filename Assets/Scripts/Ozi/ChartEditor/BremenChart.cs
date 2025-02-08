@@ -14,5 +14,13 @@ namespace Ozi.ChartEditor {
         public readonly void Sort() {
             notes.Sort();
         }
+
+        public static BremenChart Generate() {
+            return new BremenChart() {
+                bpm = 100.0f,
+                offset = 0.0f,
+                volume = 1.0f
+            };
+        }
     }
 }

@@ -5,12 +5,16 @@ namespace Ozi.ChartEditor.Feature {
         public void GenerateNewChart() {
             _editor.ResetChart();
         }
+
         public void LoadSong() {
             if (_editor.Data.IsExistWorkSpace) {
                 _editor.LoadSong();
             } else {
                 // display logic with exception
             }
+        }
+        public void PlayChart() {
+            _editor.PlayChart();
         }
 
         public void Save() {
