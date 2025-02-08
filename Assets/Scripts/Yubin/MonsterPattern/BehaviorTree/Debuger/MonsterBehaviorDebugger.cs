@@ -3,9 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(MonsterBehavior))]
 public class MonsterDebugger : MonoBehaviour
 {
-  private Color detectionColor = Color.green; // 탐지 범위 색상
-  private Color attackColor = Color.red;      // 공격 범위 색상
-  private MonsterBehavior monsterBehavior;    // 몬스터 행동 컴포넌트
+  Color detectionColor = Color.green; // 탐지 범위 색상
+  Color attackColor = Color.red;      // 공격 범위 색상
+  MonsterBehavior monsterBehavior;    // 몬스터 행동 컴포넌트
 
   private void OnDrawGizmos()
   {
