@@ -16,10 +16,11 @@ namespace Ozi.ChartPlayer {
         }
 
         public void LoadChart(BremenChart chart, AudioClip clip) {
-            _source.volume = chart.volume;
+            _source.pitch = chart.Pitch * 0.01f;
+            _source.volume = chart.Volume * 0.01f;
             _source.clip = clip;
 
-            _notes = chart.notes;
+            _notes = chart.Notes;
         }
 
         public void Play(float time = 0.0f) {

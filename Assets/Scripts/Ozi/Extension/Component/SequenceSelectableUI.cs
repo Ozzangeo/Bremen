@@ -1,39 +1,37 @@
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Ozi.Extension.Component {
     public class SequenceSelectableUI : MonoBehaviour {
-        [Header("Debug")]
-        [SerializeField] private Selectable[] _selectable_uis;
-        [SerializeField] private int _current_index = 0;
-        
-        public int CurrentIndex => _current_index;
-        public int NextIndex => _selectable_uis.NextIndex(CurrentIndex);
+        [field: Header("Debug")]
+        [field: SerializeField] public Selectable[] SelectableUIs { get; private set; }
+        [field: SerializeField] public int CurrentIndex { get; private set; }
+
+        public int NextIndex => SelectableUIs.NextIndex(CurrentIndex);
 
         private void Awake() {
-            _selectable_uis = transform.GetComponentsInChildren<Selectable>(false);
+            SelectableUIs = transform.GetComponentsInChildren<Selectable>(false);
 
-            foreach (var ui in _selectable_uis) {
+            foreach (var ui in SelectableUIs) {
                 ui.Disable();
             }
 
-            if (_selectable_uis.IsVaildIndex(CurrentIndex)) {
-                _selectable_uis[CurrentIndex].Enable();
+            if (SelectableUIs.IsVaildIndex(CurrentIndex)) {
+                SelectableUIs[CurrentIndex].Enable();
             }
         }
 
         [ContextMenu("Next")]
         public void Next() {
-            if (_selectable_uis.IsVaildIndex(CurrentIndex)) {
-                _selectable_uis[CurrentIndex].Disable();
+            if (SelectableUIs.IsVaildIndex(CurrentIndex)) {
+                SelectableUIs[CurrentIndex].Disable();
             }
 
             var next = NextIndex;
 
-            _selectable_uis[next].Enable();
+            SelectableUIs[next].Enable();
 
-            _current_index = next;
+            CurrentIndex = next;
         }
     }
 }

@@ -13,18 +13,18 @@ namespace Ozi.ChartEditor {
         private string DataPath => Path.Combine(UnityEngine.Application.persistentDataPath, "editor_data.json");
 
         [Header("Require")]
-        [SerializeField] private BremenChartPlayer _chart_player;
+        [SerializeField] private BremenChartPlayer _chartPlayer;
 
         [field: Header("Debug")]
-        [field: SerializeField] public BremenChartEditorData Data;
-        [field: SerializeField] public BremenChart Chart;
+        [field: SerializeField] public BremenChartEditorData Data { get; private set; }
+        [field: SerializeField] public BremenChart Chart { get; private set; }
         [field: SerializeField] public AudioClip SongClip { get; private set; }
         [field: SerializeField] public float SongTime { get; set; }
         [field: SerializeField] public bool Dirty { get; set; }
 
-        private VistaOpenFileDialog _chart_load_dialog;
-        private VistaSaveFileDialog _chart_save_dialog;
-        private VistaOpenFileDialog _song_load_dialog;
+        private VistaOpenFileDialog _chartLoadDialog;
+        private VistaSaveFileDialog _chartSaveDialog;
+        private VistaOpenFileDialog _songLoadDialog;
 
         public event Action OnChartReseted;
         public event Action<string, AudioClip> OnSongLoaded;    // path, clip
@@ -39,17 +39,17 @@ namespace Ozi.ChartEditor {
                 ? JsonUtility.FromJson<BremenChartEditorData>(json)
                 : new BremenChartEditorData();
 
-            _chart_load_dialog = new VistaOpenFileDialog {
+            _chartLoadDialog = new VistaOpenFileDialog {
                 Title = $"{EDITOR_TITLE} Chart Load",
                 Filter = $"bremen files (*{EDITOR_EXTENSION})|*{EDITOR_EXTENSION}",
                 FilterIndex = 1,
             };
-            _chart_save_dialog = new VistaSaveFileDialog {
+            _chartSaveDialog = new VistaSaveFileDialog {
                 Title = $"{EDITOR_TITLE} Chart Save",
                 Filter = $"bremen files (*{EDITOR_EXTENSION})|*{EDITOR_EXTENSION}",
                 FilterIndex = 1,
             };
-            _song_load_dialog = new VistaOpenFileDialog {
+            _songLoadDialog = new VistaOpenFileDialog {
                 Title = $"{EDITOR_TITLE} Song Load",
                 Filter = "mp3 files (*.mp3)|*.mp3|ogg files (*.ogg)|*.ogg",
                 FilterIndex = 1,
@@ -61,35 +61,27 @@ namespace Ozi.ChartEditor {
         }
 
         public bool PlayChart(float time = 0.0f) {
-            if (_chart_player == null) {
-                return false;
-            }
-
-            _chart_player.LoadChart(Chart, SongClip);
-            _chart_player.Play(time);
+            _chartPlayer.LoadChart(Chart, SongClip);
+            _chartPlayer.Play(time);
 
             return true;
         }
         public bool StopChart() {
-            if (_chart_player == null) {
-                return false;
-            }
-
-            _chart_player.Stop();
+            _chartPlayer.Stop();
 
             return true;
         }
 
         public bool ResetChart() {
-            Chart = BremenChart.Generate();
-            Data.work_space_path = null;
+            Chart = new();
+            Data.WorkSpacePath = default;
             Dirty = false;
 
             SongClip = null;
             SongTime = 0.0f;
 
-            if (!File.Exists(Data.last_open_file_path)) {
-                Data.last_open_file_path = null;
+            if (!File.Exists(Data.LastOpenedFilePath)) {
+                Data.LastOpenedFilePath = default;
             }
 
             OnChartReseted?.Invoke();
@@ -108,7 +100,7 @@ namespace Ozi.ChartEditor {
             }
 
             SongClip = clip;
-            Chart.song_filename = Path.GetFileName(path);
+            Chart.SongFilename = Path.GetFileName(path);
             Dirty = true;
 
             OnSongLoaded?.Invoke(path, SongClip);
@@ -118,7 +110,7 @@ namespace Ozi.ChartEditor {
 
         public bool Save() {
             if (Data.IsExistWorkSpace) {
-                return SaveAs(Data.last_open_file_path);
+                return SaveAs(Data.LastOpenedFilePath);
             }
             
             return SaveWithDialog();
@@ -128,8 +120,8 @@ namespace Ozi.ChartEditor {
             
             File.WriteAllText(path, json);
 
-            Data.work_space_path = Path.GetDirectoryName(path);
-            Data.last_open_file_path = path;
+            Data.WorkSpacePath = Path.GetDirectoryName(path);
+            Data.LastOpenedFilePath = path;
 
             Dirty = false;
 
@@ -155,37 +147,37 @@ namespace Ozi.ChartEditor {
 
             Chart = chart;
 
-            Data.work_space_path = Path.GetDirectoryName(path);
-            Data.last_open_file_path = path;
+            Data.WorkSpacePath = Path.GetDirectoryName(path);
+            Data.LastOpenedFilePath = path;
 
-            var song_path = Path.Combine(Data.work_space_path, Chart.song_filename);
+            var song_path = Path.Combine(Data.WorkSpacePath, Chart.SongFilename);
             LoadSong(song_path);
 
             Dirty = false;
 
             return true;
         }
-        public bool LoadLastOpened() => Load(Data.last_open_file_path);
+        public bool LoadLastOpened() => Load(Data.LastOpenedFilePath);
 
         // With Dialog Functions
         public bool LoadSongWithDialog() {
-            if (_song_load_dialog.ShowDialog() != DialogResult.OK) {
+            if (_songLoadDialog.ShowDialog() != DialogResult.OK) {
                 return false;
             }
 
-            var stream = _song_load_dialog.OpenFile();
+            var stream = _songLoadDialog.OpenFile();
             if (stream is null) {
                 return false;
             }
 
             stream.Close();
 
-            var song_filename = Path.GetFileName(_song_load_dialog.FileName);
-            var path = Path.Combine(Data.work_space_path, song_filename);
+            var song_filename = Path.GetFileName(_songLoadDialog.FileName);
+            var path = Path.Combine(Data.WorkSpacePath, song_filename);
 
             try {
                 if (!File.Exists(path)) {
-                    File.Copy(_song_load_dialog.FileName, path);
+                    File.Copy(_songLoadDialog.FileName, path);
                 }
             }
             catch (Exception e) {
@@ -198,32 +190,32 @@ namespace Ozi.ChartEditor {
             return true;
         }
         public bool SaveWithDialog() {
-            if (_chart_save_dialog.ShowDialog() != DialogResult.OK) {
+            if (_chartSaveDialog.ShowDialog() != DialogResult.OK) {
                 return false;
             }
 
-            var path = Path.ChangeExtension(_chart_save_dialog.FileName, EDITOR_EXTENSION);
+            var path = Path.ChangeExtension(_chartSaveDialog.FileName, EDITOR_EXTENSION);
 
             return SaveAs(path);
         }
         public bool LoadWithDialog() {
-            if (_chart_load_dialog.ShowDialog() != DialogResult.OK) {
+            if (_chartLoadDialog.ShowDialog() != DialogResult.OK) {
                 return false;
             }
 
-            var stream = _chart_load_dialog.OpenFile();
+            var stream = _chartLoadDialog.OpenFile();
             if (stream is null) {
                 return false;
             }
 
             stream.Close();
 
-            return Load(_chart_load_dialog.FileName);
+            return Load(_chartLoadDialog.FileName);
         }
 
         private void OnEnable() {
-            if (_chart_player == null) {
-                _chart_player = GameObject.FindAnyObjectByType<BremenChartPlayer>();
+            if (_chartPlayer == null) {
+                _chartPlayer = GameObject.FindAnyObjectByType<BremenChartPlayer>();
             }
         }
         private void OnDestroy() {

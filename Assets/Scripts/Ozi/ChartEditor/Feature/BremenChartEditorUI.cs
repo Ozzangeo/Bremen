@@ -1,45 +1,85 @@
 using Ozi.Extension;
 using Ozi.Extension.Component;
+using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 namespace Ozi.ChartEditor.Feature {
     public class BremenChartEditorUI : BremenChartEditorFeature {
         [Header("UI Components")]
-        [SerializeField] private SequenceSelectableUI _play_sequence_ui;
-        [SerializeField] private UIElementField _song_filename_field;
-        [SerializeField] private UIElementField _bpm_field;
-        [SerializeField] private UIElementField _offset_field;
-        [SerializeField] private GameObject _dirty_ui;
+        [SerializeField] private SequenceSelectableUI _playSequenceUI;
+        [SerializeField] private ElementFieldUI _songFilenameField;
+        [SerializeField] private ElementFieldUI _bpmField;
+        [SerializeField] private ElementFieldUI _offsetField;
+        [SerializeField] private ElementFieldUI _volumeField;
+        [SerializeField] private ElementFieldUI _pitchField;
+
+        [SerializeField] private Text _chartTitleText;
 
         private void Start() {
-            _editor.OnSongLoaded += OnSongLoaded;
-            _editor.OnChartReseted += OnChartReseted;
+            _editor.OnSongLoaded += (path, clip) => {
+                _songFilenameField.InputField.text = Path.GetFileName(path);
+            };
+            _editor.OnChartReseted += () => {
+                _songFilenameField.InputField.text = "";
+                _bpmField.InputField.text = GetTextBPM(_editor.Chart);
+                _offsetField.InputField.text = GetTextOffset(_editor.Chart);
+                _volumeField.InputField.text = GetTextVolume(_editor.Chart);
+                _pitchField.InputField.text = GetTextPitch(_editor.Chart);
+                
+                _chartTitleText.text = "";
+            };
+
+            _bpmField.InputField.onEndEdit.AddListener(o => {
+                if (float.TryParse(o, out var bpm)) {
+                    _editor.Chart.BPM = bpm;
+                    _editor.Dirty = true;
+
+                    _bpmField.InputField.text = GetTextBPM(_editor.Chart);
+                }
+            });
+            _offsetField.InputField.onEndEdit.AddListener(o => {
+                if (int.TryParse(o, out var offset)) {
+                    _editor.Chart.Offset = offset;
+                    _editor.Dirty = true;
+
+                    _offsetField.InputField.text = GetTextOffset(_editor.Chart);
+                }
+            });
+            _volumeField.InputField.onEndEdit.AddListener(o => {
+                if (int.TryParse(o, out var volume)) {
+                    _editor.Chart.Volume = Mathf.Clamp(volume, 0, 100);
+                    _editor.Dirty = true;
+
+                    _volumeField.InputField.text = GetTextVolume(_editor.Chart);
+                }
+            });
+            _pitchField.InputField.onEndEdit.AddListener(o => {
+                if (int.TryParse(o, out var pitch)) {
+                    _editor.Chart.Pitch = Mathf.Clamp(pitch, 1, 200);
+                    _editor.Dirty = true;
+
+                    _pitchField.InputField.text = GetTextPitch(_editor.Chart);
+                }
+            });
         }
 
-        private void OnSongLoaded(string path, AudioClip clip) {
-            if (_song_filename_field != null) {
-                _song_filename_field.InputField.text = Path.GetFileName(path);
-            }
-        }
-        private void OnChartReseted() {
-            if (_bpm_field != null) {
-                _bpm_field.InputField.text = $"{_editor.Chart.bpm:###,###,###.##}";
-            }
-
-            if (_offset_field != null) {
-                _offset_field.InputField.text = $"{_editor.Chart.offset:###,###,##0}";
-            }
-
-            if (_song_filename_field != null) {
-                _song_filename_field.InputField.text = "";
-            }
-        }
+        private static string GetTextBPM(BremenChart chart) => $"{chart.BPM:###,###,##0.00}";
+        private static string GetTextOffset(BremenChart chart) => $"{chart.Offset:###,###,##0}";
+        private static string GetTextVolume(BremenChart chart) => $"{chart.Volume:##0}";
+        private static string GetTextPitch(BremenChart chart) => $"{chart.Pitch:##0}";
 
         private void Update() {
-            if (_dirty_ui != null) {
-                _dirty_ui.SetActive(_editor.Dirty);
+            if (_editor.Data.LastOpenedFilePath is null) {
+                _chartTitleText.text = $"저장하지 않음";
+            }
+            else {
+                var filename = Path.GetFileName(_editor.Data.LastOpenedFilePath);
+                var dirty = _editor.Dirty ? "*" : "";
+
+                _chartTitleText.text = $"{filename}{dirty}";
             }
         }
 
@@ -58,16 +98,12 @@ namespace Ozi.ChartEditor.Feature {
         }
         public void PlayChart() {
             if (_editor.PlayChart()) {
-                if (_play_sequence_ui != null) {
-                    _play_sequence_ui.Next();
-                }
+                _playSequenceUI.Next();
             }
         }
         public void StopChart() {
             if (_editor.StopChart()) {
-                if (_play_sequence_ui != null) {
-                    _play_sequence_ui.Next();
-                }
+                _playSequenceUI.Next();
             }
         }
 

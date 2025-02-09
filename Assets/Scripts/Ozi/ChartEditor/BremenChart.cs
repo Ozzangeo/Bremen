@@ -1,30 +1,20 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Ozi.ChartEditor {
     [System.Serializable]
-    public struct BremenChart {
-        public string song_filename;
-            
-        public float bpm;
-        public int offset;
-        public int volume;
+    public class BremenChart {
+        [field: SerializeField] public string SongFilename { get; set; } = string.Empty;
 
-        public List<BremenNote> notes;
+        [field: SerializeField] public float BPM { get; set; } = 100.0f;
+        [field: SerializeField] public int Offset { get; set; } = 0;
+        [field: SerializeField] public int Volume { get; set; } = 100;
+        [field: SerializeField] public int Pitch { get; set; } = 100;
 
-        public void SetBPM(float bpm) => this.bpm = bpm;
-        public void SetOffset(int offset) => this.offset = offset;
-        public void SetVolume(int volume) => this.volume = volume;
+        [field: SerializeField] public List<BremenNote> Notes { get; set; } = new();
 
-        public readonly void Sort() {
-            notes.Sort();
-        }
-
-        public static BremenChart Generate() {
-            return new BremenChart() {
-                bpm = 100.0f,
-                offset = 0,
-                volume = 100
-            };
+        public void Sort() {
+            Notes.Sort();
         }
     }
 }

@@ -1,9 +1,11 @@
+using UnityEngine;
+
 namespace Ozi.ChartEditor {
     [System.Serializable]
-    public struct BremenChartEditorData {
-        public string last_open_file_path;
-        public string work_space_path;
+    public class BremenChartEditorData {
+        [field: SerializeField] public string LastOpenedFilePath { get; set; } = string.Empty;
+        [field: SerializeField] public string WorkSpacePath { get; set; } = string.Empty;
 
-        public readonly bool IsExistWorkSpace => work_space_path is not null;
+        public bool IsExistWorkSpace => WorkSpacePath is not null;
     }
 }
