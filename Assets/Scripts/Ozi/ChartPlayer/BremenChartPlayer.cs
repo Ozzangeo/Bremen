@@ -26,5 +26,8 @@ namespace Ozi.ChartPlayer {
             _source.time = time;
             _source.Play();
         }
+        public void Stop() {
+            _source.Stop();
+        }
     }
 }

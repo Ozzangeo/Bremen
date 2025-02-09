@@ -6,10 +6,14 @@ namespace Ozi.ChartEditor {
         public string song_filename;
             
         public float bpm;
-        public float offset;
-        public float volume;
+        public int offset;
+        public int volume;
 
         public List<BremenNote> notes;
+
+        public void SetBPM(float bpm) => this.bpm = bpm;
+        public void SetOffset(int offset) => this.offset = offset;
+        public void SetVolume(int volume) => this.volume = volume;
 
         public readonly void Sort() {
             notes.Sort();
@@ -18,8 +22,8 @@ namespace Ozi.ChartEditor {
         public static BremenChart Generate() {
             return new BremenChart() {
                 bpm = 100.0f,
-                offset = 0.0f,
-                volume = 1.0f
+                offset = 0,
+                volume = 100
             };
         }
     }
