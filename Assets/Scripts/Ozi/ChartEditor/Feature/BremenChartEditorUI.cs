@@ -9,7 +9,7 @@ using UnityEngine.UI;
 namespace Ozi.ChartEditor.Feature {
     public class BremenChartEditorUI : BremenChartEditorFeature {
         [Header("UI Components")]
-        [SerializeField] private SequenceSelectableUI _playSequenceUI;
+        [SerializeField] private SequenceButtonUI _playSequenceUI;
         [SerializeField] private ElementFieldUI _songFilenameField;
         [SerializeField] private ElementFieldUI _bpmField;
         [SerializeField] private ElementFieldUI _offsetField;
@@ -24,12 +24,10 @@ namespace Ozi.ChartEditor.Feature {
             };
             _editor.OnChartReseted += () => {
                 _songFilenameField.InputField.text = "";
-                _bpmField.InputField.text = GetTextBPM(_editor.Chart);
-                _offsetField.InputField.text = GetTextOffset(_editor.Chart);
-                _volumeField.InputField.text = GetTextVolume(_editor.Chart);
-                _pitchField.InputField.text = GetTextPitch(_editor.Chart);
-                
+
                 _chartTitleText.text = "";
+
+                UpdateFieldUI();
             };
 
             _bpmField.InputField.onEndEdit.AddListener(o => {
@@ -37,7 +35,7 @@ namespace Ozi.ChartEditor.Feature {
                     _editor.Chart.BPM = bpm;
                     _editor.Dirty = true;
 
-                    _bpmField.InputField.text = GetTextBPM(_editor.Chart);
+                    UpdateFieldUI();
                 }
             });
             _offsetField.InputField.onEndEdit.AddListener(o => {
@@ -45,7 +43,7 @@ namespace Ozi.ChartEditor.Feature {
                     _editor.Chart.Offset = offset;
                     _editor.Dirty = true;
 
-                    _offsetField.InputField.text = GetTextOffset(_editor.Chart);
+                    UpdateFieldUI();
                 }
             });
             _volumeField.InputField.onEndEdit.AddListener(o => {
@@ -53,7 +51,7 @@ namespace Ozi.ChartEditor.Feature {
                     _editor.Chart.Volume = Mathf.Clamp(volume, 0, 100);
                     _editor.Dirty = true;
 
-                    _volumeField.InputField.text = GetTextVolume(_editor.Chart);
+                    UpdateFieldUI();
                 }
             });
             _pitchField.InputField.onEndEdit.AddListener(o => {
@@ -61,7 +59,7 @@ namespace Ozi.ChartEditor.Feature {
                     _editor.Chart.Pitch = Mathf.Clamp(pitch, 1, 200);
                     _editor.Dirty = true;
 
-                    _pitchField.InputField.text = GetTextPitch(_editor.Chart);
+                    UpdateFieldUI();
                 }
             });
         }
@@ -71,12 +69,19 @@ namespace Ozi.ChartEditor.Feature {
         private static string GetTextVolume(BremenChart chart) => $"{chart.Volume:##0}";
         private static string GetTextPitch(BremenChart chart) => $"{chart.Pitch:##0}";
 
+        private void UpdateFieldUI() {
+            _bpmField.InputField.text = GetTextBPM(_editor.Chart);
+            _offsetField.InputField.text = GetTextOffset(_editor.Chart);
+            _volumeField.InputField.text = GetTextVolume(_editor.Chart);
+            _pitchField.InputField.text = GetTextPitch(_editor.Chart);
+        }
+
         private void Update() {
             if (_editor.Data.LastOpenedFilePath is null) {
                 _chartTitleText.text = $"저장하지 않음";
             }
             else {
-                var filename = Path.GetFileName(_editor.Data.LastOpenedFilePath);
+                var filename = Path.GetFileName(_editor.OpenFilePath);
                 var dirty = _editor.Dirty ? "*" : "";
 
                 _chartTitleText.text = $"{filename}{dirty}";
@@ -111,7 +116,9 @@ namespace Ozi.ChartEditor.Feature {
             _editor.Save();
         }
         public void LoadWithDialog() {
-            _editor.LoadWithDialog();
+            if (_editor.LoadWithDialog()) {
+                UpdateFieldUI();
+            }
         }
     }
 }

@@ -21,6 +21,7 @@ namespace Ozi.ChartEditor {
         [field: SerializeField] public AudioClip SongClip { get; private set; }
         [field: SerializeField] public float SongTime { get; set; }
         [field: SerializeField] public bool Dirty { get; set; }
+        [field: SerializeField] public string OpenFilePath { get; private set; }
 
         private VistaOpenFileDialog _chartLoadDialog;
         private VistaSaveFileDialog _chartSaveDialog;
@@ -61,6 +62,10 @@ namespace Ozi.ChartEditor {
         }
 
         public bool PlayChart(float time = 0.0f) {
+            if (OpenFilePath is null) {
+                return false;
+            }
+
             _chartPlayer.LoadChart(Chart, SongClip);
             _chartPlayer.Play(time);
 
@@ -75,6 +80,7 @@ namespace Ozi.ChartEditor {
         public bool ResetChart() {
             Chart = new();
             Data.WorkSpacePath = default;
+            OpenFilePath = default;
             Dirty = false;
 
             SongClip = null;
@@ -123,6 +129,8 @@ namespace Ozi.ChartEditor {
             Data.WorkSpacePath = Path.GetDirectoryName(path);
             Data.LastOpenedFilePath = path;
 
+            OpenFilePath = path;
+
             Dirty = false;
 
             return true;
@@ -149,6 +157,7 @@ namespace Ozi.ChartEditor {
 
             Data.WorkSpacePath = Path.GetDirectoryName(path);
             Data.LastOpenedFilePath = path;
+            OpenFilePath = path;
 
             var song_path = Path.Combine(Data.WorkSpacePath, Chart.SongFilename);
             LoadSong(song_path);
