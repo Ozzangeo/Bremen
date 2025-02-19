@@ -1,0 +1,14 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "msbuild",
+			"problemMatcher": [
+				"$msCompile"
+			],
+			"group": "rebuild",
+			"label": "Rebuild: solution",
+			"detail": "Rebuild the Bremen.sln solution using dotnet msbuild /t:Rebuild"
+		}
+	]
+}
