@@ -10,8 +10,8 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
   [Header("파동 프리팹")]
   public GameObject wavePrefab; // 파동
 
-  [Header("공격 쿨타임")] public float waveRate = 4f;
-  [Header("파동 속도")] public float waveSpeed = 3f;
+  [Header("파동 쿨타임")] public float waveRate = 4f;
+  [Header("파동 속도")] public float waveSpeed = 20f;
 
   float lastAttackTime = 0f;
   bool canWave = true;
