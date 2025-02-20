@@ -658,7 +658,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -848,6 +848,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: 3aad9f4c1488ce54f903639f7ad3cc98, type: 2}
+  treeFactory: {fileID: 0}
 --- !u!54 &1147378956
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1532,6 +1533,7 @@ GameObject:
   - component: {fileID: 2018166886}
   - component: {fileID: 2018166885}
   - component: {fileID: 2018166884}
+  - component: {fileID: 2018166891}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -1564,6 +1566,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: a48ee78f3d4819d45914edda52f7ff6c, type: 2}
+  treeFactory: {fileID: 2018166891}
 --- !u!54 &2018166886
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1680,6 +1683,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2018166891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2018166883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7a8def9fce499c408674d7b38428aca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  patrolTarget: {x: 0, y: 0, z: 0}
+  hasPatrolTarget: 0
+  bulletPrefab: {fileID: 6485777739131820461, guid: 4c01772145dfca945bfd9dac03ac02ce, type: 3}
 --- !u!1 &2136466348
 GameObject:
   m_ObjectHideFlags: 0
