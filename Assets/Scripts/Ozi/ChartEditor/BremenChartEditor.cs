@@ -1,4 +1,5 @@
-using Ookii.Dialogs;
+﻿using Ookii.Dialogs;
+using Ozi.ChartEditor.Tile;
 using Ozi.ChartPlayer;
 using System;
 using System.IO;
@@ -14,6 +15,7 @@ namespace Ozi.ChartEditor {
 
         [Header("Require")]
         [SerializeField] private BremenChartPlayer _chartPlayer;
+        [SerializeField] private BremenTileEditor _tileEditor;
 
         [field: Header("Debug")]
         [field: SerializeField] public BremenChartEditorData Data { get; private set; }
@@ -106,7 +108,7 @@ namespace Ozi.ChartEditor {
             }
 
             SongClip = clip;
-            Chart.SongFilename = Path.GetFileName(path);
+            Chart.songFilename = Path.GetFileName(path);
             Dirty = true;
 
             OnSongLoaded?.Invoke(path, SongClip);
@@ -122,6 +124,8 @@ namespace Ozi.ChartEditor {
             return SaveWithDialog();
         }
         public bool SaveAs(string path) {
+            Chart.angles = _tileEditor.ToAngles();
+
             var json = JsonUtility.ToJson(Chart, true);
             
             File.WriteAllText(path, json);
@@ -155,11 +159,13 @@ namespace Ozi.ChartEditor {
 
             Chart = chart;
 
+            _tileEditor.FromNotes(Chart.angles);
+
             Data.WorkSpacePath = Path.GetDirectoryName(path);
             Data.LastOpenedFilePath = path;
             OpenFilePath = path;
 
-            var song_path = Path.Combine(Data.WorkSpacePath, Chart.SongFilename);
+            var song_path = Path.Combine(Data.WorkSpacePath, Chart.songFilename);
             LoadSong(song_path);
 
             Dirty = false;

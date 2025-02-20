@@ -1,24 +1,29 @@
-using Ozi.Extension;
+Ôªøusing Ozi.Extension;
 using Ozi.Extension.Component;
 using System;
 using System.IO;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Ozi.ChartEditor.Feature {
-    public class BremenChartEditorUI : BremenChartEditorFeature {
+namespace Ozi.ChartEditor {
+    public class BremenChartEditorUI : MonoBehaviour {
+        [SerializeField] protected BremenChartEditor _editor;
+
         [Header("UI Components")]
-        [SerializeField] private SequenceButtonUI _playSequenceUI;
-        [SerializeField] private ElementFieldUI _songFilenameField;
-        [SerializeField] private ElementFieldUI _bpmField;
-        [SerializeField] private ElementFieldUI _offsetField;
-        [SerializeField] private ElementFieldUI _volumeField;
-        [SerializeField] private ElementFieldUI _pitchField;
+        [SerializeField] private SequenceButton _playSequenceUI;
+        [SerializeField] private UIElementField _songFilenameField;
+        [SerializeField] private UIElementField _bpmField;
+        [SerializeField] private UIElementField _offsetField;
+        [SerializeField] private UIElementField _volumeField;
+        [SerializeField] private UIElementField _pitchField;
 
         [SerializeField] private Text _chartTitleText;
 
-        private void Start() {
+        private void Awake() {
+            if (_editor == null) {
+                _editor = GameObject.FindAnyObjectByType<BremenChartEditor>();
+            }
+
             _editor.OnSongLoaded += (path, clip) => {
                 _songFilenameField.InputField.text = Path.GetFileName(path);
             };
@@ -32,7 +37,7 @@ namespace Ozi.ChartEditor.Feature {
 
             _bpmField.InputField.onEndEdit.AddListener(o => {
                 if (float.TryParse(o, out var bpm)) {
-                    _editor.Chart.BPM = bpm;
+                    _editor.Chart.bpm = Mathf.Clamp(bpm, 0.001f, float.MaxValue);
                     _editor.Dirty = true;
 
                     UpdateFieldUI();
@@ -40,7 +45,7 @@ namespace Ozi.ChartEditor.Feature {
             });
             _offsetField.InputField.onEndEdit.AddListener(o => {
                 if (int.TryParse(o, out var offset)) {
-                    _editor.Chart.Offset = offset;
+                    _editor.Chart.offset = offset;
                     _editor.Dirty = true;
 
                     UpdateFieldUI();
@@ -48,7 +53,7 @@ namespace Ozi.ChartEditor.Feature {
             });
             _volumeField.InputField.onEndEdit.AddListener(o => {
                 if (int.TryParse(o, out var volume)) {
-                    _editor.Chart.Volume = Mathf.Clamp(volume, 0, 100);
+                    _editor.Chart.volume = Mathf.Clamp(volume, 0, 100);
                     _editor.Dirty = true;
 
                     UpdateFieldUI();
@@ -56,7 +61,7 @@ namespace Ozi.ChartEditor.Feature {
             });
             _pitchField.InputField.onEndEdit.AddListener(o => {
                 if (int.TryParse(o, out var pitch)) {
-                    _editor.Chart.Pitch = Mathf.Clamp(pitch, 1, 200);
+                    _editor.Chart.pitch = Mathf.Clamp(pitch, 1, 200);
                     _editor.Dirty = true;
 
                     UpdateFieldUI();
@@ -64,10 +69,10 @@ namespace Ozi.ChartEditor.Feature {
             });
         }
 
-        private static string GetTextBPM(BremenChart chart) => $"{chart.BPM:###,###,##0.00}";
-        private static string GetTextOffset(BremenChart chart) => $"{chart.Offset:###,###,##0}";
-        private static string GetTextVolume(BremenChart chart) => $"{chart.Volume:##0}";
-        private static string GetTextPitch(BremenChart chart) => $"{chart.Pitch:##0}";
+        private static string GetTextBPM(BremenChart chart) => $"{chart.bpm:###,###,##0.00}";
+        private static string GetTextOffset(BremenChart chart) => $"{chart.offset:###,###,##0}";
+        private static string GetTextVolume(BremenChart chart) => $"{chart.volume:##0}";
+        private static string GetTextPitch(BremenChart chart) => $"{chart.pitch:##0}";
 
         private void UpdateFieldUI() {
             _bpmField.InputField.text = GetTextBPM(_editor.Chart);
@@ -78,7 +83,7 @@ namespace Ozi.ChartEditor.Feature {
 
         private void Update() {
             if (_editor.Data.LastOpenedFilePath is null) {
-                _chartTitleText.text = $"¿˙¿Â«œ¡ˆ æ ¿Ω";
+                _chartTitleText.text = $"Ï†ÄÏû•ÌïòÏßÄ ÏïäÏùå";
             }
             else {
                 var filename = Path.GetFileName(_editor.OpenFilePath);

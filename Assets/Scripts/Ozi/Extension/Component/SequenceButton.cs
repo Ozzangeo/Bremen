@@ -1,8 +1,8 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 namespace Ozi.Extension.Component {
-    public class SequenceButtonUI : MonoBehaviour {
+    public class SequenceButton : MonoBehaviour {
         [field: Header("Debug")]
         [field: SerializeField] public Button[] ButtonUis { get; private set; }
         [field: SerializeField] public int CurrentIndex { get; private set; }
