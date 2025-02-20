@@ -26,6 +26,8 @@ public class MonsterBehavior : MonoBehaviour
     player = GameObject.Find("Player").transform;
     spawnPosition = transform.position;
 
+    if(treeFactory == null) treeFactory = GetComponent<BehaviorTreeFactory>();
+
     rootNode = treeFactory.CreateBehaviorTree(transform, player, monsterStats, spawnPosition);
   }
 

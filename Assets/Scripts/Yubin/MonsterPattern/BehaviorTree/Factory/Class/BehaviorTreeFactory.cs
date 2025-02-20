@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 행동 트리 가상 클래스
-// 인스펙터에서 쓰기 위함
 public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
 {
   public virtual IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
