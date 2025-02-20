@@ -4,7 +4,7 @@ using UnityEngine;
 public class PlayerController : NetworkBehaviour
 {
     
-    private float moveSpeed;
+    private float moveSpeed = 1f;
 
     private NetworkCharacterController _characterController;
 
