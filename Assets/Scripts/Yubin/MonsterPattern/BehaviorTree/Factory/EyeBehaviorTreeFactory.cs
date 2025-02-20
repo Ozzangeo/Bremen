@@ -4,12 +4,12 @@ using UnityEngine;
 
 // 눈 행동 트리를 생성하는 팩토리
 // 4박자가 정확히 뭔지 몰라서 4초에 한번 발사하는거로 임시 구현
+[RequireComponent(typeof(MonsterBehavior))]
 public class EyeBehaviorTreeFactory : BehaviorTreeFactory
 {
-  [Header("돌진 속도")]
-  public float dashSpeed = 16f;      // 돌진 속도
-
-  float attackRate = 2f;      // 공격 쿨타임
+  [Header("돌진 속도")] public float dashSpeed = 16f;    // 돌진 속도
+  [Header("공격 쿨타임")] public float attackRate = 2f;  // 공격 쿨타임
+  
   float lastAttackTime = 0f;  // 마지막 공격 시간
 
   // 공격 실행 재정의

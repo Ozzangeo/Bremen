@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b89244fbe53528e49bbb525b7265f459, type: 3}
-  m_Name: Combat Drone
+  m_Name: EMPgeneratorStats
   m_EditorClassIdentifier: 
-  health: 600
-  attackPower: 26
-  moveSpeed: 10
+  health: 1300
+  attackPower: 7
+  moveSpeed: 0
   attackRange: 20
-  patrolRange: 12
+  patrolRange: 25

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(MonsterBehavior))]
 public class CombatDroneBehaviorTreeFactory : BehaviorTreeFactory
 {
   [Header("탄환 프리팹")]
