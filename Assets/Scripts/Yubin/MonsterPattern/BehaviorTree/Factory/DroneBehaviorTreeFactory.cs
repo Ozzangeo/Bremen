@@ -10,11 +10,12 @@ public class DroneBehaviorTreeFactory : BehaviorTreeFactory
   [Header("탄환 프리팹")]
   public GameObject bulletPrefab; // 탄환
 
+  [Header("탄환 속도")] public float bulletSpeed = 6f;      // 탄환 속도
+  [Header("유지 거리")] public float maintainDistance = 5f; // 유지 거리
+  [Header("후퇴 거리")] public float awayDistance = 10f;    // 후퇴 거리
+
   float fireRate = 4f;         // 탄환 발사 쿨타임
   float lastFireTime = 0f;     // 마지막 발사 시간
-  float bulletSpeed = 6f;      // 탄환 속도
-  float maintainDistance = 5f; // 유지 거리
-  float awayDistance = 10f;    // 후퇴 거리
 
   // 공격 실행 재정의
   public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
