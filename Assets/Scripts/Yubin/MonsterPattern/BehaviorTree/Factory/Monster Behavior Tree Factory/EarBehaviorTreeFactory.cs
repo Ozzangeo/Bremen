@@ -4,7 +4,7 @@ using UnityEngine;
 // 2박자에 1번이 정확히 뭔지 몰라서 2초에 한번 발사하는거로 임시 구현
 public class EarBehaviorTreeFactory : BehaviorTreeFactory
 {
-  float attackRate = 2f;      // 공격 쿨타임
+  [Header("공격 쿨타임")] public float attackRate = 2f;      // 공격 쿨타임
   float lastAttackTime = 0f;  // 마지막 공격 시간 
   
   // 공격 실행 재정의

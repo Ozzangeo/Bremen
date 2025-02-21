@@ -7,11 +7,11 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
   public virtual IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     // 개별 액션 노드
-    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, player, monsterStats));           // 공격 범위 확인
-    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player, monsterStats, spawnPosition));           // 공격
-    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, player, monsterStats, spawnPosition));      // 추적
-    IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, player, monsterStats, spawnPosition));            // 순찰
-    IBehaviorNode returnToSpawn = new ActionNode(() => ReturnToSpawn(monster, spawnPosition, monsterStats));          // 복귀
+    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, player, monsterStats));       // 공격 범위 확인
+    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player, monsterStats, spawnPosition));       // 공격
+    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, player, monsterStats, spawnPosition));  // 추적
+    IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, player, monsterStats, spawnPosition));        // 순찰
+    IBehaviorNode returnToSpawn = new ActionNode(() => ReturnToSpawn(monster, spawnPosition, monsterStats));      // 복귀
 
     // 공격 시퀸스 노드
     IBehaviorNode attackSequence = new SequenceNode(new List<IBehaviorNode> { checkAttackRange, performAttack });
