@@ -70,18 +70,19 @@ public class MidBossBehaviorTreeFactory : MonoBehaviour, IMidBossBehaviorTreeFac
     float attackRange = monsterStats.attackRange; // 공격 범위
 
     float playerDistance = Vector3.Distance(monster.position, player.position);
-    if(playerDistance <= attackRange)
-    {
-      Debug.Log("공격 상태 전환(플레이어)");
-      return IBehaviorNode.EBehaviorNodeState.Success;
-    }
-    else if(playerDistance >= playerAway)
+    if(playerDistance >= playerAway)
     {
       Debug.Log("어그로 해제");
       isPlayerTarget = false;
       return IBehaviorNode.EBehaviorNodeState.Failure;
     }
-
+    
+    if(playerDistance <= attackRange)
+    {
+      Debug.Log("공격 상태 전환(플레이어)");
+      return IBehaviorNode.EBehaviorNodeState.Success;
+    }
+  
     // 플레이어 추적
     monster.position = Vector3.MoveTowards(monster.position, player.position, moveSpeed * Time.deltaTime);    
 
