@@ -3,26 +3,17 @@ using UnityEngine;
 
 public class BossHealthDebugger : MonoBehaviour
 {
-  public TextMeshProUGUI text;
-
   Transform boss;
-  BossUtilityAI bossUtilityAI;
+  BossPattern bossPattern;
 
   private void Awake()
   {
     boss = GameObject.Find("Boss").transform;
-    bossUtilityAI = boss.GetComponent<BossUtilityAI>();
+    bossPattern = boss.GetComponent<BossPattern>();
   }
 
   public void OnButtonClick()
   {
-    bossUtilityAI.health -= 30;
-  }
-
-  private void Update()
-  {
-    string newText = "BOSS HP:";
-    int currentHP = (int)bossUtilityAI.health;
-    text.text = newText + currentHP;
+    bossPattern.GetDamage(5500);
   }
 }

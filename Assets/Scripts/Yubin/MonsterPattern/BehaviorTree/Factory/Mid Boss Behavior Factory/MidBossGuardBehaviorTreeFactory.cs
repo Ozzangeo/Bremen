@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MidBossGuardBehaviorTreeFactory : MidBossBehaviorTreeFactory
 {
-    [Header("파동 프리팹")]
+  [Header("파동 프리팹")]
   public GameObject wavePrefab; // 파동
 
   [Header("파동 쿨타임")] public float waveRate = 4f; // 파동 쿨타임
@@ -61,7 +61,6 @@ public class MidBossGuardBehaviorTreeFactory : MidBossBehaviorTreeFactory
 
     GameObject wave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
     float maxScale = monsterStats.attackRange * 2f;  // 파동 최대 크기
-
     while(wave.transform.localScale.x <= maxScale)
     {
       float scaleIncress = waveSpeed  * Time.deltaTime;
