@@ -16,6 +16,7 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
         if(Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
@@ -32,7 +33,7 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
             _runner.ProvideInput = true;
         }
 
-        
+        await SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Single);
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
