@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 // 보스 패턴의 FSM 관리
@@ -11,16 +12,32 @@ public class BossPattern : MonoBehaviour
 
   [Header("몬스터 소환")] public BossSpawnMonster bossSpawnMonster;
   [Header("파동 생성")] public BossCreateWave bossCreateWave;
+  [Header("낙하물 생성")] public BossDropObject bossDropObject;
+
+  List<Transform> player;
 
   void Start()
   {
     if(bossSpawnMonster == null) bossSpawnMonster = GetComponent<BossSpawnMonster>();
     if(bossCreateWave == null) bossCreateWave = GetComponent<BossCreateWave>();
+    if(bossDropObject == null) bossDropObject = GetComponent<BossDropObject>();
 
     // 초기화
     bossStats.Initialize();
     bossSpawnMonster.Initialize();
     bossCreateWave.Initialize();
+    bossDropObject.Initialize();
+
+    player = new List<Transform>();
+    GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+
+    foreach(GameObject obj in allObjects)
+    {
+      if(obj.name == "Player" && obj.activeInHierarchy)
+      {
+        player.Add(obj.transform);
+      }
+    }
 
     // 페이즈 1
     Phase1();
@@ -82,6 +99,7 @@ public class BossPattern : MonoBehaviour
     bossCreateWave.CreateWave(4f, bossStats.waveSpeed);
     
     // 2박자 낙하물 1번
+    bossDropObject.DropObject(player, 2f, 1);
   }
 
   // 페이즈 2 실행
@@ -91,12 +109,14 @@ public class BossPattern : MonoBehaviour
 
     // 전투 드론 7개 생성
     bossSpawnMonster.SpawnMonster(7);
+
     // 레이저 발사 100 ~ 360 랜덤하게 720도 회전
 
     // 2박자 파동
     bossCreateWave.CreateWave(2f, bossStats.waveSpeed);
 
     // 2박자 낙하물 2번
+    bossDropObject.DropObject(player, 2f, 2);
   }
 
   // 페이즈 3 실행
@@ -106,11 +126,13 @@ public class BossPattern : MonoBehaviour
 
     // 전투 드론 10개 생성
     bossSpawnMonster.SpawnMonster(10);
+
     // 레이저 발사 100 ~ 360 랜덤하게 1080도 회전, 회전 속도 증가
 
     // 2박자 파동, 속도 증가
     bossCreateWave.CreateWave(2f, bossStats.waveSpeed * 1.5f);
 
     // 1박자 낙하물 3번
+    bossDropObject.DropObject(player, 1f, 3);
   }
 }

@@ -28,12 +28,7 @@ public class BossSpawnMonster : MonoBehaviour
       Vector3 spawnPoint = new Vector3(RandomX, spawnY, RandomZ);
 
       Debug.Log("몬스터 소환");
-      if(bossPattern == null) Debug.LogWarning("d");
-      if(bossStats == null) Debug.LogWarning("dd");
-      if(bossStats.monster == null) Debug.LogWarning("d");
-      if(spawnPoint == null) Debug.LogWarning("dd");
       GameObject tmep = Instantiate(bossStats.monster, spawnPoint, Quaternion.identity);
-      if(tmep == null) Debug.LogWarning("ddd");
     }
   }
 }
