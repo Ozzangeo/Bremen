@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 namespace Ozi.ChartEditor.Tile {
     public class BremenTileEditor : MonoBehaviour {
@@ -34,15 +35,17 @@ namespace Ozi.ChartEditor.Tile {
 
         public event Action<BremenTile, bool> OnCurrentTileUpdate; // current: BremenTile, is_current_null: bool
         public event Action<float> OnZoomCamera;    // zoom_rate: float
+        public event Action OnTileUpdated;
 
         public void InsertBackTile(float angle) {
             var tile = CurrentTile.InsertBack(angle, transform);
             
             SelectTile(tile);
-        }
-        private void Awake() {
-            CurrentTile = StartTile;
 
+            OnTileUpdated?.Invoke();
+        }
+
+        private void Awake() {
             if (Camera == null) {
                 Camera = Camera.main;
             }
@@ -57,6 +60,8 @@ namespace Ozi.ChartEditor.Tile {
                 { KeyCode.Z,  45 },
                 { KeyCode.A, 360 },
             };
+
+            SelectTile(StartTile);
         }
 
         private void Update() {
@@ -112,9 +117,15 @@ namespace Ozi.ChartEditor.Tile {
         }
 
         private void SelectTile(BremenTile tile) {
+            if (CurrentTile != null) {
+                CurrentTile.Unselect();
+            }
+
             CurrentTile = tile;
             
             if (tile != null) {
+                CurrentTile.Select();
+
                 CameraMoveTargetPosition = CurrentTile.Position;
             }
         }
@@ -156,16 +167,14 @@ namespace Ozi.ChartEditor.Tile {
             ClickTileRay = new Ray(PreviousCameraPosition, direction);
 
             bool is_raycasted = Physics.Raycast(ClickTileRay, out var hit);
+            BremenTile raycasted_tile = null;
             if (is_raycasted) {
-                if (hit.collider.TryGetComponent<BremenTile>(out var tile)) {
-                    CurrentTile = tile;
-
-                    CameraMoveTargetPosition = CurrentTile.Position;
+                if (hit.collider.TryGetComponent(out raycasted_tile)) {
+                    // Debug anything
                 }
             }
-            else {
-                CurrentTile = null;
-            }
+
+            SelectTile(raycasted_tile);
 
             OnCurrentTileUpdate?.Invoke(CurrentTile, !is_raycasted);
         }
@@ -173,19 +182,21 @@ namespace Ozi.ChartEditor.Tile {
         public List<float> ToAngles() {
             // Must be StartTile is not null in logic
             if (StartTile.ToAngles(out var notes)) {
-                Debug.Log("Tile Save Succeed");
+                // Succeed
             } else {
-                Debug.Log("Tile Save Failed");
+                // Failed
             }
 
             return notes;
         }
         public void FromNotes(List<float> angles) {
             if (StartTile.FromAngles(angles, transform)) {
-                Debug.Log("Tile Load Succeed");
+                // Succeed
             } else {
-                Debug.Log("Tile Load Failed");
+                // Failed
             }
+
+            CurrentTile = StartTile;
         }
 
         private void OnDrawGizmos() {

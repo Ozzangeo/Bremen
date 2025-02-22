@@ -57,23 +57,42 @@ namespace Ozi.ChartEditor {
                 Filter = "mp3 files (*.mp3)|*.mp3|ogg files (*.ogg)|*.ogg",
                 FilterIndex = 1,
             };
+
+            _tileEditor.OnTileUpdated += OnTileUpdated;
         }
 
         private void Start() {
             ResetChart();
         }
+        private void OnTileUpdated() {
+            Chart.angles = _tileEditor.ToAngles();
+        }
 
-        public bool PlayChart(float time = 0.0f) {
+        public bool PlayChart() {
             if (OpenFilePath is null) {
                 return false;
             }
 
+            _chartPlayer.gameObject.SetActive(true);
+            
             _chartPlayer.LoadChart(Chart, SongClip);
+
+            float time = 0.0f;
+            if (_tileEditor.CurrentTile != null) {
+                var index = _tileEditor.CurrentTile.Index;
+
+                time = Chart.GetSecondsFromTileIndex(index);
+
+                Debug.Log($"Time {time}");
+            }
+
             _chartPlayer.Play(time);
 
             return true;
         }
         public bool StopChart() {
+            _chartPlayer.gameObject.SetActive(false);
+
             _chartPlayer.Stop();
 
             return true;
@@ -124,8 +143,6 @@ namespace Ozi.ChartEditor {
             return SaveWithDialog();
         }
         public bool SaveAs(string path) {
-            Chart.angles = _tileEditor.ToAngles();
-
             var json = JsonUtility.ToJson(Chart, true);
             
             File.WriteAllText(path, json);

@@ -6,45 +6,30 @@ namespace Ozi.ChartEditor.Tile {
     public class BremenTile : MonoBehaviour {
         [field: SerializeField] public BremenTile Previous { get; private set; }
         [field: SerializeField] public BremenTile Next { get; private set; }
-        [field: SerializeField] public int Index { get; private set; }
+        [field: SerializeField] public SpriteRenderer SpriteRenderer { get; private set; }
+        
+        public int Index { 
+            get => _index; 
+            private set {
+                _index = value;
 
-        private float WhenRelativeAngleNotNull {
-            get {
-                var eular_angle = transform.localEulerAngles.z;
-                var next_angle = Next.transform.localEulerAngles.z;
-
-                return (eular_angle - next_angle) + 180.0f;
-            }
+                SpriteRenderer.sortingOrder = -_index;
+            } 
         }
-        public float RelativeAngle {
-            get {
-                if (Next != null) {
-                    return WhenRelativeAngleNotNull;
-                }
+        [SerializeField] private int _index;
 
-                var eular_angle = transform.localEulerAngles.z;
-
-                return (eular_angle) + 180.0f;
-            }
-            set {
-                var eular_angle = transform.localEulerAngles;
-                eular_angle.z = value - 180.0f;
-
-                transform.localEulerAngles = eular_angle;
-            }
-        }
         public float RelativeAngleAtPrevious {
             get {
-                var angle = transform.localEulerAngles.z;
                 var previous_angle = Previous.transform.localEulerAngles.z;
+                var angle = transform.localEulerAngles.z;
 
-                return previous_angle - angle;
+                return previous_angle - (angle - 180.0f);
             }
             set {
                 var previous_angle = Previous.transform.localEulerAngles.z;
 
                 var angle = transform.localEulerAngles;
-                angle.z = previous_angle - (value + 180);
+                angle.z = previous_angle - (value - 180.0f);
 
                 transform.localEulerAngles = angle;
             }
@@ -60,9 +45,7 @@ namespace Ozi.ChartEditor.Tile {
             }
         }
 
-        public float OppositeAngle {
-            get => transform.localEulerAngles.z;
-        }
+        public float OppositeAngle => transform.localEulerAngles.z;
 
         public Vector3 Position => transform.position;
 
@@ -108,7 +91,8 @@ namespace Ozi.ChartEditor.Tile {
         private BremenTile CloneTile(Transform parent = null) {
             var clone_tile = Instantiate(this, parent);
 
-            clone_tile.name = "Bremen Tile";
+            //clone_tile.name = "Bremen Tile";
+            clone_tile.SpriteRenderer.color = Color.white;
 
             return clone_tile;
         }
@@ -125,13 +109,16 @@ namespace Ozi.ChartEditor.Tile {
         }
 
         public BremenTile InsertBack(float angle, Transform parent = null) {
-            if (Mathf.Abs(OppositeAngle - angle) <= float.Epsilon) {
-                var is_deleted = Delete();
-                if (!is_deleted) {
-                    return this;
-                }
+            angle %= 360.0f;
 
-                return Previous;
+            if (Previous != null) {
+                if (Mathf.Abs(OppositeAngle - angle) <= float.Epsilon) {
+                    if (!Delete()) {
+                        return this;
+                    }
+
+                    return Previous;
+                }
             }
 
             var clone_tile = CloneTile(parent);
@@ -151,7 +138,9 @@ namespace Ozi.ChartEditor.Tile {
             angles = new List<float>();
             
             try {
-                ChainInsertAngle(ref angles);
+                if (Next != null) {
+                    Next.ChainInsertAngle(angles);
+                }
             }
             catch (Exception e) {
                 Debug.LogException(e);
@@ -163,7 +152,9 @@ namespace Ozi.ChartEditor.Tile {
         }
         public bool FromAngles(List<float> angles, Transform parent = null) {
             try {
-                ChainDestroyTile();
+                if (Next != null) {
+                    Next.ChainDestroyTile();
+                }
 
                 BremenTile previous = this;
                 for (int i = 0; i < angles.Count; i++) {
@@ -194,41 +185,147 @@ namespace Ozi.ChartEditor.Tile {
             return true;
         }
 
-        private void ChainNextIncreseIndex() {
-            Index++;
-
-            if (Next != null) {
-                Next.StartPoint = EndPoint;
-
-                Next.ChainNextIncreseIndex();
-            }
+        public void Select() {
+            SpriteRenderer.color = Color.green;
         }
-        private void ChainNextDecreseIndex() {
-            Index--;
-
-            if (Next != null) {
-                Next.StartPoint = EndPoint;
-
-                Next.ChainNextDecreseIndex();
-            }
-        }
-        
-        private void ChainDestroyTile() {
-            if (Next != null) {
-                Destroy(Next.gameObject);
-
-                Next.ChainDestroyTile();
-            }
+        public void Unselect() {
+            SpriteRenderer.color = Color.white;
         }
 
-        private void ChainInsertAngle(ref List<float> angles) {
-            if (Next != null) {
-                var angle = WhenRelativeAngleNotNull;
+        public void Select(BremenTile end) {
+            if (end == null) {
+                Select();
 
-                angles.Add(angle);
-
-                Next.ChainInsertAngle(ref angles);
+                return;
             }
+
+            if (Index > end.Index) {
+                ChainActioner(
+                    this,
+                    o => {
+                        o.Select();
+
+                        if (o.Index == end.Index) {
+                            return null;
+                        }
+
+                        return o.Previous;
+                    }
+                    );
+            } 
+            else {
+                ChainActioner(
+                    this,
+                    o => {
+                        o.Select();
+
+                        if (o.Index == end.Index) {
+                            return null;
+                        }
+
+                        return o.Next;
+                    }
+                    );
+            }
+        }
+        public void Unselect(BremenTile end) {
+            if (end == null) {
+                Select();
+
+                return;
+            }
+
+            if (Index > end.Index) {
+                ChainActioner(
+                    this,
+                    o => {
+                        o.Unselect();
+
+                        if (o.Index == end.Index) {
+                            return null;
+                        }
+
+                        return o.Previous;
+                    }
+                    );
+            }
+            else {
+                ChainActioner(
+                    this,
+                    o => {
+                        o.Unselect();
+
+                        if (o.Index == end.Index) {
+                            return null;
+                        }
+
+                        return o.Next;
+                    }
+                    );
+            }
+        }
+
+        private static void ChainActioner(BremenTile instance, Func<BremenTile, BremenTile> on_chain) {
+            var chain = on_chain.Invoke(instance);
+
+            if (chain != null) {
+                ChainActioner(chain, on_chain);
+            }
+        }
+        private static void ChainActioner(BremenTile instance, Func<BremenTile, BremenTile> on_chain, Action<BremenTile, BremenTile> on_select_chain) {
+            var chain = on_chain.Invoke(instance);
+
+            if (chain != null) {
+                on_select_chain?.Invoke(instance, chain);
+
+                ChainActioner(chain, on_chain, on_select_chain);
+            }
+        }
+
+        private void ChainNextIncreseIndex() => 
+            ChainActioner(
+                this, 
+                o => {
+                    o.Index++;
+
+                    o.StartPoint = o.Previous.EndPoint;
+
+                    return o.Next;
+                }
+                );
+        private void ChainNextDecreseIndex() =>
+            ChainActioner(
+                this,
+                o => {
+                    o.Index--;
+
+                    o.StartPoint = o.Previous.EndPoint;
+
+                    return o.Next;
+                }
+                );
+
+        private void ChainDestroyTile() =>
+            ChainActioner(
+                this,
+                o => {
+                    Destroy(o.gameObject);
+
+                    return o.Next;
+                }
+                );
+
+        private void ChainInsertAngle(List<float> angles) {
+            ChainActioner(
+                this,
+                o => {
+                    var angle = o.RelativeAngleAtPrevious;
+
+                    angles.Add(angle);
+
+                    return o.Next;
+                }
+                );
         }
     }
 }
