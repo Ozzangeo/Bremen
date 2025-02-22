@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f31ba181e43fcc4f98a3ad03dd317d1, type: 3}
+  m_Name: BossStats
+  m_EditorClassIdentifier: 
+  health: 15000
+  monster: {fileID: 6877644001150798836, guid: 5a93f1db88f5fd944b6e651504a5ef60, type: 3}
+  wave: {fileID: 6111399449889583347, guid: d4a4349165f67af4fa2ad263b35ff42c, type: 3}
+  waveSpeed: 20
+  laser: {fileID: 0}
+  dropObject: {fileID: 0}
