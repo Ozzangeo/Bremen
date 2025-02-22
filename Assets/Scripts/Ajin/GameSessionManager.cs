@@ -7,12 +7,32 @@ using UnityEngine.SceneManagement;
 
 public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public static GameSessionManager Instance { get; private set; }
+
     private NetworkRunner _runner;
 
-    private async void StartGame(GameMode mode)
+    private void Awake()
     {
-        _runner = gameObject.AddComponent<NetworkRunner>();
-        _runner.ProvideInput = true;
+        if(Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
+    }
+
+    public async void EnterRoomWithCode(string roomCode, GameMode mode)
+    {
+        if(_runner == null)
+        {
+            _runner = gameObject.AddComponent<NetworkRunner>();
+            _runner.ProvideInput = true;
+        }
+
+        
 
         var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
         var sceneInfo = new NetworkSceneInfo();
@@ -24,7 +44,7 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
         await _runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
-            SessionName = "TestRoom",
+            SessionName = roomCode,
             Scene = scene,
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
@@ -32,30 +52,15 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
         _runner.AddCallbacks(this);
     }
 
-    private void OnGUI()
-    {
-        if (_runner == null)
-        {
-            if (GUI.Button(new Rect(0, 0, 200, 40), "Host"))
-            {
-                StartGame(GameMode.Host);
-            }
-            if (GUI.Button(new Rect(0, 40, 200, 40), "Join"))
-            {
-                StartGame(GameMode.Client);
-            }
-        }
-    }
-
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"플레이어 {player.PlayerId} 참가");
+        Debug.Log($"{player.PlayerId}");
         PlayerSpawner.Instance.SpawnPlayer(runner, player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        Debug.Log($"플레이어 {player.PlayerId} 퇴장");
+        Debug.Log($"{player.PlayerId}");
         PlayerSpawner.Instance.DespawnPlayer(runner, player);
     }
 
