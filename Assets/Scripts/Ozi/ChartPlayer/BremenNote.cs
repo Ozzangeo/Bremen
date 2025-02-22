@@ -8,7 +8,7 @@ namespace Ozi.ChartPlayer {
         [field: SerializeField] public BremenChartAudioPlayer AudioPlayer { get; set; }
 
         [field: Header("Settings")]
-        [field: SerializeField] public float Speed { get; set; } = 5.0f;
+        [field: SerializeField] public float Speed { get; set; } = 1.0f;
         
         [field: Header("Debugs")]
         [field: SerializeField] public float Timing { get; set; }
@@ -17,16 +17,16 @@ namespace Ozi.ChartPlayer {
         public RectTransform RectTransform => transform as RectTransform;
         public float Progress => (Timing - AudioPlayer.Time) / VisualizeTiming;
 
-        private Vector3 _startPosition;
-        private Vector3 _endPosition;
-        private Vector3 _distance;
+        [SerializeField] private float _progress;
+        [SerializeField] private Vector3 _startPosition;
+        [SerializeField] private Vector3 _endPosition;
+        [SerializeField] private Vector3 _distance;
 
         private void Awake() {
             var start_position = Vector3.zero;
-            start_position.x = -(RectTransform.rect.width * 0.5f);
+            start_position.x = (Screen.width * 0.5f);
 
             var end_position = Vector3.zero;
-            end_position.x = (Screen.width * 0.5f);
 
             _startPosition = start_position;
             _endPosition = end_position;
@@ -35,7 +35,10 @@ namespace Ozi.ChartPlayer {
         }
 
         private void Update() {
-            RectTransform.localPosition = _endPosition - (Progress * Speed * _distance);
+            _progress = Progress;
+
+            // a + (b - a) * t
+            RectTransform.localPosition = _endPosition + (_distance * Progress) * Speed;
         }
     }
 }
