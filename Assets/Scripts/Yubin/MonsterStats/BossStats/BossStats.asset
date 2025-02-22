@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: BossStats
   m_EditorClassIdentifier: 
   health: 15000
-  monster: {fileID: 380627646671724242, guid: 7551fb891d2c2d745a4465b07764f7b7, type: 3}
+  monster: {fileID: 6877644001150798836, guid: 5a93f1db88f5fd944b6e651504a5ef60, type: 3}
   wave: {fileID: 6111399449889583347, guid: d4a4349165f67af4fa2ad263b35ff42c, type: 3}
-  waveSpeed: 0
+  waveSpeed: 20
   laser: {fileID: 0}
   dropObject: {fileID: 0}
