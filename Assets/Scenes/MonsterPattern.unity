@@ -904,6 +904,7 @@ GameObject:
   - component: {fileID: 836007651}
   - component: {fileID: 836007652}
   - component: {fileID: 836007653}
+  - component: {fileID: 836007654}
   - component: {fileID: 836007650}
   m_Layer: 0
   m_Name: Boss
@@ -1018,6 +1019,7 @@ MonoBehaviour:
   bossSpawnMonster: {fileID: 836007651}
   bossCreateWave: {fileID: 836007652}
   bossDropObject: {fileID: 0}
+  bossCreateLaser: {fileID: 0}
 --- !u!114 &836007650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1072,6 +1074,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   objectMark: {fileID: 7374274937712472396, guid: a788573efcc60c04f9c020d870c32501, type: 3}
   dropObjectPrefab: {fileID: 5430999718932656790, guid: b611a43f7f125934fa25c58298e66fa8, type: 3}
+--- !u!114 &836007654
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 836007644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2e040561ee575643b18d725cd5852f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laserPrefab: {fileID: 7126707125972748989, guid: 9254bc0ec17538a44b833c5f49ae0ae4, type: 3}
+  laserLength: 20
 --- !u!1 &978195057
 GameObject:
   m_ObjectHideFlags: 0
