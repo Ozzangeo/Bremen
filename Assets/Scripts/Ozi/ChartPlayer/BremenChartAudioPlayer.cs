@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Windows.Forms.VisualStyles;
+using UnityEngine;
 
 namespace Ozi.ChartPlayer {
     [RequireComponent(typeof(AudioSource))]
@@ -14,26 +15,12 @@ namespace Ozi.ChartPlayer {
                 _source.clip = value;
                 _offsetTime = 0.0f;
 
-                IsPlaying = false;
+                _source.Stop();
             }
         }
 
         public float Time {
-            get => _source.time + _offsetTime;
-            set {
-                var time = value - _offsetTime;
-
-                if (time > 0.0f) {
-                    _source.time = time;
-                } else {
-                    _source.time = 0.0f;
-
-                    _offsetTime += time;
-                }
-            }
-        }
-        public float RealTime {
-            get => _source.time;
+            get => _source.time - _offsetTime;
             set => _source.time = value;
         }
 
@@ -46,7 +33,7 @@ namespace Ozi.ChartPlayer {
             set => _source.volume = value;
         }
 
-        [field: SerializeField] public bool IsPlaying { get; private set; }
+        public bool IsPlaying => _source.isPlaying;
 
         private void Awake() {
             if (_source == null) {
@@ -54,37 +41,34 @@ namespace Ozi.ChartPlayer {
             }
         }
         private void Update() {
-            if (!IsPlaying) {
+            if (IsPlaying) {
                 return;
             }
-            
-            if (_offsetTime < Offset) {
-                _offsetTime += UnityEngine.Time.deltaTime;
 
-                if (_offsetTime >= Offset) {
-                    var offset = _offsetTime - Offset;
+            if (_offsetTime > 0.0f) {
+                _offsetTime -= UnityEngine.Time.deltaTime;
+            }
+            else {
+                Time = Mathf.Abs(_offsetTime);
+                _offsetTime = 0.0f;
 
-                    _source.time += offset;
-                    _offsetTime = Offset;
-
-                    _source.UnPause();
-                }
+                _source.UnPause();
             }
         }
 
-        public void Play(float offset = 0.0f) {
-            IsPlaying = true;
-            
-            _offsetTime = offset;
-
+        public void Play(float time = 0.0f) {
             _source.Play();
-            if (Offset > 0.0f) {
+
+            if (time > Offset) {
+                Time = time - Offset;
+            } else {
                 _source.Pause();
+
+                _offsetTime = Offset - time;
             }
+
         }
         public void Stop() {
-            IsPlaying = false;
-
             _source.Stop();
         }
     }

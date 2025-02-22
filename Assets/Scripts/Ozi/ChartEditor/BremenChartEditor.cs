@@ -2,6 +2,7 @@
 using Ozi.ChartEditor.Tile;
 using Ozi.ChartPlayer;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using UnityEngine;
@@ -16,6 +17,9 @@ namespace Ozi.ChartEditor {
         [Header("Require")]
         [SerializeField] private BremenChartPlayer _chartPlayer;
         [SerializeField] private BremenTileEditor _tileEditor;
+
+        [Header("Settings")]
+        [SerializeField] private List<GameObject> _editorUis;
 
         [field: Header("Debug")]
         [field: SerializeField] public BremenChartEditorData Data { get; private set; }
@@ -73,6 +77,10 @@ namespace Ozi.ChartEditor {
                 return false;
             }
 
+            foreach (var ui in _editorUis) {
+                ui.SetActive(false);
+            }
+
             _chartPlayer.gameObject.SetActive(true);
             
             _chartPlayer.LoadChart(Chart, SongClip);
@@ -82,15 +90,17 @@ namespace Ozi.ChartEditor {
                 var index = _tileEditor.CurrentTile.Index;
 
                 time = Chart.GetSecondsFromTileIndex(index);
-
-                Debug.Log($"Time {time}");
             }
 
-            _chartPlayer.Play(time);
+            _chartPlayer.Play(time, true);
 
             return true;
         }
         public bool StopChart() {
+            foreach (var ui in _editorUis) {
+                ui.SetActive(true);
+            }
+
             _chartPlayer.gameObject.SetActive(false);
 
             _chartPlayer.Stop();

@@ -9,14 +9,13 @@ namespace Ozi.ChartPlayer {
 
         [field: Header("Settings")]
         [field: SerializeField] public float Speed { get; set; } = 5.0f;
-        [field: SerializeField] public float Height { get; set; } = 100.0f;
         
         [field: Header("Debugs")]
         [field: SerializeField] public float Timing { get; set; }
         [field: SerializeField] public float VisualizeTiming { get; set; }
 
         public RectTransform RectTransform => transform as RectTransform;
-        public float Progress => (Timing - AudioPlayer.RealTime) / VisualizeTiming;
+        public float Progress => (Timing - AudioPlayer.Time) / VisualizeTiming;
 
         private Vector3 _startPosition;
         private Vector3 _endPosition;
@@ -36,10 +35,7 @@ namespace Ozi.ChartPlayer {
         }
 
         private void Update() {
-            var position = _endPosition - (Progress * Speed * _distance);
-            position.y = Height;
-
-            RectTransform.position = position;
+            RectTransform.localPosition = _endPosition - (Progress * Speed * _distance);
         }
     }
 }

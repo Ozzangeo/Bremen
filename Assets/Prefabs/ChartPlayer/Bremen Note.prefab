@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7720806279567590463
 RectTransform:
   m_ObjectHideFlags: 0
@@ -89,4 +89,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Image>k__BackingField: {fileID: 7184506237569844398}
+  <AudioPlayer>k__BackingField: {fileID: 0}
+  <Speed>k__BackingField: 5
+  <Height>k__BackingField: 5
   <Timing>k__BackingField: 0
+  <VisualizeTiming>k__BackingField: 0
