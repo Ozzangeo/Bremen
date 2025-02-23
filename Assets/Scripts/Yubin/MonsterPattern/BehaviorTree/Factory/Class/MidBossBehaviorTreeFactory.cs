@@ -4,14 +4,21 @@ using System.Collections.Generic;
 // 중간 보스 행동 트리 가상 클래스
 public class MidBossBehaviorTreeFactory : MonoBehaviour, IMidBossBehaviorTreeFactory
 {
-  [Header("플레이어 어그로 표시")] public bool isPlayerTarget = false;  // 플레이어 어그로 표시
-  [Header("플레이어 어그로 해제 거리")] public float playerAway = 5f;   // 플레이어 어그로 해제 거리
+  [HideInInspector] public bool isPlayerTarget = false;  // 플레이어 어그로 표시
+  [HideInInspector] public float playerAway = 5f;   // 플레이어 어그로 해제 거리
 
-  public virtual IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, Transform bitCore, MonsterStats monsterStats, Vector3 spawnPosition)
+  Transform player;         // 가장 가까운 타겟 플레이어
+  List<Transform> players;  // 플레이어 리스트
+
+  public virtual IBehaviorNode CreateBehaviorTree(Transform monster, List<Transform> players, Transform bitCore, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     // 1. 비트 코어 타겟팅
     // 2. 플레이어에게 피격 시 어그로
     // 3. 플레이어가 도망(5)가면 1로 이동
+
+    // 가장 가까운 플레이어
+    player = ClosestPlayer(players);
+    this.players = players;
 
     IBehaviorNode accessBitCore = new ActionNode(() => AccessBitCore(bitCore, monsterStats, monster));  // 비트 코어 접근
     IBehaviorNode attackBitCore = new ActionNode(() => AttackBitCore(bitCore, monsterStats, monster));  // 비트 코어 공격
@@ -28,6 +35,25 @@ public class MidBossBehaviorTreeFactory : MonoBehaviour, IMidBossBehaviorTreeFac
     IBehaviorNode rootSelector = new SelectorNode(new List<IBehaviorNode> { playerSequence, bitCoreSequence});
 
     return rootSelector;
+  }
+
+  // 가장 가까운 플레이어 찾기
+  private Transform ClosestPlayer(List<Transform> players)
+  {
+    Transform closestPlayer = null;
+    float minDistance = float.MaxValue;
+
+    foreach(Transform current in players)
+    {
+      float temp = Vector3.Distance(transform.position, current.position);
+      if(temp < minDistance)
+      {
+        minDistance = temp;
+        closestPlayer = current;
+      }
+    }
+
+    return closestPlayer;
   }
 
   // 비트 코어 접근
@@ -98,10 +124,12 @@ public class MidBossBehaviorTreeFactory : MonoBehaviour, IMidBossBehaviorTreeFac
     return IBehaviorNode.EBehaviorNodeState.Success;
   }
 
-  // 피격
-  public void GetDamage()
+  // 플레이어 어그로 전환
+  public void TargetPlayer()
   {
     Debug.Log("플레이어 어그로 지정");
+    player = ClosestPlayer(players);
+    Debug.Log(player.transform.position);
     isPlayerTarget = true;
   }
 }

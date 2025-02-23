@@ -4,25 +4,25 @@ using UnityEngine;
 // 레이저 생성, 회전
 public class BossCreateLaser : MonoBehaviour
 {
-  [Header("레이저 프리팹")] public GameObject laserPrefab;
-  [Header("레이저 길이")] public float laserLength = 20f;
 
   GameObject laser;
   GameObject pivot;
   BossStats bossStats; // 보스 능력치
   BossPattern bossPattern;
+  float laserLength;
 
   // 초기화
   public void Initialize()
   {
     bossPattern = GetComponent<BossPattern>();
     bossStats = bossPattern.bossStats;
+    laserLength = bossStats.laser.transform.localScale.z;
   }
 
   // 레이저 생성
   public void CreateLaser()
   {
-    if (laser == null) laser = Instantiate(laserPrefab, transform.position, Quaternion.identity);
+    if (laser == null) laser = Instantiate(bossStats.laser, transform.position, Quaternion.identity);
     if (pivot == null) pivot = new GameObject("LaserPivot");
 
     pivot.transform.position = transform.position;
@@ -35,8 +35,8 @@ public class BossCreateLaser : MonoBehaviour
   {
     Debug.Log("레이저 파괴");
 
-    if (laser != null) Destroy(laser);
-    if (pivot != null) Destroy(pivot);
+    if(laser != null) Destroy(laser);
+    if(pivot != null) Destroy(pivot);
   }
 
   // 회전
@@ -48,7 +48,7 @@ public class BossCreateLaser : MonoBehaviour
     float rotationStep = speed * Time.deltaTime;
     float direction = Mathf.Sign(targetAngle);
 
-    while(Mathf.Abs(rotatedAngle) < Mathf.Abs(targetAngle))
+    while(Mathf.Abs(rotatedAngle) < Mathf.Abs(targetAngle) && laser != null && pivot != null)
     {
       float step = Mathf.Min(rotationStep, Mathf.Abs(targetAngle) - Mathf.Abs(rotatedAngle));
       pivot.transform.Rotate(Vector3.up * direction, step);

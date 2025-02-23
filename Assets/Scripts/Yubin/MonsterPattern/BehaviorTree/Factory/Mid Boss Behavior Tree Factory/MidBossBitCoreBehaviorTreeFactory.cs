@@ -13,13 +13,13 @@ public class MidBossBitCoreBehaviorTreeFactory : MidBossBehaviorTreeFactory
 
   float lastAttackTime = 0f;
 
-  public override IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, Transform bitCore, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode CreateBehaviorTree(Transform monster, List<Transform> player, Transform bitCore, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     // 1. 6등분 각도중에 하나 선택
     // 2. 디버프 결정(둘중하나)
     // 3. 4박자에 한 번 선택한 각도로 파동 생성
 
-    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player, monsterStats, monster)); // 공격
+    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player[0], monsterStats, monster)); // 공격
     IBehaviorNode rootSelector = new SelectorNode(new List<IBehaviorNode> { performAttack });
 
     return rootSelector;

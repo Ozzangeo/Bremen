@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 1258747460923125840}
   - component: {fileID: 3037988222130876894}
   - component: {fileID: 393522180043202392}
+  - component: {fileID: 2338660879902861887}
   - component: {fileID: 1921975933826549991}
   m_Layer: 0
   m_Name: Boss
@@ -130,8 +131,9 @@ MonoBehaviour:
   bossState: 0
   bossSpawnMonster: {fileID: 5169412082919188626}
   bossCreateWave: {fileID: 1258747460923125840}
-  bossDropObject: {fileID: 0}
-  bossCreateLaser: {fileID: 0}
+  bossDropObject: {fileID: 3037988222130876894}
+  bossCreateLaser: {fileID: 393522180043202392}
+  bossInfoManager: {fileID: 2338660879902861887}
 --- !u!114 &5169412082919188626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,6 +190,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserPrefab: {fileID: 7126707125972748989, guid: 9254bc0ec17538a44b833c5f49ae0ae4, type: 3}
   laserLength: 20
+--- !u!114 &2338660879902861887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4123993620820123375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39437f959d1896b4e8e37939f25a1a4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1921975933826549991
 MonoBehaviour:
   m_ObjectHideFlags: 0
