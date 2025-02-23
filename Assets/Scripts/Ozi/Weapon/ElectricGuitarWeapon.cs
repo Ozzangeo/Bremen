@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Ozi.Weapon {
     public class ElectricGuitarWeapon : BasicWeapon {
@@ -13,13 +12,13 @@ namespace Ozi.Weapon {
 
         private const float PLAY_ATTACK_INCREASE_ATTACK = 3.0f;
         private const float PLAY_ATTACK_STANDARD_COMBO = 8.0f;
-        private const float PLAY_ATTACK_RADIUS = 3.0f;
+        private const float PLAY_ATTACK_RADIUS = 1.0f;
+        private const float PLAY_ATTACK_BUFF_RADIUS = 5.0f;
         private const float PLAY_ATTACK_DAMAGE = 30.0f;
         private const float PLAY_ATTACK_MAX_DAMAGE = 78.0f;
 
         [SerializeField] private float _normalIncreasedAttack = 0.0f;
         private Dictionary<TestEntity, float> _playIncreasedAttackByEntity;
-        private List<TestEntity> _playRemoveEntities;
 
         private void ClearPlayIncreased() {
             foreach (var pair in _playIncreasedAttackByEntity) {
@@ -33,7 +32,6 @@ namespace Ozi.Weapon {
 
         protected override void OnInitialize() {
             _playIncreasedAttackByEntity = new();
-            _playRemoveEntities = new();
 
             OnComboAdd +=
                 () => {
@@ -80,7 +78,9 @@ namespace Ozi.Weapon {
             var position = Owner.transform.position;
             var entities = FindEntities(position, PLAY_ATTACK_RADIUS);
 
-            var team_entities = entities.Where(o => o.IsSameTeam(Owner.team));
+            var team_entities = 
+                FindEntities(position, PLAY_ATTACK_BUFF_RADIUS)
+                .Where(o => o.IsSameTeam(Owner.team));
             var other_team_entities = entities.Where(o => !o.IsSameTeam(Owner.team));
 
             int play_combo = (int)(ChartPlayer.Combo / PLAY_ATTACK_STANDARD_COMBO);
