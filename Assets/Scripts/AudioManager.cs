@@ -1,6 +1,17 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
+
+public enum PlayType {
+    BGM,
+    SFX,
+    UI,
+}
 
 public class AudioManager : MonoBehaviour {
+    public const int MAX_COUNT_OF_ID_IN_BGM = 2;
+    public const int MAX_COUNT_OF_ID_IN_SFX = 8;
+    public const int MAX_COUNT_OF_ID_IN_UI = 8;
+
     public static AudioManager Instance {
         get {
             if (!IsInstanceAllocated
@@ -25,60 +36,49 @@ public class AudioManager : MonoBehaviour {
     private static AudioManager _instance = null;
     public static bool IsInstanceAllocated { get; private set; } = false;   // MonoBehaviour Fake Null Blocking Variable From Unity
 
-    public static AudioSource AudioSource => Instance._mainAudioSource;
-    public static AudioClip Clip {
-        get => AudioSource.clip;
-        set => AudioSource.clip = value;
-    }
-    public static float Time {
-        get => AudioSource.time;
-        set => AudioSource.time = value;
-    }
-    public static float Volume {
-        get => AudioSource.volume;
-        set => AudioSource.volume = value;
-    }
-    public static float Pitch {
-        get => AudioSource.pitch;
-        set => AudioSource.pitch = value;
-    }
-
-    [Header("Requires")]
-    [SerializeField] private AudioSource _mainAudioSource;
+    public Dictionary<PlayType, ManagedAudioSource> AudioSourceByType { get; private set; } = new();
 
     private void Awake() {
-        _mainAudioSource = gameObject.AddComponent<AudioSource>();
-
         if (IsInstanceAllocated) {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
+
+            return;
         }
+
+        AudioSourceByType[PlayType.BGM] = new ManagedAudioSource(MAX_COUNT_OF_ID_IN_BGM, false, transform, "BGM");
+        AudioSourceByType[PlayType.SFX] = new ManagedAudioSource(MAX_COUNT_OF_ID_IN_SFX, true , transform, "SFX");
+        AudioSourceByType[PlayType.UI]  = new ManagedAudioSource(MAX_COUNT_OF_ID_IN_UI , true , transform, "UI" );
     }
 
-    public static void Play(float? time = null, float? volume = null, float? pitch = null) {
-        AudioSource.Play();
+    public static ManagedAudioSource GetAudioSource(PlayType play_type) => Instance.AudioSourceByType[play_type];
 
-        if (time is float t) {
-            Time = t;
-        }
+    #region SetProperties
+    public static void SetGlobalVolume(PlayType play_type, float global_volume) => GetAudioSource(play_type).GlobalVolume = global_volume;
+    public static void SetGlobalPitch(PlayType play_type, float global_pitch) => GetAudioSource(play_type).GlobalPitch = global_pitch;
+    #endregion
+    #region GetProperties
+    public static float GetGlobalVolume(PlayType play_type) => GetAudioSource(play_type).GlobalVolume;
+    public static float GetGlobalPitch(PlayType play_type) => GetAudioSource(play_type).GlobalPitch;
+    #endregion
+    #region ControlFunctions
+    public static int Play(PlayType play_type, float volume = 1.0f, float pitch = 1.0f, bool? is_loop = null, AudioClip clip = null) {
+        var audio_source = GetAudioSource(play_type);
 
-        if (volume is float v) {
-            Volume = v;
-        }
+        var id = audio_source.Index;
 
-        if (pitch is float p) {
-            Pitch = p;
-        }
+        audio_source.Play(volume, pitch, is_loop, clip);
+        audio_source.TryRevolveIndex();
+
+        return id;
     }
-    public static void Play(AudioClip clip, float? time = null, float? volume = null, float? pitch = null) {
-        Clip = clip;
+    public static void Play(PlayType play_type, int id, float volume = 1.0f, float pitch = 1.0f, bool? is_loop = null, AudioClip clip = null) {
+        var audio_source = GetAudioSource(play_type);
 
-        Play(time, volume, pitch);
+        audio_source.Play(id, volume, pitch, is_loop, clip);
     }
 
-    public static void Stop() => AudioSource.Play();
-    public static void Pause() => AudioSource.Pause();
-    public static void UnPause() => AudioSource.UnPause();
-
-    public static void PlayOneShot(AudioClip clip) => AudioSource.PlayOneShot(clip);
-    public static void PlayClipAtPoint(AudioClip clip, Vector3 position) => AudioSource.PlayClipAtPoint(clip, position);
+    public static void Stop(PlayType play_type, int id) => GetAudioSource(play_type).Stop(id);
+    public static void Pause(PlayType play_type, int id) => GetAudioSource(play_type).Pause(id);
+    public static void UnPause(PlayType play_type, int id) => GetAudioSource(play_type).UnPause(id);
+    #endregion
 }
