@@ -33,7 +33,8 @@ namespace Ozi.ChartPlayer {
             set => _source.volume = value;
         }
 
-        public bool IsPlaying => _source.isPlaying;
+        public bool SourceIsPlaying => _source.isPlaying;
+        [field: SerializeField] public bool IsPlaying { get; private set; }
 
         private void Awake() {
             if (_source == null) {
@@ -41,12 +42,13 @@ namespace Ozi.ChartPlayer {
             }
         }
         private void Update() {
-            if (IsPlaying) {
+            if (SourceIsPlaying
+                || !IsPlaying) {
                 return;
             }
 
             if (_offsetTime > 0.0f) {
-                _offsetTime -= UnityEngine.Time.deltaTime;
+                _offsetTime -= UnityEngine.Time.deltaTime * _source.pitch;
             }
             else {
                 Time = Mathf.Abs(_offsetTime);
@@ -59,6 +61,7 @@ namespace Ozi.ChartPlayer {
         public void Play(float time = 0.0f) {
             _source.Play();
 
+
             if (time > Offset) {
                 Time = time - Offset;
             } else {
@@ -67,9 +70,12 @@ namespace Ozi.ChartPlayer {
                 _offsetTime = Offset - time;
             }
 
+            IsPlaying = true;
         }
         public void Stop() {
             _source.Stop();
+
+            IsPlaying = false;
         }
     }
 }
