@@ -2,15 +2,19 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace Ozi.ChartPlayer {
     public class BremenChartPlayer : MonoBehaviour {
         private const float CHART_START_OFFSET_BEAT = 4.0f;
 
-        private const float JUDGMENT_TIMING_MS = 100;   // (ms)
-        private const float JUDGMENT_TIMING = JUDGMENT_TIMING_MS * 0.001f;
-        private const float HALF_JUDGMENT_TIMING = JUDGMENT_TIMING * 0.5f;
+        private const int MISS_TIMING_RANGE_MS = 120;
+        private const int PERFECT_TIMING_RANGE_MS = 100;
+
+        private const float MISS_TIMING_RANGE = MISS_TIMING_RANGE_MS * 0.001f;
+        private const float PERFECT_TIMING_RANGE = PERFECT_TIMING_RANGE_MS * 0.001f;
+
+        private const float HALF_MISS_TIMING = MISS_TIMING_RANGE * 0.5f;
+        private const float HALF_PERFECT_TIMING = PERFECT_TIMING_RANGE * 0.5f;
 
         [field: Header("Requires")]
         [field: SerializeField] public BremenChartAudioPlayer AudioPlayer { get; private set; }
@@ -36,8 +40,8 @@ namespace Ozi.ChartPlayer {
             }
             
             var time = AudioPlayer.Time;
-            var min_timing = time - HALF_JUDGMENT_TIMING;
-            var max_timing = time + HALF_JUDGMENT_TIMING;
+            var min_timing = time - HALF_PERFECT_TIMING;
+            var max_timing = time + HALF_PERFECT_TIMING;
             var timing = Timings[NoteIndex];
 
             if (IsAutoPlay) {
@@ -45,19 +49,40 @@ namespace Ozi.ChartPlayer {
                     OnHitNote();
                 }
             } 
-            else if (Input.GetKeyDown(KeyCode.Space)) {
-                if (min_timing <= timing && timing <= max_timing) {
-                    OnHitNote();
-                }
-            }
             else if (timing < min_timing) {
-                Combo = 0;
-                NoteIndex++;
-
-                OnComboReset?.Invoke();
+                OnMissNote();
             }
         }
 
+        public bool TryProcessNote() {
+            var time = AudioPlayer.Time;
+            var miss_min_timing = time - HALF_MISS_TIMING;
+            var miss_max_timing = time - HALF_MISS_TIMING;
+            var perfect_min_timing = time - HALF_PERFECT_TIMING;
+            var perfect_max_timing = time + HALF_PERFECT_TIMING;
+
+            var timing = Timings[NoteIndex];
+
+            if (perfect_min_timing <= timing && timing <= perfect_max_timing) {
+                OnHitNote();
+                
+                return true;
+            }
+            else if (miss_min_timing <= timing && timing <= miss_max_timing) {
+                OnMissNote();
+
+                return false;
+            }
+
+                return false;
+        }
+
+        private void OnMissNote() {
+            Combo = 0;
+            NoteIndex++;
+
+            OnComboReset?.Invoke();
+        }
         private void OnHitNote() {
             Combo++;
             NoteIndex++;
