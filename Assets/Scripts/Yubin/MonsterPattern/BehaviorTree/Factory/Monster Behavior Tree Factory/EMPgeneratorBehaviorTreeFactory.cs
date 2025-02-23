@@ -15,12 +15,16 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
 
   float lastAttackTime = 0f;
   bool canWave = true;
+  GameObject currentWave;
 
-  public override IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode CreateBehaviorTree(Transform monster, List<Transform> players, MonsterStats monsterStats, Vector3 spawnPosition)
   {
+    this.players = players;
+    player = ClosestPlayer(monster, players, monsterStats.patrolRange, spawnPosition);
+    
     // 개별 액션 노드
-    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, player, monsterStats)); // 공격 범위 확인
-    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player, monsterStats, spawnPosition)); // 공격
+    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, monsterStats)); // 공격 범위 확인
+    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(monsterStats, spawnPosition)); // 공격
 
     // 공격 시퀸스 노드
     IBehaviorNode attackSequence = new SequenceNode(new List<IBehaviorNode> { checkAttackRange, performAttack });
@@ -32,7 +36,7 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
   }
 
   // 공격 실행 재정의
-  public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
   {
     if(Time.time - lastAttackTime >= waveRate && canWave)
     {
@@ -53,18 +57,26 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
   {
     canWave = false;
 
-    GameObject wave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
+    currentWave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
     float maxScale = monsterStats.attackRange * 2f;  // 파동 최대 크기
 
-    while(wave.transform.localScale.x <= maxScale)
+    while(currentWave.transform.localScale.x <= maxScale)
     {
       float scaleIncress = waveSpeed  * Time.deltaTime;
-      wave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
+      currentWave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
       yield return null;
     }
 
-    Destroy(wave);
+    Destroy(currentWave);
     canWave = true;
   }
 
+  // 몬스터 사망
+  public override void MidBossDie()
+  {
+    Debug.Log("몬스터 사망");
+    
+    Destroy(currentWave);
+    Destroy(gameObject);
+  }
 }

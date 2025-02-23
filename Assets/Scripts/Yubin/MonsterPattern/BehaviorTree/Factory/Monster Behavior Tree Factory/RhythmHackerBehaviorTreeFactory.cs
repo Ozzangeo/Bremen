@@ -18,13 +18,15 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
   private bool isVisible = false;
   private bool isAttacking = false;
 
-  public override IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode CreateBehaviorTree(Transform monster, List<Transform> players, MonsterStats monsterStats, Vector3 spawnPosition)
   {
+    this.players = players;
+    player = ClosestPlayer(monster, players, monsterStats.patrolRange, spawnPosition);
     // 개별 액션 노드
-    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, player, monsterStats));          // 공격 범위 확인
-    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player, monsterStats, spawnPosition)); // 공격
-    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, player, monsterStats, spawnPosition));     // 추적
-    IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, player, monsterStats, spawnPosition));           // 순찰
+    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, monsterStats));          // 공격 범위 확인
+    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(monsterStats, spawnPosition)); // 공격
+    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, monsterStats, spawnPosition));     // 추적
+    IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, monsterStats, spawnPosition));           // 순찰
     IBehaviorNode returnToSpawn = new ActionNode(() => ReturnToSpawn(monster, spawnPosition, monsterStats));         // 복귀
 
     // 공격 시퀸스 노드
@@ -46,7 +48,7 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
   }
 
   // 추적 재정의
-  public override IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     float patrolRange = monsterStats.patrolRange;  // 순찰 범위
     float moveSpeed = monsterStats.moveSpeed;      // 이동 속도
@@ -83,11 +85,11 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
   }
 
   // 공격 실행 재정의 파동 -> 반투명 -> 이동 반복
-  public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
   {
     if(!isAttacking)
     {
-      StartCoroutine(AttackSequence(transform, player, monsterStats));
+      StartCoroutine(AttackSequence(transform, player, monsterStats, spawnPosition));
     }
 
     Debug.Log("공격 상태");
@@ -95,20 +97,25 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
   }
 
   // 공격 시퀸스: 파동 -> 반투명 -> 이동 반복
-  private IEnumerator AttackSequence(Transform monster, Transform player, MonsterStats monsterStats)
+  private IEnumerator AttackSequence(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     isAttacking = true;
 
     // 파동 발사
     StartCoroutine(Wave(monsterStats));
-    yield return new WaitForSeconds(0.5f);
+    yield return new WaitForSeconds(0.1f);
 
     // 반투명화 (Alpha = 0.7)
     yield return StartCoroutine(SetSemiTransparent());
 
     // 플레이어에게 이동
-    yield return StartCoroutine(MoveToPlayer(monster, player, monsterStats));
-    yield return new WaitForSeconds(0.5f); 
+    float playerDistance = Vector3.Distance(transform.position, player.position);
+    if(playerDistance <= monsterStats.patrolRange)
+    {
+      yield return StartCoroutine(MoveToPlayer(monster, player, monsterStats, spawnPosition));
+    }
+    
+    yield return new WaitForSeconds(0.1f); 
 
     isAttacking = false;
   }
@@ -129,13 +136,13 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
   }
 
   // 플레이어에게 이동
-  private IEnumerator MoveToPlayer(Transform monster, Transform player, MonsterStats monsterStats)
+  private IEnumerator MoveToPlayer(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     Debug.Log("이동");
     float dashTime = 0.5f;
     float elapsedTime = 0f;
     Vector3 startPosition = monster.position;
-    Vector3 targetPosition = player.position;
+    Vector3 targetPosition = GetCenterPlayer(monsterStats.patrolRange, spawnPosition);
 
     while(elapsedTime < dashTime)
     {
@@ -145,6 +152,31 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
     }
 
     monster.position = targetPosition;
+  }
+
+  // 순찰 범위 내 플레이어들의 중앙 위치
+  private Vector3 GetCenterPlayer(float patrolRange, Vector3 spawnPosition)
+  {
+    Vector3 sumPosition = Vector3.zero;
+    int count = 0;
+
+    foreach (Transform player in players)
+    {
+      float distance = Vector3.Distance(player.position, spawnPosition);
+      if (distance <= patrolRange)
+      {
+        sumPosition += player.position;
+        count++;
+      }
+    }
+    // 만약 순찰 범위 내 플레이어가 없다면 가장 가까운 플레이어에게 이동
+    if (count == 0)
+    {
+      Transform closestPlayer = ClosestPlayer(transform, players, patrolRange, spawnPosition);
+      return closestPlayer != null ? closestPlayer.position : spawnPosition;
+    }
+
+    return sumPosition / count; // 중앙 위치 반환
   }
 
   // 파동 코루틴

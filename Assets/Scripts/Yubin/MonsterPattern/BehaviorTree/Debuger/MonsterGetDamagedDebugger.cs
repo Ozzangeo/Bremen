@@ -4,11 +4,11 @@ public class MonsterGetDamagedDebugger : MonoBehaviour
 {
   public GameObject midBoss;
   public float damage;
-  MidBossInfoManager midBossInfo;
+  MonsterInfoManager midBossInfo;
 
   void Start()
   {
-    midBossInfo = midBoss.GetComponent<MidBossInfoManager>();
+    midBossInfo = midBoss.GetComponent<MonsterInfoManager>();
   }
 
   public void temp()

@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 5126342339528515072}
   - component: {fileID: 3852950814776266985}
   - component: {fileID: 5756485842639333117}
+  - component: {fileID: 6632298481498392739}
   m_Layer: 0
   m_Name: Rhythm Hacker
   m_TagString: Untagged
@@ -177,9 +178,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 70a9a3c88aeb0d74cb7e3227a2c318dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  players: []
   patrolTarget: {x: 0, y: 0, z: 0}
   hasPatrolTarget: 0
   wavePrefab: {fileID: 6111399449889583347, guid: 5c936267d8b47bb4c9d5481d75b120a5, type: 3}
   releaseTime: 5
   applicationSpeed: 4
   waveSpeed: 20
+--- !u!114 &6632298481498392739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5099048297523601062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395dd728029f9324a8b95763fc80824d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
