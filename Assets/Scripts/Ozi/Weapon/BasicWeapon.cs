@@ -53,6 +53,7 @@ namespace Ozi.Weapon {
         protected virtual void SpecialAttack() => Debug.Log("Default Special Attack");
 
         protected virtual void OnInitialize() { }
+        protected virtual void OnUpdate() { }
 
         protected virtual void Start() {
             if (ChartPlayer == null) {
@@ -80,19 +81,25 @@ namespace Ozi.Weapon {
         }
 
         protected virtual void Update() {
+            // if onwer has haking effect -> return
+
+            #region DeprecatedLogic
             // Normal attack cancelable
-            if (Input.GetKeyDown(SPECIAL_ATTACK_KEY)) {
-                if (CumulativeCombo >= NeedComboSpecialAttack) {
-                    SpecialAttack();
+            //if (Input.GetKeyDown(SPECIAL_ATTACK_KEY)) {
+            //    if (CumulativeCombo >= NeedComboSpecialAttack) {
+            //        SpecialAttack();
 
-                    CumulativeCombo = 0;
+            //        CumulativeCombo = 0;
 
-                    OnUseSpecialAttack?.Invoke();
-                } else {
-                    OnUseFailedSpecialAttack?.Invoke();
-                }
-            }
-            else if (Input.GetMouseButtonDown(0)) {
+            //        OnUseSpecialAttack?.Invoke();
+            //    } else {
+            //        OnUseFailedSpecialAttack?.Invoke();
+            //    }
+            //}
+            //else
+            #endregion
+
+            if (Input.GetMouseButtonDown(0)) {
                 var result = ChartPlayer.TryProcessNote();
 
                 if (Input.GetKey(PLAY_ATTACK_KEY)) {
@@ -124,6 +131,7 @@ namespace Ozi.Weapon {
                 }
             }
 
+            OnUpdate();
         }
 
         protected List<TestEntity> FindEntities(Vector3 origin, float radius, int layer_mask = -1) {
