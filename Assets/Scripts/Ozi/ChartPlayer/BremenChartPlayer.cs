@@ -4,6 +4,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ozi.ChartPlayer {
+    public enum BremenNoteResult {
+        Perfect,
+        Miss,
+        None,
+    }
+
     public class BremenChartPlayer : MonoBehaviour {
         private const float CHART_START_OFFSET_BEAT = 4.0f;
 
@@ -25,6 +31,7 @@ namespace Ozi.ChartPlayer {
         [field: Header("Debugs")]
         [field: SerializeField] public int NoteIndex { get; private set; } = 0;
         [field: SerializeField] public int Combo { get; private set; }
+        [field: SerializeField] public BremenChart Chart { get; private set; }
         [field: SerializeField] public List<float> Timings { get; private set; }
 
         public event Action<int> OnComboAdd;    // combo: int
@@ -54,7 +61,7 @@ namespace Ozi.ChartPlayer {
             }
         }
 
-        public bool TryProcessNote() {
+        public BremenNoteResult TryProcessNote() {
             var time = AudioPlayer.Time;
             var miss_min_timing = time - HALF_MISS_TIMING;
             var miss_max_timing = time - HALF_MISS_TIMING;
@@ -66,15 +73,15 @@ namespace Ozi.ChartPlayer {
             if (perfect_min_timing <= timing && timing <= perfect_max_timing) {
                 OnHitNote();
                 
-                return true;
+                return BremenNoteResult.Perfect;
             }
             else if (miss_min_timing <= timing && timing <= miss_max_timing) {
                 OnMissNote();
 
-                return false;
+                return BremenNoteResult.Miss;
             }
 
-                return false;
+            return BremenNoteResult.None;
         }
 
         private void OnMissNote() {
@@ -99,6 +106,8 @@ namespace Ozi.ChartPlayer {
             AudioPlayer.Offset = (CHART_START_OFFSET_BEAT * chart.SecondsPerBeat) * pitch;
 
             Timings = chart.ToTimings();
+
+            Chart = chart;
 
             OnLoadedChart?.Invoke(chart);
         }
