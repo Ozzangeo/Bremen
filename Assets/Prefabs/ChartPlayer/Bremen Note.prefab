@@ -28,7 +28,7 @@ RectTransform:
   m_GameObject: {fileID: 4104866117632090777}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -90,7 +90,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Image>k__BackingField: {fileID: 7184506237569844398}
   <AudioPlayer>k__BackingField: {fileID: 0}
+  <Sprites>k__BackingField:
+  - {fileID: 21300000, guid: 0eb71ce6520cc0f4a811109712ec7d4f, type: 3}
+  - {fileID: 21300000, guid: 29b9f78e33486574da5f95ddf7deb938, type: 3}
   <Speed>k__BackingField: 5
-  <Height>k__BackingField: 5
   <Timing>k__BackingField: 0
   <VisualizeTiming>k__BackingField: 0
+  _startPosition: {x: 0, y: 0, z: 0}
+  _endPosition: {x: 0, y: 0, z: 0}
+  _distance: {x: 0, y: 0, z: 0}

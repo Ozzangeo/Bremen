@@ -85,8 +85,11 @@ namespace Ozi.ChartPlayer {
 
             while (_visualizeNoteIndex < _player.Timings.Count
                 && _player.Timings[_visualizeNoteIndex] <= visualize_timing) {
+                var random = Random.Range(0, 2);
+
                 foreach (var pool in _notePools) {
-                    pool.Generate(_player.Timings[_visualizeNoteIndex], _visualizeTiming);
+                   var note = pool.Generate(_player.Timings[_visualizeNoteIndex], _visualizeTiming);
+                    note.SetSprite(random);
                 }
 
                 _visualizeNoteIndex++;
