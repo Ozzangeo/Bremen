@@ -1,4 +1,10 @@
 {
+    "editor.fontFamily": "'Monoid', Consolas, 'Courier New', monospace",
+    "editor.fontSize": 16,
+    "editor.lineHeight": 1.6,
+    "editor.letterSpacing": 0.5,
+    "editor.fontLigatures": false,
+    
     "files.exclude": {
         "**/.DS_Store": true,
         "**/.git": true,

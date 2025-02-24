@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 7685999682151998420}
   - component: {fileID: 8528080848278062032}
   - component: {fileID: 3657864969910217856}
-  - component: {fileID: 8040052607248952478}
   - component: {fileID: 2786558981784507160}
+  - component: {fileID: 3757941661061551583}
+  - component: {fileID: 8040052607248952478}
   m_Layer: 0
   m_Name: Mid Boss Eye
   m_TagString: Untagged
@@ -153,18 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: b0526e72d443de040b7e637ebba36954, type: 2}
   treeFactory: {fileID: 0}
---- !u!114 &8040052607248952478
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9121355800758406128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2786558981784507160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,3 +170,27 @@ MonoBehaviour:
   playerAway: 5
   dashSpeed: 16
   attackRate: 2
+--- !u!114 &3757941661061551583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9121355800758406128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b645a0db680d05847bf1385209573793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8040052607248952478
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9121355800758406128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

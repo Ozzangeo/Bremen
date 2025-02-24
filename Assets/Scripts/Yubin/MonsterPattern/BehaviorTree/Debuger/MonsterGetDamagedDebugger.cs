@@ -1,17 +1,18 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MonsterGetDamagedDebugger : MonoBehaviour
 {
   public GameObject midBoss;
-  MidBossBehaviorTreeFactory midBossBehaviorTreeFactory;
+  public float damage;
+  MonsterInfoManager midBossInfo;
 
   void Start()
   {
-    midBossBehaviorTreeFactory = midBoss.GetComponent<MidBossBehaviorTreeFactory>();
+    midBossInfo = midBoss.GetComponent<MonsterInfoManager>();
   }
 
   public void temp()
   {
-    midBossBehaviorTreeFactory.GetDamage();
+    // midBossInfo.GetDamage(damage);
   }
 }

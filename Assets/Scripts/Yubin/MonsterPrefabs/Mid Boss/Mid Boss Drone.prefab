@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 5085699786720728421}
   - component: {fileID: 626179905346847053}
   - component: {fileID: 114006863386348041}
-  - component: {fileID: 8016125689784889044}
+  - component: {fileID: 6672862839382578064}
   - component: {fileID: 6880146420181803155}
+  - component: {fileID: 8016125689784889044}
   m_Layer: 0
   m_Name: Mid Boss Drone
   m_TagString: Untagged
@@ -153,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: a48ee78f3d4819d45914edda52f7ff6c, type: 2}
   treeFactory: {fileID: 6880146420181803155}
---- !u!114 &8016125689784889044
+--- !u!114 &6672862839382578064
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +163,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7984305727228344576}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
+  m_Script: {fileID: 11500000, guid: b645a0db680d05847bf1385209573793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &6880146420181803155
@@ -183,3 +184,15 @@ MonoBehaviour:
   bulletSpeed: 6
   maintainDistance: 5
   awayDistance: 10
+--- !u!114 &8016125689784889044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7984305727228344576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -18,7 +18,7 @@ public class DroneBehaviorTreeFactory : BehaviorTreeFactory
   float lastFireTime = 0f;     // 마지막 발사 시간
 
   // 공격 실행 재정의
-  public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
   {
     float patrolRange = monsterStats.patrolRange; // 순찰 범위
 
@@ -59,7 +59,7 @@ public class DroneBehaviorTreeFactory : BehaviorTreeFactory
   }
 
   // 추적 재정의
-  public override IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     float patrolRange = monsterStats.patrolRange;  // 순찰 범위
     float moveSpeed = monsterStats.moveSpeed;      // 이동 속도

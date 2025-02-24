@@ -1,10 +1,8 @@
+﻿using Ozi.Weapon.Entity;
 using UnityEngine;
 
-public class BossBehavior : MonoBehaviour
+public class BossBehavior : BasicEntityBehaviour
 {
-  [Header("몬스터 능력치")]
-  public MonsterStats monsterStats;
-
   [Header("보스 패턴 팩토리")]
   public BossBehaviorTreeFactory treeFactory;
 

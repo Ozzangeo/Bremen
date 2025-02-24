@@ -2,166 +2,141 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
 namespace Ozi.ChartPlayer {
+    public enum BremenNoteResult {
+        Perfect,
+        Miss,
+        None,
+    }
+
     public class BremenChartPlayer : MonoBehaviour {
-        private const float VISUALIZE_NOTE_POOL_BEAT = 8.0f;
         private const float CHART_START_OFFSET_BEAT = 4.0f;
 
-        private const float JUDGMENT_TIMING_MS = 100;   // (ms)
-        private const float JUDGMENT_TIMING = JUDGMENT_TIMING_MS * 0.001f;
-        private const float HALF_JUDGMENT_TIMING = JUDGMENT_TIMING * 0.5f;
+        private const int MISS_TIMING_RANGE_MS = 120;
+        private const int PERFECT_TIMING_RANGE_MS = 100;
 
-        [Header("Requires")]
-        [SerializeField] private BremenChartAudioPlayer _audioPlayer;
-        [SerializeField] private BremenNote _notePrefab;
+        private const float MISS_TIMING_RANGE = MISS_TIMING_RANGE_MS * 0.001f;
+        private const float PERFECT_TIMING_RANGE = PERFECT_TIMING_RANGE_MS * 0.001f;
 
-        [Header("Settings")]
-        [SerializeField] private float _noteHeight = 0.0f;
+        private const float HALF_MISS_TIMING = MISS_TIMING_RANGE * 0.5f;
+        private const float HALF_PERFECT_TIMING = PERFECT_TIMING_RANGE * 0.5f;
 
-        [Header("Debugs")]
-        [SerializeField] private bool _isAutoPlay = false;
-        [SerializeField] private int _combo;
-        [SerializeField] private List<float> _timings;
+        [field: Header("Requires")]
+        [field: SerializeField] public BremenChartAudioPlayer AudioPlayer { get; private set; }
+
+        [field: Header("Settings")]
+        [field: SerializeField] public bool IsAutoPlay { get; set; } = false;
+
+        [field: Header("Debugs")]
+        [field: SerializeField] public int NoteIndex { get; private set; } = 0;
+        [field: SerializeField] public int Combo { get; private set; }
+        [field: SerializeField] public BremenChart Chart { get; private set; }
+        [field: SerializeField] public List<float> Timings { get; private set; }
 
         public event Action<int> OnComboAdd;    // combo: int
         public event Action OnComboReset;
-
-        public IObjectPool<BremenNote> NotePool { get; private set; }
-        [Header("Note Debugs")]
-        [SerializeField] private int _noteIndex = 0;
-        [SerializeField] private int _usingNoteIndex = 0;
-        [SerializeField] private int _visualizedNoteIndex = 0;
-        [SerializeField] private float _visualizeTiming = 0.0f;
-        [SerializeField] private Transform _notesParent;
-        [SerializeField] private List<BremenNote> _usingNotes = new();
-
-        private void Awake() {
-            NotePool = new ObjectPool<BremenNote>(OnCreateObject, OnGetObject, OnReleaseObject, OnDestroyObject);
-
-            var position = _notesParent.position;
-            position.y = _noteHeight;
-            _notesParent.position = position;
-        }
-
-        private BremenNote OnCreateObject() {
-            var note = Instantiate(_notePrefab, _notesParent);
-
-            note.gameObject.SetActive(false);
-
-            return note;
-        }
-        private void OnGetObject(BremenNote note) {
-            note.gameObject.SetActive(true);
-
-            note.Image.color = Color.white;
-            note.AudioPlayer = _audioPlayer;
-        }
-        private void OnReleaseObject(BremenNote note) {
-            note.gameObject.SetActive(false);
-        }
-        private void OnDestroyObject(BremenNote note) {
-            Destroy(note.gameObject);
-        }
+        public event Action<BremenChart> OnLoadedChart; // chart: BremenChart
+        public event Action<float> OnPlayed;  // start_time: float
+        public event Action OnStoped;
+        public event Action OnReseted;
 
         private void Update() {
-            if (_noteIndex >= _timings.Count) {
+            if (NoteIndex >= Timings.Count) {
                 return;
             }
             
-            var time = _audioPlayer.Time;
-            var min_timing = time - HALF_JUDGMENT_TIMING;
-            var max_timing = time + HALF_JUDGMENT_TIMING;
-            var timing = _timings[_noteIndex];
+            var time = AudioPlayer.Time;
+            var min_timing = time - HALF_PERFECT_TIMING;
+            var max_timing = time + HALF_PERFECT_TIMING;
+            var timing = Timings[NoteIndex];
 
-            if ((Input.GetKeyDown(KeyCode.Space) || _isAutoPlay)
-                && min_timing <= timing && timing <= max_timing) {
-                _combo++;
-                _noteIndex++;
-                
-                OnComboAdd?.Invoke(_combo);
-            }
+            if (IsAutoPlay) {
+                if (time <= timing) {
+                    OnHitNote();
+                }
+            } 
             else if (timing < min_timing) {
-                _combo = 0;
-                _noteIndex++;
+                OnMissNote();
+            }
+        }
 
-                OnComboReset?.Invoke();
+        public BremenNoteResult TryProcessNote() {
+            var time = AudioPlayer.Time;
+            var miss_min_timing = time - HALF_MISS_TIMING;
+            var miss_max_timing = time - HALF_MISS_TIMING;
+            var perfect_min_timing = time - HALF_PERFECT_TIMING;
+            var perfect_max_timing = time + HALF_PERFECT_TIMING;
+
+            var timing = Timings[NoteIndex];
+
+            if (perfect_min_timing <= timing && timing <= perfect_max_timing) {
+                OnHitNote();
+                
+                return BremenNoteResult.Perfect;
+            }
+            else if (miss_min_timing <= timing && timing <= miss_max_timing) {
+                OnMissNote();
+
+                return BremenNoteResult.Miss;
             }
 
-            ReleaseVisualizeNote();
+            return BremenNoteResult.None;
+        }
 
-            VisualizeNote();
+        private void OnMissNote() {
+            Combo = 0;
+            NoteIndex++;
+
+            OnComboReset?.Invoke();
+        }
+        private void OnHitNote() {
+            Combo++;
+            NoteIndex++;
+
+            OnComboAdd?.Invoke(Combo);
         }
 
         public void LoadChart(BremenChart chart, AudioClip clip) {
             var pitch = chart.pitch * 0.01f;
-            _audioPlayer.Clip = clip;
-            _audioPlayer.Pitch = pitch;
-            _audioPlayer.Volume = chart.volume * 0.01f;
+            AudioPlayer.Clip = clip;
+            AudioPlayer.Pitch = pitch;
+            AudioPlayer.Volume = chart.volume * 0.01f;
 
-            var seconds_per_beat = chart.SecondsPerBeat;
-            _audioPlayer.Offset = CHART_START_OFFSET_BEAT * seconds_per_beat * pitch;
-            _visualizeTiming = VISUALIZE_NOTE_POOL_BEAT * seconds_per_beat;
+            AudioPlayer.Offset = (CHART_START_OFFSET_BEAT * chart.SecondsPerBeat) * pitch;
 
-            _timings = chart.ToTimings();
+            Timings = chart.ToTimings();
+
+            Chart = chart;
+
+            OnLoadedChart?.Invoke(chart);
         }
 
-        public void Play(float time = 0.0f, bool is_auto_play = false) {
-            ResetPlayer();
+        public void Play(float start_time = 0.0f, bool is_auto_play = false) {
+            ResetPlayData();
 
-            _isAutoPlay = is_auto_play;
+            IsAutoPlay = is_auto_play;
 
-            while (_noteIndex < _timings.Count 
-                && _timings[_noteIndex] < time) {
-                _noteIndex++;
+            while (NoteIndex < Timings.Count 
+                && Timings[NoteIndex] < start_time) {
+                NoteIndex++;
             }
 
-            VisualizeNote();
+            AudioPlayer.Play(start_time);
 
-            if (time != 0.0f && _usingNotes.Count > 0) {
-                _usingNotes[_noteIndex].Image.color = Color.green;
-            }
-
-            _audioPlayer.Play(time);
+            OnPlayed?.Invoke(start_time);
         }
         public void Stop() {
-            _audioPlayer.Stop();
+            AudioPlayer.Stop();
 
-            ReleaseVisualizeNote();
-
-            _usingNotes.Clear();
+            OnStoped?.Invoke();
         }
 
-        private void ResetPlayer() {
-            _combo = 0;
-            _noteIndex = 0;
-            _visualizedNoteIndex = 0;
-            _usingNoteIndex = 0;
-        }
-        private void ReleaseVisualizeNote() {
-            for (int i = _usingNoteIndex; i < _noteIndex; i++) {
-                var using_note = _usingNotes[i];
+        private void ResetPlayData() {
+            Combo = 0;
+            NoteIndex = 0;
 
-                NotePool.Release(using_note);
-
-                _usingNoteIndex++;
-            }
-        }
-        private void VisualizeNote() {
-            var visualize_time = _audioPlayer.Time + _visualizeTiming;
-
-            while (_visualizedNoteIndex < _timings.Count
-                && _timings[_visualizedNoteIndex] <= visualize_time) {
-                var note = NotePool.Get();
-
-                note.Timing = _timings[_visualizedNoteIndex];
-                note.VisualizeTiming = _visualizeTiming;
-
-                _usingNotes.Add(note);
-
-                _visualizedNoteIndex++;
-            }
+            OnReseted?.Invoke();
         }
     }
 }

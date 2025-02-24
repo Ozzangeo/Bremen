@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 // 몬스터 스폰
@@ -10,12 +11,14 @@ public class BossSpawnMonster : MonoBehaviour
 
   BossStats bossStats; // 보스 능력치
   BossPattern bossPattern;
+  List<GameObject> monsters;
 
   // 초기화
   public void Initialize()
   {
     bossPattern = GetComponent<BossPattern>();
     bossStats = bossPattern.bossStats;
+    monsters = new List<GameObject>();
   }
 
   // 몬스터 스폰
@@ -28,7 +31,17 @@ public class BossSpawnMonster : MonoBehaviour
       Vector3 spawnPoint = new Vector3(RandomX, spawnY, RandomZ);
 
       Debug.Log("몬스터 소환");
-      GameObject tmep = Instantiate(bossStats.monster, spawnPoint, Quaternion.identity);
+      GameObject temp = Instantiate(bossStats.monster, spawnPoint, Quaternion.identity);
+      monsters.Add(temp);
+    }
+  }
+
+  // 몬스터 파괴 (보스 사망)
+  public void DeleteMonster()
+  {
+    foreach(GameObject current in monsters)
+    {
+      Destroy(current);
     }
   }
 }

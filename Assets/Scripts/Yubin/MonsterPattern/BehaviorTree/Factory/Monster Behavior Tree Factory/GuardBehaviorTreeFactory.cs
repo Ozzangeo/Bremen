@@ -18,7 +18,7 @@ public class GuardBehaviorTreeFactory : BehaviorTreeFactory
   bool canWave = true;
   
   // 공격 실행 재정의
-  public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
   {
     if(Time.time - lastAttackTime >= waveRate && canWave)
     {

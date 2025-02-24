@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "BossStats", menuName = "ScriptableObjects/BossStats", order = 2)]
 public class BossStats : ScriptableObject
@@ -18,6 +18,7 @@ public class BossStats : ScriptableObject
 
   [Header("낙하물")]
   public GameObject dropObject; // 낙하물
+  public GameObject dropObjectMark; // 낙하물 표시
 
   // 스크립터블 오브젝트 초기화
   public void Initialize()

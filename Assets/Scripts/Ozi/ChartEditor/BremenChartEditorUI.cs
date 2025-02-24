@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Ozi.ChartEditor {
     public class BremenChartEditorUI : MonoBehaviour {
-        [SerializeField] protected BremenChartEditor _editor;
+        [SerializeField] private BremenChartEditor _editor;
 
         [Header("UI Components")]
         [SerializeField] private SequenceButton _playSequenceUI;
