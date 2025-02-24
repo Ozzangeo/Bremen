@@ -156,7 +156,7 @@ namespace Ozi.Weapon {
             foreach (var entity in entities) {
                 var apply_damage = damage - entity.Status.defense;
 
-                entity.GetDamage(Math.Clamp(apply_damage, 0.0f, float.MaxValue));
+                entity.Hit(Math.Clamp(apply_damage, 0.0f, float.MaxValue));
             }
         }
         protected void EntitiesHeal(IEnumerable<BasicEntityBehaviour> entities, float heal) {
