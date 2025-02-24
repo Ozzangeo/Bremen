@@ -1,15 +1,18 @@
 using Fusion;
+using NUnit.Framework;
 using UnityEngine;
 
 public class PlayerData : MonoBehaviour
 {
     public static PlayerData Instance { get; private set; }
 
-    public int localPlayerID;
-    public int ownerId;
     public string playerName;
     public string roomCode;
     public CharacterData selectedCharacter;
+    public bool[] isClear = new bool[2];
+
+    public int hp;
+    public float moveSpeed;
 
     private void Awake()
     {
@@ -26,7 +29,7 @@ public class PlayerData : MonoBehaviour
 
     private void Start()
     {
-        //localPlayerID = RunnerAOIGizmos.LocalPlayer.PlayerID;
-        //ownerId = object.InputAuthority.PlayerID;
+        hp = selectedCharacter.maxHP;
+        moveSpeed = selectedCharacter.moveSpeed;
     }
 }

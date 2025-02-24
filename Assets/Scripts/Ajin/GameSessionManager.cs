@@ -26,7 +26,10 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
         }
     }
 
-
+    public async void EnterGame()
+    {
+        await SceneManager.LoadSceneAsync("StageScene", LoadSceneMode.Single);
+    }
 
     public async void EnterRoomWithCode(string roomCode, GameMode mode)
     {

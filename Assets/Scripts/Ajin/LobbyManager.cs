@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.UI;
 using Fusion;
-using static Unity.Collections.Unicode;
 
 public class LobbyManager : NetworkBehaviour
 {
@@ -74,7 +72,7 @@ public class LobbyManager : NetworkBehaviour
         }
         else
         {
-            Debug.LogWarning("❌ 클라이언트는 씬을 로드할 수 없습니다!");
+            Debug.LogWarning("클라이언트는 씬을 로드할 수 없습니다!");
         }
     }
 

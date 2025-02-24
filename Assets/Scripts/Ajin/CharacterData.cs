@@ -4,7 +4,7 @@ using UnityEngine;
 public class CharacterData : ScriptableObject
 {
     public string characterName;
-    public float maxHP;
+    public int maxHP;
     public float moveSpeed;
     public int comboUnit;
     public GameObject characterPrefab;

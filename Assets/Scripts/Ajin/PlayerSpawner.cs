@@ -8,8 +8,7 @@ public class PlayerSpawner : MonoBehaviour
 
     [SerializeField] private GameObject _lobbyPlayerPrefab;
     [SerializeField] private GameObject _playerPrefab;
-    public Dictionary<PlayerRef, NetworkObject> spawnedLobbyCharacters = new Dictionary<PlayerRef, NetworkObject>();
-    public Dictionary<PlayerRef, NetworkObject> spawnedGameCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private void Awake()
     {
@@ -22,47 +21,44 @@ public class PlayerSpawner : MonoBehaviour
     {
         if(runner.IsServer)
         {
-            if(!spawnedLobbyCharacters.ContainsKey(player))
+            if(!spawnedCharacters.ContainsKey(player))
             {
                 Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
                 NetworkObject networkPlayerObject = runner.Spawn(_lobbyPlayerPrefab, spawnPosition, Quaternion.identity, player);
 
-                spawnedLobbyCharacters[player] = networkPlayerObject;
+                spawnedCharacters[player] = networkPlayerObject;
             }
         }
     }
 
     public void DespawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {
-        if (spawnedLobbyCharacters.TryGetValue(player, out NetworkObject playerObject))
+        if (spawnedCharacters.TryGetValue(player, out NetworkObject playerObject))
         {
             runner.Despawn(playerObject);
-            spawnedLobbyCharacters.Remove(player);
+            spawnedCharacters.Remove(player);
         }
     }
 
     // ===== Game ===== 
-
-    public void SpawnGamePlayer(NetworkRunner runner, PlayerRef player)
+    public void SpawnGamePlayer(NetworkRunner runner)
     {
         if (runner.IsServer)
         {
-            if (!spawnedGameCharacters.ContainsKey(player))
+            foreach(var player in spawnedCharacters.Keys)
             {
                 Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
                 NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-
-                spawnedGameCharacters[player] = networkPlayerObject;
             }
         }
     }
 
     public void DespawnGamePlayer(NetworkRunner runner, PlayerRef player)
     {
-        if (spawnedGameCharacters.TryGetValue(player, out NetworkObject playerObject))
+        if (spawnedCharacters.TryGetValue(player, out NetworkObject playerObject))
         {
             runner.Despawn(playerObject);
-            spawnedGameCharacters.Remove(player);
+            spawnedCharacters.Remove(player);
         }
     }
 
@@ -70,14 +66,14 @@ public class PlayerSpawner : MonoBehaviour
 
     public NetworkObject GetPlayerObject(PlayerRef player)
     {
-        spawnedLobbyCharacters.TryGetValue(player, out NetworkObject playerObject);
+        spawnedCharacters.TryGetValue(player, out NetworkObject playerObject);
         return playerObject;
     }
 
     public List<NetworkObject> GetAllPlayerObject()
     {
         List<NetworkObject> allPlayers = new List<NetworkObject>();
-        foreach (var player in spawnedLobbyCharacters.Values)
+        foreach (var player in spawnedCharacters.Values)
         {
             allPlayers.Add(player);
         }
