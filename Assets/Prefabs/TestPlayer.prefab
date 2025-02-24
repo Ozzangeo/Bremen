@@ -96,12 +96,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7610749013862640617}
-  - component: {fileID: 1925859061663521557}
+  - component: {fileID: 4453356104261171049}
   - component: {fileID: 5182505556561312240}
   - component: {fileID: 233760110054647651}
   - component: {fileID: 8804483670759175500}
   m_Layer: 0
-  m_Name: TestPlayerPrefab
+  m_Name: TestPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -121,10 +121,9 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6590599475335479381}
-  - {fileID: 6639306264178385591}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1925859061663521557
+--- !u!114 &4453356104261171049
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -133,10 +132,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 2792264294237694396}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2393fbcfd8bc7cc4d91b4eba7f8608a4, type: 3}
+  m_Script: {fileID: 11500000, guid: aeef217e25c3b754a9846de65a072c14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterBody: {fileID: 1966693830431708555}
 --- !u!114 &5182505556561312240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -149,12 +147,12 @@ MonoBehaviour:
   m_Script: {fileID: -1552182283, guid: e725a070cec140c4caffb81624c8c787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SortKey: 1364737956
+  SortKey: 297747809
   ObjectInterest: 1
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
-  - {fileID: 1925859061663521557}
+  - {fileID: 4453356104261171049}
   - {fileID: 8804483670759175500}
   ForceRemoteRenderTimeframe: 0
 --- !u!143 &233760110054647651
@@ -309,47 +307,3 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &6855931998091345507
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6639306264178385591}
-  - component: {fileID: 5555082828684901783}
-  m_Layer: 0
-  m_Name: Camera
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6639306264178385591
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6855931998091345507}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.2, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7610749013862640617}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5555082828684901783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6855931998091345507}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2ac7fca85a13284e97962fda79fedc7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

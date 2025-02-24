@@ -6,8 +6,9 @@ public class PlayerSpawner : MonoBehaviour
 {
     public static PlayerSpawner Instance;
 
+    [SerializeField] private GameObject _lobbyPlayerPrefab;
     [SerializeField] private GameObject _playerPrefab;
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
     private void Awake()
     {
@@ -15,32 +16,47 @@ public class PlayerSpawner : MonoBehaviour
             Instance = this;
     }
 
-    public void SpawnPlayer(NetworkRunner runner, PlayerRef player)
+// ===== Lobby =====
+    public void SpawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {
         if(runner.IsServer)
         {
-            Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-
-            if (networkPlayerObject != null)
+            if(!spawnedCharacters.ContainsKey(player))
             {
-                _spawnedCharacters[player] = networkPlayerObject;
+                Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
+                NetworkObject networkPlayerObject = runner.Spawn(_lobbyPlayerPrefab, spawnPosition, Quaternion.identity, player);
+
+                spawnedCharacters[player] = networkPlayerObject;
             }
         }
     }
 
-    public void DespawnPlayer(NetworkRunner runner, PlayerRef player)
+    public void DespawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {
-        if (_spawnedCharacters.TryGetValue(player, out NetworkObject playerObject))
+        if (spawnedCharacters.TryGetValue(player, out NetworkObject playerObject))
         {
             runner.Despawn(playerObject);
-            _spawnedCharacters.Remove(player);
+            spawnedCharacters.Remove(player);
         }
     }
 
+    // ===== Game ===== 
+
+
+
     public NetworkObject GetPlayerObject(PlayerRef player)
     {
-        _spawnedCharacters.TryGetValue(player, out NetworkObject playerObject);
+        spawnedCharacters.TryGetValue(player, out NetworkObject playerObject);
         return playerObject;
+    }
+
+    public List<NetworkObject> GetAllPlayerObject()
+    {
+        List<NetworkObject> allPlayers = new List<NetworkObject>();
+        foreach (var player in spawnedCharacters.Values)
+        {
+            allPlayers.Add(player);
+        }
+        return allPlayers;
     }
 }

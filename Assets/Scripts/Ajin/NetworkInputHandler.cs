@@ -3,32 +3,35 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public Camera mainCamera;
+
+    private void Start()
+    {
+        mainCamera = Camera.main;        
+    }
+
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
+        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        if (Input.GetKey(KeyCode.W))
+        Debug.Log($"Input Horizontal: {Input.GetAxis("Horizontal")}, Vertical: {Input.GetAxis("Vertical")}");
+        Debug.Log($"Move Input: {moveInput}");
+
+        // 연주
+        if (Input.GetKey(KeyCode.Q))
         {
-            data.direction += Vector3.forward;
+
         }
 
-        if (Input.GetKey(KeyCode.S))
-        {
-            data.direction += Vector3.back;
-        }
+        data.moveInput = moveInput;
+        //data.direction = moveDir; // 정규화해서 속도 균일하게
+        data.isJumping = Input.GetKey(KeyCode.Space);
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            data.direction += Vector3.left;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            data.direction += Vector3.right;
-        }
         input.Set(data);
     }
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }

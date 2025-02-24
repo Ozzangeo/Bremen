@@ -9,7 +9,7 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
     public static GameSessionManager Instance { get; private set; }
 
-    private NetworkRunner _runner;
+    public NetworkRunner runner;
 
     private void Awake()
     {
@@ -27,10 +27,10 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public async void EnterRoomWithCode(string roomCode, GameMode mode)
     {
-        if(_runner == null)
+        if(runner == null)
         {
-            _runner = gameObject.AddComponent<NetworkRunner>();
-            _runner.ProvideInput = true;
+            runner = gameObject.AddComponent<NetworkRunner>();
+            runner.ProvideInput = true;
         }
 
         await SceneManager.LoadSceneAsync("LobbyScene", LoadSceneMode.Single);
@@ -42,7 +42,7 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
             sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
         }
 
-        await _runner.StartGame(new StartGameArgs()
+        await runner.StartGame(new StartGameArgs()
         {
             GameMode = mode,
             SessionName = roomCode,
@@ -50,46 +50,22 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
             SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
         });
 
-        _runner.AddCallbacks(this);
+        runner.AddCallbacks(this);
     }
 
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log($"{player.PlayerId}");
-        PlayerSpawner.Instance.SpawnPlayer(runner, player);
+        PlayerSpawner.Instance.SpawnLobbyPlayer(runner, player);
     }
 
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
         Debug.Log($"{player.PlayerId}");
-        PlayerSpawner.Instance.DespawnPlayer(runner, player);
+        PlayerSpawner.Instance.DespawnLobbyPlayer(runner, player);
     }
 
-    public void OnInput(NetworkRunner runner, NetworkInput input)
-    {
-        var data = new NetworkInputData();
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            data.direction += Vector3.forward;
-        }
-
-        if (Input.GetKey(KeyCode.S))
-        {
-            data.direction += Vector3.back;
-        }
-
-        if (Input.GetKey(KeyCode.A))
-        {
-            data.direction += Vector3.left;
-        }
-
-        if (Input.GetKey(KeyCode.D))
-        {
-            data.direction += Vector3.right;
-        }
-        input.Set(data);
-    }
+    public void OnInput(NetworkRunner runner, NetworkInput input) { }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }
