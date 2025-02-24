@@ -1,11 +1,14 @@
 ﻿using Ozi.Weapon.Entity;
+using Ozi.Weapon.Entity.Effect;
+using Ozi.Weapon.Entity.Effect.Implement;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Services.Matchmaker.Models;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Ozi.Weapon {
     public class ElectricGuitarWeapon : BasicWeapon {
-        private const float NORMAL_ATTACK_INCREASE_ATTACK = 5.0f;
         private const float NORMAL_ATTACK_STANDARD_COMBO = 3.0f;
         private const float NORMAL_ATTACK_RADIUS = 0.25f;
         private const float NORMAL_ATTACK_DAMAGE = 115.0f;
@@ -18,8 +21,8 @@ namespace Ozi.Weapon {
         private const float PLAY_ATTACK_DAMAGE = 30.0f;
         private const float PLAY_ATTACK_MAX_DAMAGE = 78.0f;
 
-        [SerializeField] private float _normalIncreasedAttack = 0.0f;
         private Dictionary<BasicEntityBehaviour, float> _playIncreasedAttackByEntity;
+        private HashSet<BasicEntityBehaviour> _buffedEntities;
 
         private void ClearPlayIncreased() {
             foreach (var pair in _playIncreasedAttackByEntity) {
@@ -27,6 +30,8 @@ namespace Ozi.Weapon {
                 var increased = pair.Value;
 
                 entity.Status.attack -= increased;
+
+                entity.Status.Notify();
             }
             _playIncreasedAttackByEntity.Clear();
         }
@@ -37,29 +42,24 @@ namespace Ozi.Weapon {
             OnComboAdd +=
                 () => {
                     // Normal
-                    var before_increased = _normalIncreasedAttack;
-
-                    int normal_combo = (int)(ChartPlayer.Combo / NORMAL_ATTACK_STANDARD_COMBO);
-                    _normalIncreasedAttack = normal_combo * NORMAL_ATTACK_INCREASE_ATTACK;
-
-                    Owner.Status.attack += _normalIncreasedAttack - before_increased;
+                    if (ChartPlayer.Combo % NORMAL_ATTACK_STANDARD_COMBO == 0) {
+                        Owner.Status.AddEffect(new ElectricGuitarIncreaseAttackEffect(new EffectParam(Owner, Owner)));
+                    }
 
                     // Play
                     if (Input.GetKey(PLAY_ATTACK_KEY)) {
                         PlayAttack();
-                    } else {
-                        ClearPlayIncreased();
                     }
                 };
             OnComboReset +=
                 () => {
                     // Normal
-                    Owner.Status.attack -= _normalIncreasedAttack;
-
-                    _normalIncreasedAttack = 0.0f;
+                    Owner.Status.RemoveEffect<ElectricGuitarIncreaseAttackEffect>();
 
                     // Play
-                    ClearPlayIncreased();
+                    foreach (var entity in _buffedEntities) {
+                        entity.Status.RemoveEffect<ElectricGuitarTeamIncreaseAttackEffect>();
+                    }
                 };
         }
 
@@ -71,7 +71,7 @@ namespace Ozi.Weapon {
                 FindEntities(position + forward, NORMAL_ATTACK_RADIUS)
                 .Where(o => o.IsSameTeam(Owner));
 
-            var damage = Mathf.Clamp(Owner.Status.attack, NORMAL_ATTACK_DAMAGE, NORMAL_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(NORMAL_ATTACK_DAMAGE + Owner.Status.attack, 0.0f, NORMAL_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(entities, damage);
         }
@@ -84,24 +84,15 @@ namespace Ozi.Weapon {
                 .Where(o => o.IsSameTeam(Owner));
             var other_team_entities = entities.Where(o => !o.IsSameTeam(Owner));
 
-            int play_combo = (int)(ChartPlayer.Combo / PLAY_ATTACK_STANDARD_COMBO);
-            var play_attack = play_combo * PLAY_ATTACK_INCREASE_ATTACK;
+            if (ChartPlayer.Combo % PLAY_ATTACK_STANDARD_COMBO == 0) {
+                EntitiesAddEffect(team_entities, o => new ElectricGuitarTeamIncreaseAttackEffect(new EffectParam(Owner, o)));
 
-            var inner_entities = _playIncreasedAttackByEntity.Where(o => entities.Contains(o.Key));
-            
-            ClearPlayIncreased();
-
-            _playIncreasedAttackByEntity = inner_entities.ToDictionary(o => o.Key, o => o.Value);
-
-            foreach (var pair in _playIncreasedAttackByEntity) {
-                var entity = pair.Key;
-                var increased = pair.Value;
-
-                entity.Status.attack += play_attack;
-                _playIncreasedAttackByEntity[entity] = play_attack;
+                foreach (var entity in team_entities) {
+                    _buffedEntities.Add(entity);
+                }
             }
 
-            var damage = Mathf.Clamp(Owner.Status.attack, PLAY_ATTACK_DAMAGE, PLAY_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(PLAY_ATTACK_DAMAGE + Owner.Status.attack, 0.0f, PLAY_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(other_team_entities, damage);
         }
