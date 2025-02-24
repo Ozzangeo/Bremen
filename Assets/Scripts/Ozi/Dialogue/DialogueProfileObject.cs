@@ -3,6 +3,6 @@
 namespace Ozi.Dialogue {
     [CreateAssetMenu(fileName = "DialogueProfile", menuName = "Dialogue/DialogueProfile")]
     public class DialogueProfileObject : ScriptableObject {
-        [field: SerializeField] public DialogueProfile Profile { get; private set; }
+        [field: SerializeField] public DialogueProfile Data { get; private set; }
     }
 }
