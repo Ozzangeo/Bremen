@@ -11,10 +11,11 @@ public class BossPattern : MonoBehaviour
   [Header("보스 능력치")] public BossStats bossStats;
   [Header("보스 상태 표시")] public EBossState bossState = EBossState.Phase1;
 
-  [Header("몬스터 소환")] public BossSpawnMonster bossSpawnMonster;
-  [Header("파동 생성")] public BossCreateWave bossCreateWave;
-  [Header("낙하물 생성")] public BossDropObject bossDropObject;
-  [Header("레이저 생성")] public BossCreateLaser bossCreateLaser;
+  BossSpawnMonster bossSpawnMonster;
+  BossCreateWave bossCreateWave;
+  BossDropObject bossDropObject;
+  BossCreateLaser bossCreateLaser;
+  BossInfoManager bossInfoManager;
 
   List<Transform> player;
 
@@ -24,6 +25,7 @@ public class BossPattern : MonoBehaviour
     if(bossCreateWave == null) bossCreateWave = GetComponent<BossCreateWave>();
     if(bossDropObject == null) bossDropObject = GetComponent<BossDropObject>();
     if(bossCreateLaser == null) bossCreateLaser = GetComponent<BossCreateLaser>();
+    if(bossInfoManager == null) bossInfoManager = GetComponent<BossInfoManager>();
 
     // 초기화
     bossStats.Initialize();
@@ -31,6 +33,7 @@ public class BossPattern : MonoBehaviour
     bossCreateWave.Initialize();
     bossDropObject.Initialize();
     bossCreateLaser.Initialize();
+    bossInfoManager.Initialize();
 
     player = new List<Transform>();
     GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
@@ -47,30 +50,25 @@ public class BossPattern : MonoBehaviour
     StartCoroutine(Phase1());
   }
 
-  // 피격
-  public void GetDamage(float damage)
+  void Update()
   {
-    Debug.Log("피격");
-    bossStats.health -= damage;
+    // 보스 사망
+    if(bossStats.health <= 0)
+    {
+      BossDie();
+    }
+  }
 
-    EBossState tempState = EBossState.Phase1;
-    // 페이즈 2
-    if(bossStats.health <= 10000 && bossStats.health > 5000)
-    {
-      tempState = EBossState.Phase2;
-    }
-    // 페이즈 3
-    else if(bossStats.health <= 5000)
-    {
-      tempState = EBossState.Phase3;
-    }
+  public void BossDie()
+  {
+      Debug.Log("보스 사망");
 
-    // 페이즈 갱신
-    if(!tempState.Equals(bossState))
-    {
-      bossState = tempState;
-      UpdateState(bossState);
-    }
+      bossSpawnMonster.DeleteMonster();
+      bossCreateWave.DeleteWave();
+      bossDropObject.DeleteDropObject();
+      bossCreateLaser.DeleteLaser();
+
+      Destroy(gameObject);
   }
 
   // 상태 갱신

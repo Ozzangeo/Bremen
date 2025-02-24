@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 6439430947303454592}
   - component: {fileID: 2243537766455788028}
   - component: {fileID: 795005474621590098}
-  - component: {fileID: 6326039432144349948}
+  - component: {fileID: 9107858913831701414}
   - component: {fileID: 880978708201327544}
+  - component: {fileID: 6326039432144349948}
   m_Layer: 0
   m_Name: Drone
   m_TagString: Untagged
@@ -153,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: a48ee78f3d4819d45914edda52f7ff6c, type: 2}
   treeFactory: {fileID: 880978708201327544}
---- !u!114 &6326039432144349948
+--- !u!114 &9107858913831701414
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +163,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8587527286866546344}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dfefb05373b23ff4ca7287380778add8, type: 3}
+  m_Script: {fileID: 11500000, guid: 395dd728029f9324a8b95763fc80824d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &880978708201327544
@@ -177,6 +178,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c7a8def9fce499c408674d7b38428aca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  players: []
   patrolTarget: {x: 0, y: 0, z: 0}
   hasPatrolTarget: 0
   bulletPrefab: {fileID: 6485777739131820461, guid: 4c01772145dfca945bfd9dac03ac02ce, type: 3}
+  bulletSpeed: 6
+  maintainDistance: 5
+  awayDistance: 10
+--- !u!114 &6326039432144349948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8587527286866546344}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfefb05373b23ff4ca7287380778add8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

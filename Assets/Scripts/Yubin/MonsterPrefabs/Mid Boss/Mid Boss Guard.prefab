@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 4461217226051594767}
   - component: {fileID: 7105211770210439519}
   - component: {fileID: 4009846367892597295}
-  - component: {fileID: 9137041127073720145}
   - component: {fileID: 3229575828508320829}
+  - component: {fileID: 4936316656814211757}
+  - component: {fileID: 9137041127073720145}
   m_Layer: 0
   m_Name: Mid Boss Guard
   m_TagString: Untagged
@@ -153,18 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: e680cd134f62e924eba2efae760ce126, type: 2}
   treeFactory: {fileID: 3229575828508320829}
---- !u!114 &9137041127073720145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4679145285359606414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &3229575828508320829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,3 +172,27 @@ MonoBehaviour:
   waveRate: 4
   waveSpeed: 20
   dashSpeed: 14
+--- !u!114 &4936316656814211757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4679145285359606414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b645a0db680d05847bf1385209573793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &9137041127073720145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4679145285359606414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

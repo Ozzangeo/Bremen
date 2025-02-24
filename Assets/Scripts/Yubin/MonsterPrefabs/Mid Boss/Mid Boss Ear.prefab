@@ -14,8 +14,9 @@ GameObject:
   - component: {fileID: 3405188395194667811}
   - component: {fileID: 1143758387338792772}
   - component: {fileID: 2312061913860735589}
-  - component: {fileID: 7411698904393977490}
   - component: {fileID: 7658573119742861994}
+  - component: {fileID: 2030065687405675591}
+  - component: {fileID: 7411698904393977490}
   m_Layer: 0
   m_Name: Mid Boss Ear
   m_TagString: Untagged
@@ -32,7 +33,7 @@ Transform:
   m_GameObject: {fileID: 1921521993537988890}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 1, z: 0}
+  m_LocalPosition: {x: 10, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -153,18 +154,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterStats: {fileID: 11400000, guid: ff4d3a757291bee4c8634dba9366b2b6, type: 2}
   treeFactory: {fileID: 7658573119742861994}
---- !u!114 &7411698904393977490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1921521993537988890}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7658573119742861994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,3 +169,27 @@ MonoBehaviour:
   isPlayerTarget: 0
   playerAway: 5
   attackRate: 2
+--- !u!114 &2030065687405675591
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921521993537988890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b645a0db680d05847bf1385209573793, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7411698904393977490
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921521993537988890}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d00430a97fdea43a6e46b14f6bac9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

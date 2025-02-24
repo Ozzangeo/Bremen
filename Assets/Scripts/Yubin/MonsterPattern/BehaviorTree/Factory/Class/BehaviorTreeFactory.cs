@@ -4,13 +4,19 @@ using UnityEngine;
 // 행동 트리 가상 클래스
 public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
 {
-  public virtual IBehaviorNode CreateBehaviorTree(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  [HideInInspector] public Transform player;         // 가장 가까운 타겟 플레이어
+  [HideInInspector] public List<Transform> players;  // 플레이어 리스트
+
+  public virtual IBehaviorNode CreateBehaviorTree(Transform monster, List<Transform> players, MonsterStats monsterStats, Vector3 spawnPosition)
   {
+    this.players = players;
+    player = ClosestPlayer(monster, players, monsterStats.patrolRange, spawnPosition);
+
     // 개별 액션 노드
-    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, player, monsterStats));       // 공격 범위 확인
-    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(player, monsterStats, spawnPosition));       // 공격
-    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, player, monsterStats, spawnPosition));  // 추적
-    IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, player, monsterStats, spawnPosition));        // 순찰
+    IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, monsterStats));       // 공격 범위 확인
+    IBehaviorNode performAttack = new ActionNode(() => PerformAttack(monsterStats, spawnPosition));       // 공격
+    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, monsterStats, spawnPosition));  // 추적
+    IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, monsterStats, spawnPosition));        // 순찰
     IBehaviorNode returnToSpawn = new ActionNode(() => ReturnToSpawn(monster, spawnPosition, monsterStats));      // 복귀
 
     // 공격 시퀸스 노드
@@ -25,8 +31,33 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
     return rootSelector;
   }
 
+  // 순찰 범위 내에 들어온 플레이어
+  public Transform ClosestPlayer(Transform monster, List<Transform> players, float patrolRange, Vector3 spawnPosition)
+  {
+    Transform closest = null;
+    float minDistance = float.MaxValue;
+
+    foreach (Transform current in players)
+    {
+      float distance = Vector3.Distance(current.position, spawnPosition);
+      if (distance <= patrolRange)
+      {
+        return current;
+      }
+
+      // 범위 내에 없더라도 가장 가까운 플레이어 반환
+      // null 반환 시 터짐
+      if(distance < minDistance)
+      {
+        minDistance = distance;
+        closest = current;
+      }
+    }
+    return closest;
+  }
+
   // 공격 범위 체크
-  public virtual IBehaviorNode.EBehaviorNodeState CheckAttackRange(Transform monster, Transform player, MonsterStats monsterStats)
+  public virtual IBehaviorNode.EBehaviorNodeState CheckAttackRange(Transform monster, MonsterStats monsterStats)
   {
     float attackRange = monsterStats.attackRange; // 공격 범위
 
@@ -34,7 +65,7 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
   }
 
   // 공격 실행
-  public virtual IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public virtual IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
   {
     float patrolRange = monsterStats.patrolRange; // 순찰 범위
 
@@ -47,7 +78,7 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
   }
 
   // 추적
-  public virtual IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public virtual IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     float patrolRange = monsterStats.patrolRange;  // 순찰 범위
     float moveSpeed = monsterStats.moveSpeed;      // 이동 속도
@@ -75,8 +106,10 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
   [HideInInspector] public Vector3 patrolTarget;          // 순찰 목적지
   [HideInInspector] public bool hasPatrolTarget = false;  // 타겟 유무
 
-  public virtual IBehaviorNode.EBehaviorNodeState Patrol(Transform monster, Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public virtual IBehaviorNode.EBehaviorNodeState Patrol(Transform monster, MonsterStats monsterStats, Vector3 spawnPosition)
   {
+    player = ClosestPlayer(monster, players, monsterStats.patrolRange, spawnPosition);
+    Debug.Log(player.transform.position);
     float patrolRange = monsterStats.patrolRange; // 순찰 범위
     float moveSpeed = monsterStats.moveSpeed;     // 이동 속도
 
@@ -114,5 +147,13 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
     }
 
     return IBehaviorNode.EBehaviorNodeState.Failure;
+  }
+
+  // 몬스터 사망
+  public virtual void MidBossDie()
+  {
+    Debug.Log("몬스터 사망");
+    
+    Destroy(gameObject);
   }
 }

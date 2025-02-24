@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 4215768864664528151}
   - component: {fileID: 7073691652456941603}
   - component: {fileID: 4772874149707608333}
+  - component: {fileID: 5877987866910993978}
   m_Layer: 0
   m_Name: EMP generator
   m_TagString: Untagged
@@ -177,8 +178,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0b119b7adcdd8c4298378c8d7124fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  players: []
   patrolTarget: {x: 0, y: 0, z: 0}
   hasPatrolTarget: 0
   wavePrefab: {fileID: 6111399449889583347, guid: 7b81d35c71f1c9e4183f93bfcd4a269d, type: 3}
   waveRate: 4
   waveSpeed: 20
+--- !u!114 &5877987866910993978
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6348122296261263439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395dd728029f9324a8b95763fc80824d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

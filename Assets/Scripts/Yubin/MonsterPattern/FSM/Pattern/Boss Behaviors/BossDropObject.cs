@@ -5,17 +5,32 @@ using UnityEngine;
 // 낙하물 생성
 public class BossDropObject : MonoBehaviour
 {
-  [Header("낙하물 예고 표시")] public GameObject objectMark;    // 낙하물 예고 표시
-  [Header("낙하물 프리팹")] public GameObject dropObjectPrefab; // 낙하물 프리팹
-
   BossStats bossStats; // 보스 능력치
   BossPattern bossPattern;
+  List<GameObject> currentObjects;
+  List<GameObject> currentMarks;
 
   // 초기화
   public void Initialize()
   {
     bossPattern = GetComponent<BossPattern>();
     bossStats = bossPattern.bossStats;
+    currentObjects = new List<GameObject>();
+    currentMarks = new List<GameObject>();
+  }
+
+  // 낙하물 파괴 (보스 사망)
+  public void DeleteDropObject()
+  {
+    foreach(GameObject current in currentObjects)
+    {
+      Destroy(current);
+    }
+
+    foreach(GameObject current in currentMarks)
+    {
+      Destroy(current);
+    }
   }
 
   // 낙하물 생성
@@ -35,14 +50,18 @@ public class BossDropObject : MonoBehaviour
     {
     // 예고 위치 표시 후 파괴
     Vector3 markPosition = new Vector3(player.position.x, player.position.y, player.position.z);
-    GameObject mark = Instantiate(objectMark, markPosition, Quaternion.identity);
+    GameObject mark = Instantiate(bossStats.dropObjectMark, markPosition, Quaternion.identity);
+
+    currentMarks.Add(mark);
 
     yield return new WaitForSeconds(dropRate);
     Destroy(mark);
 
     // 플레이어 머리 위에 낙하물 생성
     Vector3 dropPosition = new Vector3(markPosition.x, markPosition.y + 15f, markPosition.z);
-    GameObject dropObject = Instantiate(dropObjectPrefab, dropPosition, Quaternion.identity);
+    GameObject dropObject = Instantiate(bossStats.dropObject, dropPosition, Quaternion.identity);
+
+    currentObjects.Add(dropObject);
 
     Rigidbody rb = dropObject.GetComponent<Rigidbody>();
     if (rb != null)

@@ -10,12 +10,20 @@ public class BossCreateWave : MonoBehaviour
   GameObject wavePrefab;  // 파동
   bool isSpawning = false;
   private Coroutine waveCoroutine;
+  GameObject currentWave;
 
   // 초기화
   public void Initialize()
   {
     bossStats = GetComponent<BossPattern>().bossStats;
     wavePrefab = bossStats.wave;
+  }
+
+  // 파동 파괴 (보스 사망)
+  public void DeleteWave()
+  {
+    StopWave();
+    Destroy(currentWave);
   }
 
   // 파동 생성
@@ -54,14 +62,14 @@ public class BossCreateWave : MonoBehaviour
   {
     Debug.Log("파동 생성");
 
-    GameObject wave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
-    while(wave.transform.localScale.x <= maxScale * 2)
+    currentWave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
+    while(currentWave.transform.localScale.x <= maxScale * 2)
     {
       float scaleIncress = waveSpeed  * Time.deltaTime;
-      wave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
+      currentWave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
       yield return null;
     }
 
-    Destroy(wave);
+    Destroy(currentWave);
   }
 }

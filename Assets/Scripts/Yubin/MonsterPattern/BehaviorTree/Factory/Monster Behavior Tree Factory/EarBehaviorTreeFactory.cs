@@ -8,7 +8,7 @@ public class EarBehaviorTreeFactory : BehaviorTreeFactory
   float lastAttackTime = 0f;  // 마지막 공격 시간 
   
   // 공격 실행 재정의
-  public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats, Vector3 spawnPosition)
+  public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
   {
     float patrolRange = monsterStats.patrolRange; // 순찰 범위
 
