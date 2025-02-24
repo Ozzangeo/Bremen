@@ -12,6 +12,11 @@ public class BasicSpawnerTest : MonoBehaviour, INetworkRunnerCallbacks
     //현재 방에 접속 중인 플레이어의 정보와 네트워크 오브젝트를 담는 딕셔너리
     private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
 
+    private void Start()
+    {
+        
+    }
+
     async void StartGame(GameMode mode)
     {
         _runner = gameObject.AddComponent<NetworkRunner>();
@@ -69,25 +74,23 @@ public class BasicSpawnerTest : MonoBehaviour, INetworkRunnerCallbacks
     {
         var data = new NetworkInputData();
 
-        if (Input.GetKey(KeyCode.W))
+        if(Input.GetKey(KeyCode.W))
         {
             data.direction += Vector3.forward;
         }
-
         if (Input.GetKey(KeyCode.S))
         {
             data.direction += Vector3.back;
         }
-
         if (Input.GetKey(KeyCode.A))
         {
             data.direction += Vector3.left;
         }
-
         if (Input.GetKey(KeyCode.D))
         {
             data.direction += Vector3.right;
         }
+
         input.Set(data);
     }
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }

@@ -3,9 +3,17 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
+    public Camera mainCamera;
+
+    private void Start()
+    {
+        mainCamera = Camera.main;        
+    }
+
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
@@ -14,21 +22,22 @@ public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
         {
             data.direction += Vector3.forward;
         }
-
         if (Input.GetKey(KeyCode.S))
         {
             data.direction += Vector3.back;
         }
-
         if (Input.GetKey(KeyCode.A))
         {
             data.direction += Vector3.left;
         }
-
         if (Input.GetKey(KeyCode.D))
         {
             data.direction += Vector3.right;
         }
+
+        data.isPlaying = Input.GetKey(KeyCode.Q);
+        data.isJumping = Input.GetKeyDown(KeyCode.Space);
+
         input.Set(data);
     }
     public void OnPlayerJoined(NetworkRunner runner, PlayerRef player) { }
