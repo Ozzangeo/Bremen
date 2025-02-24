@@ -765,6 +765,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rhythm Hacker
       objectReference: {fileID: 0}
+    - target: {fileID: 5099048297523601062, guid: 6fc9017c825f6c34f8d52b0fd008cdac, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8743935729084080089, guid: 6fc9017c825f6c34f8d52b0fd008cdac, type: 3}
       propertyPath: m_LocalPosition.x
       value: -3.1430035
@@ -1679,7 +1683,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e4fba79ba68de342a985051dde11406, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initStatusData: {fileID: 0}
+  bossStats: {fileID: 0}
   monsterStats: {fileID: 11400000, guid: 3aad9f4c1488ce54f903639f7ad3cc98, type: 2}
+  selectedCharacter: {fileID: 0}
+  <Status>k__BackingField:
+    name: 
+    attack: 0
+    defense: 0
+    health: 0
+    max_health: 0
+    speed: 0
+  <Team>k__BackingField: 0
   treeFactory: {fileID: 0}
 --- !u!54 &1147378956
 Rigidbody:
