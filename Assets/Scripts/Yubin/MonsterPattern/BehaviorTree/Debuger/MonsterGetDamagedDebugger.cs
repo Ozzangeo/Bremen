@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MonsterGetDamagedDebugger : MonoBehaviour
 {
@@ -13,6 +13,6 @@ public class MonsterGetDamagedDebugger : MonoBehaviour
 
   public void temp()
   {
-    midBossInfo.GetDamage(damage);
+    // midBossInfo.GetDamage(damage);
   }
 }

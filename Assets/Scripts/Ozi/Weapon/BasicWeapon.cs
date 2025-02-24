@@ -5,21 +5,6 @@ using UnityEngine;
 
 namespace Ozi.Weapon {
     public class BasicWeapon : MonoBehaviour {
-        [System.Serializable]
-        public class TestEntityStatus {
-            public float hp;
-            public float defense;
-            public float attack;
-            public float speed;
-        }
-        [System.Serializable]
-        public class TestEntity : MonoBehaviour {
-            public TestEntityStatus status;
-            public int team;
-
-            public bool IsSameTeam(int team) => team == this.team;
-        }
-
         public const int MAX_PHYSICS_COLLIDER_COUNT = 20;
 
         public const KeyCode PLAY_ATTACK_KEY = KeyCode.Q;
@@ -30,7 +15,7 @@ namespace Ozi.Weapon {
         [field: SerializeField] public BremenChartPlayer ChartPlayer { get; protected set; }
         
         [field: Header("Settings")]
-        [field: SerializeField] public TestEntity Owner { get; set; }
+        [field: SerializeField] public BasicEntityBehaviour Owner { get; set; }
         
         [field: Header("Debugs")]
         [field: SerializeField] public int CumulativeCombo { get; protected set; } = 0;
@@ -39,11 +24,11 @@ namespace Ozi.Weapon {
 
         public event Action OnUseNormalAttack;
         public event Action OnUsePlayAttack;
-        public event Action OnUseSpecialAttack;
+        // [Obsolete] public event Action OnUseSpecialAttack;
 
         public event Action OnUseFailedNormalAttack;
         public event Action OnUseFailedPlayAttack;
-        public event Action OnUseFailedSpecialAttack;
+        // [Obsolete] public event Action OnUseFailedSpecialAttack;
 
         public event Action OnComboAdd;
         public event Action OnComboReset;
@@ -134,14 +119,14 @@ namespace Ozi.Weapon {
             OnUpdate();
         }
 
-        protected List<TestEntity> FindEntities(Vector3 origin, float radius, int layer_mask = -1) {
-            var entities = new List<TestEntity>();
+        protected List<BasicEntityBehaviour> FindEntities(Vector3 origin, float radius, int layer_mask = -1) {
+            var entities = new List<BasicEntityBehaviour>();
 
             int count = Physics.OverlapSphereNonAlloc(origin, radius, PhysicsColliders, layer_mask);
             for (int i = 0; i < count; i++) {
                 var collider = PhysicsColliders[i];
 
-                if (collider.TryGetComponent<TestEntity>(out var entity)) {
+                if (collider.TryGetComponent<BasicEntityBehaviour>(out var entity)) {
                     entities.Add(entity);
                 }
             }
@@ -149,9 +134,9 @@ namespace Ozi.Weapon {
             return entities;
         }
 
-        protected void EntitiesKnockback(IEnumerable<TestEntity> entities, Vector3 origin, float power, ForceMode mode = ForceMode.VelocityChange)
+        protected void EntitiesKnockback(IEnumerable<BasicEntityBehaviour> entities, Vector3 origin, float power, ForceMode mode = ForceMode.VelocityChange)
             => EntitiesKnockback(entities, origin, power, o => 1.0f, mode);
-        protected void EntitiesKnockback(IEnumerable<TestEntity> entities, Vector3 origin, float power, Func<float, float> power_graph, ForceMode mode = ForceMode.VelocityChange) {
+        protected void EntitiesKnockback(IEnumerable<BasicEntityBehaviour> entities, Vector3 origin, float power, Func<float, float> power_graph, ForceMode mode = ForceMode.VelocityChange) {
             foreach (var entity in entities) {
                 if (entity.TryGetComponent<Rigidbody>(out var rigidbody)) {
                     var position = entity.transform.position;
@@ -166,18 +151,18 @@ namespace Ozi.Weapon {
             }
         }
         
-        protected void EntitiesHit(IEnumerable<TestEntity> entities, float damage) {
+        protected void EntitiesHit(IEnumerable<BasicEntityBehaviour> entities, float damage) {
             foreach (var entity in entities) {
-                var apply_damage = damage - entity.status.defense;
+                var apply_damage = damage - entity.Status.defense;
 
-                entity.status.hp -= Math.Clamp(apply_damage, 0.0f, float.MaxValue);
+                entity.GetDamage(Math.Clamp(apply_damage, 0.0f, float.MaxValue));
             }
         }
-        protected void EntitiesHeal(IEnumerable<TestEntity> entities, float heal) {
+        protected void EntitiesHeal(IEnumerable<BasicEntityBehaviour> entities, float heal) {
             foreach (var entity in entities) {
                 var apply_heal = heal;
 
-                entity.status.hp += Math.Clamp(apply_heal, 0.0f, float.MaxValue);
+                entity.Status.health += Math.Clamp(apply_heal, 0.0f, float.MaxValue);
             }
         }
     }

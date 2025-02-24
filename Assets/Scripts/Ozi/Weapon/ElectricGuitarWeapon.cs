@@ -18,14 +18,14 @@ namespace Ozi.Weapon {
         private const float PLAY_ATTACK_MAX_DAMAGE = 78.0f;
 
         [SerializeField] private float _normalIncreasedAttack = 0.0f;
-        private Dictionary<TestEntity, float> _playIncreasedAttackByEntity;
+        private Dictionary<BasicEntityBehaviour, float> _playIncreasedAttackByEntity;
 
         private void ClearPlayIncreased() {
             foreach (var pair in _playIncreasedAttackByEntity) {
                 var entity = pair.Key;
                 var increased = pair.Value;
 
-                entity.status.attack -= increased;
+                entity.Status.attack -= increased;
             }
             _playIncreasedAttackByEntity.Clear();
         }
@@ -41,7 +41,7 @@ namespace Ozi.Weapon {
                     int normal_combo = (int)(ChartPlayer.Combo / NORMAL_ATTACK_STANDARD_COMBO);
                     _normalIncreasedAttack = normal_combo * NORMAL_ATTACK_INCREASE_ATTACK;
 
-                    Owner.status.attack += _normalIncreasedAttack - before_increased;
+                    Owner.Status.attack += _normalIncreasedAttack - before_increased;
 
                     // Play
                     if (Input.GetKey(PLAY_ATTACK_KEY)) {
@@ -53,7 +53,7 @@ namespace Ozi.Weapon {
             OnComboReset +=
                 () => {
                     // Normal
-                    Owner.status.attack -= _normalIncreasedAttack;
+                    Owner.Status.attack -= _normalIncreasedAttack;
 
                     _normalIncreasedAttack = 0.0f;
 
@@ -68,9 +68,9 @@ namespace Ozi.Weapon {
 
             var entities =
                 FindEntities(position + forward, NORMAL_ATTACK_RADIUS)
-                .Where(o => o.IsSameTeam(Owner.team));
+                .Where(o => o.IsSameTeam(Owner));
 
-            var damage = Mathf.Clamp(Owner.status.attack, NORMAL_ATTACK_DAMAGE, NORMAL_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(Owner.Status.attack, NORMAL_ATTACK_DAMAGE, NORMAL_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(entities, damage);
         }
@@ -78,10 +78,10 @@ namespace Ozi.Weapon {
             var position = Owner.transform.position;
             var entities = FindEntities(position, PLAY_ATTACK_RADIUS);
 
-            var team_entities = 
+            var team_entities =
                 FindEntities(position, PLAY_ATTACK_BUFF_RADIUS)
-                .Where(o => o.IsSameTeam(Owner.team));
-            var other_team_entities = entities.Where(o => !o.IsSameTeam(Owner.team));
+                .Where(o => o.IsSameTeam(Owner));
+            var other_team_entities = entities.Where(o => !o.IsSameTeam(Owner));
 
             int play_combo = (int)(ChartPlayer.Combo / PLAY_ATTACK_STANDARD_COMBO);
             var play_attack = play_combo * PLAY_ATTACK_INCREASE_ATTACK;
@@ -96,11 +96,11 @@ namespace Ozi.Weapon {
                 var entity = pair.Key;
                 var increased = pair.Value;
 
-                entity.status.attack += play_attack;
+                entity.Status.attack += play_attack;
                 _playIncreasedAttackByEntity[entity] = play_attack;
             }
 
-            var damage = Mathf.Clamp(Owner.status.attack, PLAY_ATTACK_DAMAGE, PLAY_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(Owner.Status.attack, PLAY_ATTACK_DAMAGE, PLAY_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(other_team_entities, damage);
         }

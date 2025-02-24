@@ -1,12 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 // 중간 보스 행동 실행
-public class MidBossBehavior : MonoBehaviour
+public class MidBossBehavior : BasicEntityBehaviour 
 {
-  [Header("몬스터 능력치")]
-  public MonsterStats monsterStats;
-
   [Header("몬스터 패턴 팩토리")]
   public MidBossBehaviorTreeFactory treeFactory;
 
