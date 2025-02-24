@@ -16,4 +16,4 @@ MonoBehaviour:
   attackPower: 13
   moveSpeed: 7
   attackRange: 7
-  patrolRange: 30
+  patrolRange: 20
