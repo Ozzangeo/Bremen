@@ -1,4 +1,6 @@
-﻿namespace Ozi.Weapon.Entity.Effect.Implement {
+﻿using Ozi.Weapon.Utility;
+
+namespace Ozi.Weapon.Entity.Effect.Implement {
     public class BlindEffect : BasicEffect {
         public const int MAX_STACK = 10;
         public const float BLIND_LEVEL = 0.1f;
@@ -22,12 +24,20 @@
             }
 
             _progress_time = 0.0f;
-            
-            // blind logic
+
+            if (Stack < MAX_STACK) {
+                Stack++;
+
+                ScreenBlinder.Show(Stack * BLIND_LEVEL);
+            }
         }
 
         public override void OnUpdate(float delta_time) {
             _progress_time += delta_time;
+        }
+
+        public override void OnRemoved() {
+            ScreenBlinder.Show(0.0f);
         }
     }
 }

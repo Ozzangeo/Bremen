@@ -1,4 +1,6 @@
-﻿namespace Ozi.Weapon.Entity.Effect.Implement {
+﻿using UnityEngine;
+
+namespace Ozi.Weapon.Entity.Effect.Implement {
     public class HearingLossEffect : BasicEffect {
         public const int MAX_STACK = 10;
         public const float BLIND_LEVEL = 0.1f;
@@ -23,11 +25,19 @@
 
             _progress_time = 0.0f;
 
-            // hearing loss logic
+            if (Stack < MAX_STACK) {
+                Stack++;
+
+                AudioManager.GlobalVolume = 1.0f - (BLIND_LEVEL * Stack);
+            }
         }
 
         public override void OnUpdate(float delta_time) {
             _progress_time += delta_time;
+        }
+
+        public override void OnRemoved() {
+            AudioManager.GlobalVolume = 1.0f;
         }
     }
 }
