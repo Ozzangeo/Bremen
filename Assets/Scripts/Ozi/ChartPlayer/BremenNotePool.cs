@@ -16,7 +16,6 @@ namespace Ozi.ChartPlayer {
         [field: Header("Debugs")]
         [field: SerializeField] public List<BremenNote> Using { get; private set; } = new();
         [field: SerializeField] public int UsingIndex { get; private set; } = 0;
-        [field: SerializeField] public int ReleasedIndex { get; private set; } = 0;
 
         public BremenNotePool(BremenChartAudioPlayer audio_player, BremenNote prefab, Transform parent = null) {
             AudioPlayer = audio_player;
@@ -41,7 +40,6 @@ namespace Ozi.ChartPlayer {
             Using.Clear();
 
             UsingIndex = 0;
-            ReleasedIndex = 0;
         }
 
         public void Focus(int index) {
