@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 [CreateAssetMenu(fileName = "BossStats", menuName = "ScriptableObjects/BossStats", order = 2)]
 public class BossStats : ScriptableObject
@@ -25,5 +25,13 @@ public class BossStats : ScriptableObject
   {
     health = 15000f;
     waveSpeed = 20f;
+  }
+
+  public EntityStats ToEntityStats() {
+    var stats = new EntityStats() {
+      health = health,
+    };
+
+    return stats;
   }
 }

@@ -18,10 +18,10 @@ namespace Ozi.Weapon {
             // owner included
             var team_entites = 
                 FindEntities(position, NORMAL_ATTACK_BUFF_RADIUS)
-                .Where(o => o.IsSameTeam(Owner.team));
+                .Where(o => o.IsSameTeam(Owner));
             var other_team_entites =
                 FindEntities(position, NORMAL_ATTACK_DEBUFF_RADIUS)
-                .Where(o => !o.IsSameTeam(Owner.team));
+                .Where(o => !o.IsSameTeam(Owner));
 
             // buff team entities logic
 
@@ -34,7 +34,7 @@ namespace Ozi.Weapon {
             var entities = FindEntities(position, PLAY_ATTACK_HEAL_RADIUS);
 
             // owner included
-            var team_entites = entities.Where(o => o.IsSameTeam(Owner.team));
+            var team_entites = entities.Where(o => o.IsSameTeam(Owner));
 
             var combo = ChartPlayer.Combo;
 

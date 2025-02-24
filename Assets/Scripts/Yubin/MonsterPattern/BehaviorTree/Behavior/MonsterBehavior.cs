@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 // 몬스터 행동 실행
 
-public class MonsterBehavior : MonoBehaviour
+public class MonsterBehavior : BasicEntityBehaviour
 {
   // [Header("공격 범위(빨간색)")]
   // public float attackRange = 2.0f;
@@ -11,9 +11,6 @@ public class MonsterBehavior : MonoBehaviour
   // public float detectionRange = 10.0f;
   // [Header("이동 속도")]
   // public float moveSpeed = 3.0f;
-
-  [Header("몬스터 능력치")]
-  public MonsterStats monsterStats;
 
   [Header("몬스터 패턴 팩토리")]
   public BehaviorTreeFactory treeFactory;

@@ -17,7 +17,7 @@ namespace Ozi.Weapon {
         private const float PLAY_ATTACK_DAMAGE = 11.0f;
         private const float PLAY_ATTACK_MAX_DAMAGE = 33.0f;
 
-        private readonly ElementCooldown<TestEntity> AttackKnockbackCooldown = new();
+        private readonly ElementCooldown<BasicEntityBehaviour> AttackKnockbackCooldown = new();
 
         protected override void OnUpdate() {
             AttackKnockbackCooldown.Update(Time.deltaTime);
@@ -27,7 +27,7 @@ namespace Ozi.Weapon {
             var position = Owner.transform.position;
             var entities = 
                 FindEntities(position, NORMAL_ATTACK_RADIUS)
-                .Where(o => !o.IsSameTeam(Owner.team));
+                .Where(o => !o.IsSameTeam(Owner));
 
             // knockback logic
             var knockback_entities = entities.Where(o => !AttackKnockbackCooldown.HasCooldown(o));
@@ -37,7 +37,7 @@ namespace Ozi.Weapon {
             AttackKnockbackCooldown.AddElements(knockback_entities, NORMAL_ATTACK_KNOCKBACK_TIME);
 
             // damage logic
-            var damage = Mathf.Clamp(Owner.status.attack, NORMAL_ATTACK_DAMAGE, NORMAL_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(Owner.Status.attack, NORMAL_ATTACK_DAMAGE, NORMAL_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(entities, damage);
         }
@@ -59,10 +59,10 @@ namespace Ozi.Weapon {
             // provocate logic
             var provocate_entities =
                 FindEntities(position, PLAY_ATTACK_PROVOCATE_RADIUS)
-                .Where(o => !o.IsSameTeam(Owner.team));
+                .Where(o => !o.IsSameTeam(Owner));
 
             // damage logic
-            var damage = Mathf.Clamp(Owner.status.attack, PLAY_ATTACK_DAMAGE, PLAY_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(Owner.Status.attack, PLAY_ATTACK_DAMAGE, PLAY_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(entities, damage);
         }
