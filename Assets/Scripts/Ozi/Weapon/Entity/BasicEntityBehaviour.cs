@@ -15,7 +15,9 @@ namespace Ozi.Weapon.Entity {
         [field: SerializeField] public EntityStatus Status { get; protected set; }
         [field: SerializeField] public int Team { get; set; } = 0;
 
-        public event Action OnHit;
+        public event Action<float> OnHit;   // damage: float
+        public event Action<float> OnHeal;  // heal: float
+        public event Action OnStatusChanged;
         public event Action OnDead;
 
         protected virtual void Awake() {
@@ -44,14 +46,23 @@ namespace Ozi.Weapon.Entity {
             }
         }
 
-        public void GetDamage(float damage) {
+        public void Hit(float damage) {
             Status.health -= damage;
 
-            OnHit?.Invoke();
+            OnHit?.Invoke(damage);
 
             if (Status.health <= 0) {
                 OnDead?.Invoke();
             }
+        }
+        public void Heal(float heal) {
+            Status.health = Mathf.Clamp(Status.health + heal, 0.0f, Status.max_health);
+
+            OnHeal?.Invoke(heal);
+        }
+        
+        public void NotifyStatusChanged() {
+            OnStatusChanged?.Invoke();
         }
 
         public bool IsSameTeam(int team) => Team == team;
