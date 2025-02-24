@@ -9,8 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e651dbb3fbac04af2b8f5abf007ddc23, type: 3}
-  m_Name: DefaultNetworkPrefabs
+  m_Script: {fileID: 11500000, guid: ad6f5972c5472f14b89c776432a7a249, type: 3}
+  m_Name: Profile 2
   m_EditorClassIdentifier: 
-  IsDefault: 1
-  List: []
+  <Data>k__BackingField:
+    <Profile>k__BackingField: {fileID: 0}
+    <Name>k__BackingField: "\uC774\uB984 2"
+    <TalkSpeed>k__BackingField: 10
+    <TalkAudio>k__BackingField: {fileID: 0}

@@ -52,7 +52,7 @@ namespace Ozi.ChartPlayer {
             var timing = Timings[NoteIndex];
 
             if (IsAutoPlay) {
-                if (time <= timing) {
+                if (timing <= time) {
                     OnHitNote();
                 }
             } 
