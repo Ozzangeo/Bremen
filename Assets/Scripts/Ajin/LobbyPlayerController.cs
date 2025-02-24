@@ -4,7 +4,7 @@ using TMPro;
 using Fusion;
 using Unity.VisualScripting;
 
-public class LobbyPlayerController : MonoBehaviour
+public class LobbyPlayerController : NetworkBehaviour
 {
     [SerializeField] private TMP_Text playerNameTxt;
     [SerializeField] private GameObject readyObject;
@@ -15,19 +15,13 @@ public class LobbyPlayerController : MonoBehaviour
     private Button rightBtn;
 
     [Networked] public string playerName { get; set; }
+    private string previousPlayerName;
+
     [Networked] public bool isReady { get; set; }
     [Networked] public int characterIndex { get; set; }
 
-    private bool lastReadyState;
-    private int lastCharacterIndex;
-
-    private NetworkObject localPlayer;
-    private LobbyPlayerController _lobbyPlayerController;
-    private bool isLocalPlayer = false;
-
     private void Start()
     {
-
         readyBtn = GameObject.Find("ReadyButton")?.GetComponent<Button>();
         leftBtn = GameObject.Find("LeftButton")?.GetComponent<Button>();
         rightBtn = GameObject.Find("RightButton")?.GetComponent<Button>();
@@ -36,52 +30,47 @@ public class LobbyPlayerController : MonoBehaviour
         leftBtn.onClick.AddListener(() => ChangeCharacter(-1));
         rightBtn.onClick.AddListener(() => ChangeCharacter(1));
 
-        localPlayer =  PlayerSpawner.Instance.GetPlayerObject(GameSessionManager.Instance.runner.LocalPlayer);
-        if(localPlayer != null)
+        if(Object.HasInputAuthority)
         {
-            _lobbyPlayerController = localPlayer.GetComponent<LobbyPlayerController>(); 
-        }
-        if (_lobbyPlayerController == this)
-        {
-            isLocalPlayer = true;
+            SetName_RPC(PlayerData.Instance.playerName);
         }
 
-        if(isLocalPlayer)
-        {
-            playerNameTxt.text = PlayerData.Instance.playerName;
-            playerName = PlayerData.Instance.playerName;
-        }
-
-        UpdateUI();
+        UpdatePlayerNameUI();
+        UpdateReady();
+        UpdateCharacterModel();
     }
 
-    public void FixedUpdateNetwork()
+    public override void FixedUpdateNetwork()
     {
-        if (lastReadyState != isReady)
+        if (playerName != previousPlayerName)
         {
-            lastReadyState = isReady;
-            UpdateReady();
+            UpdatePlayerNameUI();
+            previousPlayerName = playerName; // 이전 값 업데이트
         }
+    }
 
-        if (lastCharacterIndex != characterIndex)
-        {
-            lastCharacterIndex = characterIndex;
-            UpdateCharacterModel();
-        }
+    private void UpdatePlayerNameUI()
+    {
+        playerNameTxt.text = playerName;
     }
 
     private void ToggleReady()
     {
-        if (!isLocalPlayer) return;
+        if (!Object.HasInputAuthority) return;
 
         isReady = !isReady;
         UpdateReady();
         UpdateReady_RPC(isReady);
+
+        if (LobbyManager.Instance != null)
+        {
+            LobbyManager.Instance.CheckAllReady();
+        }
     }
 
     private void ChangeCharacter(int offset)
     {
-        if (!isLocalPlayer) return;
+        if (!Object.HasInputAuthority) return;
 
         characterIndex += offset;
         if (characterIndex >= characterModels.Length)
@@ -97,15 +86,21 @@ public class LobbyPlayerController : MonoBehaviour
         UpdateCharacterIndex_RPC(characterIndex);
     }
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    [Rpc(RpcSources.InputAuthority | RpcSources.StateAuthority, RpcTargets.All)]
+    private void SetName_RPC(string name)
+    {
+        playerName = name;
+        playerNameTxt.text = playerName;
+    }
+
+    [Rpc(RpcSources.InputAuthority | RpcSources.StateAuthority, RpcTargets.All)]
     private void UpdateReady_RPC(bool readyStatus)
     {
         isReady = readyStatus;
         UpdateReady();
     }
 
-    // 캐릭터 인덱스 동기화를 위한 RPC
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
+    [Rpc(RpcSources.InputAuthority | RpcSources.StateAuthority, RpcTargets.All)]
     private void UpdateCharacterIndex_RPC(int index)
     {
         characterIndex = index;
@@ -125,9 +120,13 @@ public class LobbyPlayerController : MonoBehaviour
         }
     }
 
-    private void UpdateUI()
+    public override void Spawned()
     {
-        UpdateReady();
-        UpdateCharacterModel();
+        base.Spawned(); // 기본 동작 수행 (필수는 아니지만 안정성을 위해)
+
+        if (LobbyManager.Instance != null)
+        {
+            LobbyManager.Instance.RegisterPlayer(this);
+        }
     }
 }

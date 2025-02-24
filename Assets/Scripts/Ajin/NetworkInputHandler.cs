@@ -17,20 +17,26 @@ public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
-        Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        Debug.Log($"Input Horizontal: {Input.GetAxis("Horizontal")}, Vertical: {Input.GetAxis("Vertical")}");
-        Debug.Log($"Move Input: {moveInput}");
-
-        // 연주
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.W))
         {
-
+            data.direction += Vector3.forward;
+        }
+        if (Input.GetKey(KeyCode.S))
+        {
+            data.direction += Vector3.back;
+        }
+        if (Input.GetKey(KeyCode.A))
+        {
+            data.direction += Vector3.left;
+        }
+        if (Input.GetKey(KeyCode.D))
+        {
+            data.direction += Vector3.right;
         }
 
-        data.moveInput = moveInput;
-        //data.direction = moveDir; // 정규화해서 속도 균일하게
-        data.isJumping = Input.GetKey(KeyCode.Space);
+        data.isPlaying = Input.GetKey(KeyCode.Q);
+        data.isJumping = Input.GetKeyDown(KeyCode.Space);
 
         input.Set(data);
     }

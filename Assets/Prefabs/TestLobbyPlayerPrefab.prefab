@@ -142,6 +142,9 @@ MonoBehaviour:
   characterModels:
   - {fileID: 1966693830431708555}
   - {fileID: 7613193243565198782}
+  _playerName: 
+  _isReady: 0
+  _characterIndex: 0
 --- !u!114 &5182505556561312240
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +162,7 @@ MonoBehaviour:
   Flags: 262145
   NestedObjects: []
   NetworkedBehaviours:
+  - {fileID: 7430384440967134508}
   - {fileID: 8804483670759175500}
   ForceRemoteRenderTimeframe: 0
 --- !u!143 &233760110054647651

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -24,6 +25,8 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
             return;
         }
     }
+
+
 
     public async void EnterRoomWithCode(string roomCode, GameMode mode)
     {
