@@ -17,7 +17,7 @@ namespace Ozi.Weapon.Entity {
 
         public event Action<float> OnHit;   // damage: float
         public event Action<float> OnHeal;  // heal: float
-        public event Action OnStatusChanged;
+        public event Action<EntityStatus> OnStatusChanged;
         public event Action OnDead;
 
         protected virtual void Awake() {
@@ -54,15 +54,19 @@ namespace Ozi.Weapon.Entity {
             if (Status.health <= 0) {
                 OnDead?.Invoke();
             }
+
+            NotifyStatusChanged();
         }
         public void Heal(float heal) {
             Status.health = Mathf.Clamp(Status.health + heal, 0.0f, Status.max_health);
 
             OnHeal?.Invoke(heal);
+
+            NotifyStatusChanged();
         }
         
         public void NotifyStatusChanged() {
-            OnStatusChanged?.Invoke();
+            OnStatusChanged?.Invoke(Status);
         }
 
         public bool IsSameTeam(int team) => Team == team;
