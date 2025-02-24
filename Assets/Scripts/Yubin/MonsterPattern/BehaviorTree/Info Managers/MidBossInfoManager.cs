@@ -10,7 +10,7 @@ public class MidBossInfoManager : MonoBehaviour
     midBossBehavior = GetComponent<MidBossBehavior>();
     midBossBehaviorTreeFactory = GetComponent<MidBossBehaviorTreeFactory>();
 
-    midBossBehavior.OnHit += o => {
+    midBossBehavior.OnHit += (o) => {
       midBossBehaviorTreeFactory.TargetPlayer();
     };
 

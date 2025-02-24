@@ -1,0 +1,19 @@
+fileFormatVersion: 2
+guid: 503f3cf13854e9c43b31e630032b7222
+timeCreated: 1466255719
+licenseType: Store
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences: []
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61829
+  packageName: Quadcopter controller (PC||Mobile||C#||JS)
+  packageVersion: 2.0
+  assetPath: Assets/Drone/DroneCanvasC.cs
+  uploadId: 133328

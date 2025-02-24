@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class MidBossBehaviorTreeFactory : MonoBehaviour, IMidBossBehaviorTreeFactory
 {
   [HideInInspector] public bool isPlayerTarget = false;  // 플레이어 어그로 표시
-  [HideInInspector] public float playerAway = 5f;   // 플레이어 어그로 해제 거리
+  public float playerAway = 15f;   // 플레이어 어그로 해제 거리
 
   Transform player;         // 가장 가까운 타겟 플레이어
   List<Transform> players;  // 플레이어 리스트

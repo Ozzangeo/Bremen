@@ -1,7 +1,4 @@
-﻿using Ozi.Weapon.Entity.Effect;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 namespace Ozi.Weapon.Entity {
@@ -17,8 +14,6 @@ namespace Ozi.Weapon.Entity {
         [field: Header("Debugs")]
         [field: SerializeField] public EntityStatus Status { get; protected set; }
         [field: SerializeField] public int Team { get; set; } = 0;
-
-        private IEnumerator _onUpdate;
 
         public event Action<float> OnHit;   // damage: float
         public event Action<float> OnHeal;  // heal: float
@@ -49,14 +44,6 @@ namespace Ozi.Weapon.Entity {
             else {
                 Status = new();
             }
-
-            Status.OnStatusNotified += o => OnStatusChanged?.Invoke(o);
-
-            StartCoroutine(_onUpdate = OnUpdate());
-        }
-
-        protected virtual void OnDestroy() {
-            StopCoroutine(_onUpdate);
         }
 
         public void Hit(float damage) {
@@ -68,25 +55,21 @@ namespace Ozi.Weapon.Entity {
                 OnDead?.Invoke();
             }
 
-            Status.Notify();
+            NotifyStatusChanged();
         }
         public void Heal(float heal) {
             Status.health = Mathf.Clamp(Status.health + heal, 0.0f, Status.max_health);
 
             OnHeal?.Invoke(heal);
 
-            Status.Notify();
+            NotifyStatusChanged();
         }
         
+        public void NotifyStatusChanged() {
+            OnStatusChanged?.Invoke(Status);
+        }
+
         public bool IsSameTeam(int team) => Team == team;
         public bool IsSameTeam(BasicEntityBehaviour behaviour) => IsSameTeam(behaviour.Team);
-        
-        public IEnumerator OnUpdate() {
-            while (true) {
-                Status.OnUpdate(Time.deltaTime);
-
-                yield return null;
-            }
-        }
     }
 }

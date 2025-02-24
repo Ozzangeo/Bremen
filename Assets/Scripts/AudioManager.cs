@@ -38,8 +38,6 @@ public class AudioManager : MonoBehaviour {
 
     public Dictionary<PlayType, ManagedAudioSource> AudioSourceByType { get; private set; } = new();
 
-    public static float GlobalVolume { get; set; } = 1.0f;
-
     private void Awake() {
         if (IsInstanceAllocated) {
             Destroy(gameObject);
@@ -68,7 +66,7 @@ public class AudioManager : MonoBehaviour {
 
         var id = audio_source.Index;
 
-        audio_source.Play(volume * GlobalVolume, pitch, is_loop, clip);
+        audio_source.Play(volume, pitch, is_loop, clip);
         audio_source.TryRevolveIndex();
 
         return id;
@@ -76,7 +74,7 @@ public class AudioManager : MonoBehaviour {
     public static void Play(PlayType play_type, int id, float volume = 1.0f, float pitch = 1.0f, bool? is_loop = null, AudioClip clip = null) {
         var audio_source = GetAudioSource(play_type);
 
-        audio_source.Play(id, volume * GlobalVolume, pitch, is_loop, clip);
+        audio_source.Play(id, volume, pitch, is_loop, clip);
     }
 
     public static void Stop(PlayType play_type, int id) => GetAudioSource(play_type).Stop(id);

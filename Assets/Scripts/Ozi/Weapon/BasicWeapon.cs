@@ -1,7 +1,5 @@
 ﻿using Ozi.ChartPlayer;
 using Ozi.Weapon.Entity;
-using Ozi.Weapon.Entity.Effect;
-using Ozi.Weapon.Entity.Effect.Implement;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -69,6 +67,8 @@ namespace Ozi.Weapon {
         }
 
         protected virtual void Update() {
+            // if onwer has haking effect -> return
+
             #region DeprecatedLogic
             // Normal attack cancelable
             //if (Input.GetKeyDown(SPECIAL_ATTACK_KEY)) {
@@ -87,10 +87,6 @@ namespace Ozi.Weapon {
 
             if (Input.GetMouseButtonDown(0)) {
                 var result = ChartPlayer.TryProcessNote();
-
-                if (Owner.Status.HasEffect<HackingEffect>()) {
-                    return;
-                }
 
                 if (Input.GetKey(PLAY_ATTACK_KEY)) {
                     switch (result) {
@@ -167,29 +163,7 @@ namespace Ozi.Weapon {
             foreach (var entity in entities) {
                 var apply_heal = heal;
 
-                entity.Heal(apply_heal);
-            }
-        }
-        
-        protected void EntitiesAddEffect<T>(IEnumerable<BasicEntityBehaviour> entities, Func<BasicEntityBehaviour, T> generator) where T : BasicEffect {
-            foreach (var entity in entities) {
-                var effect = generator.Invoke(entity);
-
-                entity.Status.AddEffect(effect);
-            }
-        }
-        protected void EntitiesAddEffect(IEnumerable<BasicEntityBehaviour> entities, int hash_code, Func<BasicEntityBehaviour, BasicEffect> generator) {
-            foreach (var entity in entities) {
-                var effect = generator.Invoke(entity);
-
-                entity.Status.AddEffect(hash_code, effect);
-            }
-        }
-
-
-        protected void EntitiesNotify(IEnumerable<BasicEntityBehaviour> entities) {
-            foreach (var entity in entities) {
-                entity.Status.Notify();
+                entity.Status.health += Math.Clamp(apply_heal, 0.0f, float.MaxValue);
             }
         }
     }

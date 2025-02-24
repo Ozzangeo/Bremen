@@ -13,7 +13,7 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
 
   [Header("파동 속도")] public float waveSpeed = 20f; // 파동 속도
 
-  private Renderer monsterRenderer;
+  [Header("머터리얼")] public Renderer monsterRenderer;
   private Coroutine transparencyCoroutine;
   private bool isVisible = false;
   private bool isAttacking = false;
@@ -43,7 +43,7 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
 
   private void Start()
   {
-    monsterRenderer = GetComponent<Renderer>();
+    if(monsterRenderer == null) monsterRenderer = GetComponent<Renderer>();
     SetTransparency(0f);
   }
 
@@ -185,12 +185,13 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
     Debug.Log("파동");
 
     GameObject wave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
-    float maxScale = monsterStats.attackRange * 2f;
+    float maxScale = monsterStats.attackRange * 10f;  // 파동 최대 크기
+    wave.transform.localScale = new Vector3(wave.transform.position.x, 30f, wave.transform.position.z);
 
     while(wave.transform.localScale.x <= maxScale)
     {
-      float scaleIncrease = waveSpeed * Time.deltaTime;
-      wave.transform.localScale += new Vector3(scaleIncrease, 0, scaleIncrease);
+      float scaleIncress = waveSpeed * 2.5f * Time.deltaTime;
+      wave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
       yield return null;
     }
 

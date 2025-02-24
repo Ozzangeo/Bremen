@@ -41,11 +41,12 @@ public class GuardBehaviorTreeFactory : BehaviorTreeFactory
     canWave = false;
 
     GameObject wave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
-    float maxScale = monsterStats.attackRange * 2f;  // 파동 최대 크기
+    float maxScale = monsterStats.attackRange * 10f;  // 파동 최대 크기
+    wave.transform.localScale = new Vector3(wave.transform.position.x, 30f, wave.transform.position.z);
 
     while(wave.transform.localScale.x <= maxScale)
     {
-      float scaleIncress = waveSpeed  * Time.deltaTime;
+      float scaleIncress = waveSpeed * 2.5f * Time.deltaTime;
       wave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
       yield return null;
     }

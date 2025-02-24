@@ -1,6 +1,4 @@
 ﻿using Ozi.Weapon.Entity;
-using Ozi.Weapon.Entity.Effect;
-using Ozi.Weapon.Entity.Effect.Implement;
 using Ozi.Weapon.Utility;
 using System.Linq;
 using UnityEngine;
@@ -40,7 +38,7 @@ namespace Ozi.Weapon {
             AttackKnockbackCooldown.AddElements(knockback_entities, NORMAL_ATTACK_KNOCKBACK_TIME);
 
             // damage logic
-            var damage = Mathf.Clamp(NORMAL_ATTACK_DAMAGE + Owner.Status.attack, 0.0f, NORMAL_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(Owner.Status.attack, NORMAL_ATTACK_DAMAGE, NORMAL_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(entities, damage);
         }
@@ -48,8 +46,7 @@ namespace Ozi.Weapon {
             var position = Owner.transform.position;
             var entities =
                 FindEntities(position, PLAY_ATTACK_RADIUS)
-                .Where(o => o.transform != Owner.transform)
-                .Where(o => !o.IsSameTeam(Owner));
+                .Where(o => o.transform != Owner.transform);
 
             // knockback logic
             var knockback_entities = entities.Where(o => !AttackKnockbackCooldown.HasCooldown(o));
@@ -58,15 +55,15 @@ namespace Ozi.Weapon {
 
             AttackKnockbackCooldown.AddElements(knockback_entities, PLAY_ATTACK_KNOCKBACK_TIME);
 
+            // debuff logic
+
             // provocate logic
             var provocate_entities =
                 FindEntities(position, PLAY_ATTACK_PROVOCATE_RADIUS)
                 .Where(o => !o.IsSameTeam(Owner));
 
-            EntitiesAddEffect(provocate_entities, o => new ProvocateEffect(new EffectParam(Owner, o, 0.5f)));
-
             // damage logic
-            var damage = Mathf.Clamp(PLAY_ATTACK_DAMAGE + Owner.Status.attack, 0.0f, PLAY_ATTACK_MAX_DAMAGE);
+            var damage = Mathf.Clamp(Owner.Status.attack, PLAY_ATTACK_DAMAGE, PLAY_ATTACK_MAX_DAMAGE);
 
             EntitiesHit(entities, damage);
         }

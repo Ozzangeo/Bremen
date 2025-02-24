@@ -49,6 +49,7 @@ namespace Ozi.ChartPlayer {
         }
         public BremenNote Generate(float timing, float visualize_timing) {
             var note = Pool.Get();
+            Debug.Log($"Generate: {timing}");
 
             note.Timing = timing;
             note.VisualizeTiming = visualize_timing;

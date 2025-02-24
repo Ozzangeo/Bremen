@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossCreateWave : MonoBehaviour
 {
-  [Header("파동 최대 크기")] public float maxScale = 25f; // 파동 최대 크기
+  [Header("파동 최대 크기")] public float maxScale = 75; // 파동 최대 크기
 
   BossStats bossStats;    // 보스 능력치
   GameObject wavePrefab;  // 파동
@@ -62,10 +62,13 @@ public class BossCreateWave : MonoBehaviour
   {
     Debug.Log("파동 생성");
 
-    currentWave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
+    Vector3 spawnVector = new Vector3(transform.position.x, transform.position.y - 5f, transform.position.z);
+    currentWave = Instantiate(wavePrefab, spawnVector, Quaternion.identity);
+    currentWave.transform.localScale = new Vector3(currentWave.transform.position.x, 30f, currentWave.transform.position.z);
+
     while(currentWave.transform.localScale.x <= maxScale * 2)
     {
-      float scaleIncress = waveSpeed  * Time.deltaTime;
+      float scaleIncress = waveSpeed * 2.5f * Time.deltaTime;
       currentWave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
       yield return null;
     }

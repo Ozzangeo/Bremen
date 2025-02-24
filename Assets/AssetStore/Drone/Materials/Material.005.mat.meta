@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: fdac38feab82ea94da9cdece1e49e915
+timeCreated: 1461939548
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61829
+  packageName: Quadcopter controller (PC||Mobile||C#||JS)
+  packageVersion: 2.0
+  assetPath: Assets/Drone/Materials/Material.005.mat
+  uploadId: 133328

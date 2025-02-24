@@ -9,7 +9,7 @@ public class MidBossBitCoreBehaviorTreeFactory : MidBossBehaviorTreeFactory
 
   [Header("파동 쿨타임")] public float waveRate = 4f;
   [Header("파동 속도")] public float waveSpeed = 20f;
-  [Header("파동 이동 속도")] public float waveMoveSpeed = 10f;
+  [Header("파동 이동 속도")] public float waveMoveSpeed = 20f;
 
   float lastAttackTime = 0f;
 
@@ -66,7 +66,7 @@ public class MidBossBitCoreBehaviorTreeFactory : MidBossBehaviorTreeFactory
 
     while(true && wave != null)
     {
-      float scaleIncrease = waveSpeed * 0.35f * Time.deltaTime;
+      float scaleIncrease = waveSpeed * 0.5f * Time.deltaTime;
       wave.transform.localScale += new Vector3(scaleIncrease, 0, 0);
       wave.transform.position += direction * waveMoveSpeed * Time.deltaTime;
       yield return null;

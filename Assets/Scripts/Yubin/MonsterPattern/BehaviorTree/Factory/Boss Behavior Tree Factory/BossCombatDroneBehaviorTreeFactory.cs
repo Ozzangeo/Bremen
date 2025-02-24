@@ -13,7 +13,7 @@ public class BossCombatDroneBehaviorTreeFactory : BossBehaviorTreeFactory
   float lastFireTime = 0f;     // 마지막 발사 시간
 
   // 공격 실행 재정의
-  public override IBehaviorNode.EBehaviorNodeState PerformAttack(Transform player, MonsterStats monsterStats)
+  public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats)
   {
     // 쿨타임마다 발사
     if(Time.time - lastFireTime >= fireRate)
@@ -43,8 +43,8 @@ public class BossCombatDroneBehaviorTreeFactory : BossBehaviorTreeFactory
     {
       // 발사
       Vector3 direction = (player.position - transform.position).normalized;
-      Quaternion leftRot = Quaternion.Euler(0, -5, 0);  // 왼쪽으로 5도
-      Quaternion rightRot = Quaternion.Euler(0, 5, 0);  // 오른쪽으로 5도
+      Quaternion leftRot = Quaternion.Euler(0, -2.5f, 0);  // 왼쪽으로 5도
+      Quaternion rightRot = Quaternion.Euler(0, 2.5f, 0);  // 오른쪽으로 5도
 
 
       bulletRigidbody1.AddForce(leftRot * direction * bulletSpeed, ForceMode.VelocityChange);
@@ -58,7 +58,7 @@ public class BossCombatDroneBehaviorTreeFactory : BossBehaviorTreeFactory
   }
 
   // 추적 재정의
-  public override IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, Transform player, MonsterStats monsterStats)
+  public override IBehaviorNode.EBehaviorNodeState ChasePlayer(Transform monster, MonsterStats monsterStats)
   {
     float moveSpeed = monsterStats.moveSpeed;      // 이동 속도
     float attackRange = monsterStats.attackRange;  // 공격 범위

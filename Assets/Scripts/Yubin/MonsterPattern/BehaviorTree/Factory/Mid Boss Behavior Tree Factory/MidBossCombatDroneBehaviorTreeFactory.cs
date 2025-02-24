@@ -60,8 +60,8 @@ public class MidBossCombatDroneBehaviorTreeFactory : MidBossBehaviorTreeFactory
     {
       // 발사
       Vector3 direction = (target.position - transform.position).normalized;
-      Quaternion leftRot = Quaternion.Euler(0, -5, 0);  // 왼쪽으로 5도
-      Quaternion rightRot = Quaternion.Euler(0, 5, 0);  // 오른쪽으로 5도
+      Quaternion leftRot = Quaternion.Euler(0, -2.5f, 0);  // 왼쪽으로 5도
+      Quaternion rightRot = Quaternion.Euler(0, 2.5f, 0);  // 오른쪽으로 5도
 
 
       bulletRigidbody1.AddForce(leftRot * direction * bulletSpeed, ForceMode.VelocityChange);

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 97495477478feb5479a77889a7bcad80
+timeCreated: 1461947513
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61829
+  packageName: Quadcopter controller (PC||Mobile||C#||JS)
+  packageVersion: 2.0
+  assetPath: Assets/Drone/PropellersRotation.anim
+  uploadId: 133328
