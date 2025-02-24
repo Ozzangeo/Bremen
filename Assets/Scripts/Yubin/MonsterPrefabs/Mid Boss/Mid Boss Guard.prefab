@@ -2013,7 +2013,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPlayerTarget: 0
   playerAway: 15
-  wavePrefab: {fileID: 6111399449889583347, guid: 05107445f134ae541a2b2e8fd3ebc5d0, type: 3}
+  wavePrefab: {fileID: 4935017288137493733, guid: 05107445f134ae541a2b2e8fd3ebc5d0, type: 3}
   waveRate: 4
   waveSpeed: 20
   dashSpeed: 14

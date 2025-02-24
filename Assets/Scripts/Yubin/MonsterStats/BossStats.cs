@@ -24,6 +24,6 @@ public class BossStats : ScriptableObject
   public void Initialize()
   {
     health = 15000f;
-    waveSpeed = 20f;
+    waveSpeed = 40f;
   }
 }

@@ -11,7 +11,7 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
   public GameObject wavePrefab; // 파동
 
   [Header("파동 쿨타임")] public float waveRate = 4f;
-  [Header("파동 속도")] public float waveSpeed = 20f;
+  [Header("파동 속도")] public float waveSpeed = 80f;
 
   float lastAttackTime = 0f;
   bool canWave = true;
@@ -58,11 +58,12 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
     canWave = false;
 
     currentWave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
-    float maxScale = monsterStats.attackRange * 2f;  // 파동 최대 크기
+    float maxScale = monsterStats.attackRange * 10f;  // 파동 최대 크기
+    currentWave.transform.localScale = new Vector3(currentWave.transform.position.x, 30f, currentWave.transform.position.z);
 
     while(currentWave.transform.localScale.x <= maxScale)
     {
-      float scaleIncress = waveSpeed  * Time.deltaTime;
+      float scaleIncress = waveSpeed * 2.5f * Time.deltaTime;
       currentWave.transform.localScale += new Vector3(scaleIncress, 0, scaleIncress);
       yield return null;
     }

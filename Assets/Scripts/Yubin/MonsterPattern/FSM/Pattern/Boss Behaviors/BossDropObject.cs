@@ -49,7 +49,7 @@ public class BossDropObject : MonoBehaviour
     for(int i = 0; i < n; i++)
     {
     // 예고 위치 표시 후 파괴
-    Vector3 markPosition = new Vector3(player.position.x, player.position.y, player.position.z);
+    Vector3 markPosition = new Vector3(player.position.x, player.position.y - 4f, player.position.z);
     GameObject mark = Instantiate(bossStats.dropObjectMark, markPosition, Quaternion.identity);
 
     currentMarks.Add(mark);
@@ -58,7 +58,7 @@ public class BossDropObject : MonoBehaviour
     Destroy(mark);
 
     // 플레이어 머리 위에 낙하물 생성
-    Vector3 dropPosition = new Vector3(markPosition.x, markPosition.y + 15f, markPosition.z);
+    Vector3 dropPosition = new Vector3(markPosition.x, markPosition.y + 30f, markPosition.z);
     GameObject dropObject = Instantiate(bossStats.dropObject, dropPosition, Quaternion.identity);
 
     currentObjects.Add(dropObject);

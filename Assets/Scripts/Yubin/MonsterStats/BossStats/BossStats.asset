@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: BossStats
   m_EditorClassIdentifier: 
   health: 15000
-  monster: {fileID: 6877644001150798836, guid: 5a93f1db88f5fd944b6e651504a5ef60, type: 3}
-  wave: {fileID: 6111399449889583347, guid: d4a4349165f67af4fa2ad263b35ff42c, type: 3}
-  waveSpeed: 20
+  monster: {fileID: 2924663015250349214, guid: 5a93f1db88f5fd944b6e651504a5ef60, type: 3}
+  wave: {fileID: 4925810856127680054, guid: a8825b785ba144943b010bbfb9d2dc46, type: 3}
+  waveSpeed: 40
   laser: {fileID: 7126707125972748989, guid: 9254bc0ec17538a44b833c5f49ae0ae4, type: 3}
-  dropObject: {fileID: 5430999718932656790, guid: b611a43f7f125934fa25c58298e66fa8, type: 3}
+  dropObject: {fileID: 1375007410250537184, guid: b611a43f7f125934fa25c58298e66fa8, type: 3}
   dropObjectMark: {fileID: 7374274937712472396, guid: a788573efcc60c04f9c020d870c32501, type: 3}

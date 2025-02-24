@@ -96,7 +96,7 @@ public class BossPattern : MonoBehaviour
     bossSpawnMonster.SpawnMonster(4);
 
     // 4박자 파동
-    bossCreateWave.CreateWave(4f, bossStats.waveSpeed);
+    bossCreateWave.CreateWave(4f, bossStats.waveSpeed * 2);
     
     // 2박자 낙하물 1번
     bossDropObject.DropObject(player, 2f, 1);
@@ -117,7 +117,7 @@ public class BossPattern : MonoBehaviour
     bossSpawnMonster.SpawnMonster(7);
 
     // 2박자 파동
-    bossCreateWave.CreateWave(2f, bossStats.waveSpeed);
+    bossCreateWave.CreateWave(2f, bossStats.waveSpeed * 2);
 
     // 2박자 낙하물 2번
     bossDropObject.DropObject(player, 2f, 2);
@@ -148,7 +148,7 @@ public class BossPattern : MonoBehaviour
     bossSpawnMonster.SpawnMonster(10);
 
     // 2박자 파동, 속도 증가
-    bossCreateWave.CreateWave(2f, bossStats.waveSpeed * 1.5f);
+    bossCreateWave.CreateWave(2f, bossStats.waveSpeed * 3f);
 
     // 1박자 낙하물 3번
     bossDropObject.DropObject(player, 1f, 3);

@@ -35,8 +35,8 @@ Transform:
   m_GameObject: {fileID: 4123993620820123375}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: 0}
-  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_LocalPosition: {x: 0, y: 8, z: 0}
+  m_LocalScale: {x: 15, y: 15, z: 15}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -129,11 +129,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bossStats: {fileID: 11400000, guid: a3ef12ed3389fe04d91d2ace1aef4a4e, type: 2}
   bossState: 0
-  bossSpawnMonster: {fileID: 5169412082919188626}
-  bossCreateWave: {fileID: 1258747460923125840}
-  bossDropObject: {fileID: 3037988222130876894}
-  bossCreateLaser: {fileID: 393522180043202392}
-  bossInfoManager: {fileID: 2338660879902861887}
 --- !u!114 &5169412082919188626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -146,8 +141,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a936e48eec8238a4a8a94a07f9160f88, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnRangeX: {x: 20, y: -20}
-  spawnRangeZ: {x: 20, y: -20}
+  spawnRangeX: {x: 75, y: -75}
+  spawnRangeZ: {x: 75, y: -75}
   spawnY: 1
 --- !u!114 &1258747460923125840
 MonoBehaviour:
@@ -161,7 +156,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fb88f1813b093e4588b8cfe3cefdfa8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxScale: 25
+  maxScale: 750
 --- !u!114 &3037988222130876894
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,8 +169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac34298a14d242c4182d8ecac1418722, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectMark: {fileID: 7374274937712472396, guid: a788573efcc60c04f9c020d870c32501, type: 3}
-  dropObjectPrefab: {fileID: 5430999718932656790, guid: b611a43f7f125934fa25c58298e66fa8, type: 3}
 --- !u!114 &393522180043202392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,8 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2e040561ee575643b18d725cd5852f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laserPrefab: {fileID: 7126707125972748989, guid: 9254bc0ec17538a44b833c5f49ae0ae4, type: 3}
-  laserLength: 20
 --- !u!114 &2338660879902861887
 MonoBehaviour:
   m_ObjectHideFlags: 0

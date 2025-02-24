@@ -445,7 +445,7 @@ MonoBehaviour:
   players: []
   patrolTarget: {x: 0, y: 0, z: 0}
   hasPatrolTarget: 0
-  wavePrefab: {fileID: 6111399449889583347, guid: 5c936267d8b47bb4c9d5481d75b120a5, type: 3}
+  wavePrefab: {fileID: 124178217809181857, guid: 5c936267d8b47bb4c9d5481d75b120a5, type: 3}
   releaseTime: 5
   applicationSpeed: 4
   waveSpeed: 20
