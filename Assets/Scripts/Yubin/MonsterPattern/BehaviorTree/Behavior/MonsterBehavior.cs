@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Ozi.Weapon.Entity;
+using System.Collections.Generic;
 using UnityEngine;
 
 // 몬스터 행동 실행

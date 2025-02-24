@@ -1,4 +1,5 @@
 ﻿using Ozi.ChartPlayer;
+using Ozi.Weapon.Entity;
 using System;
 using System.Collections.Generic;
 using UnityEngine;

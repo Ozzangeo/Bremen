@@ -1,4 +1,5 @@
-﻿using Ozi.Weapon.Utility;
+﻿using Ozi.Weapon.Entity;
+using Ozi.Weapon.Utility;
 using System.Linq;
 using UnityEngine;
 

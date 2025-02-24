@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Ozi.Weapon.Entity;
+using UnityEngine;
 
 public class BossBehavior : BasicEntityBehaviour
 {

@@ -26,12 +26,4 @@ public class BossStats : ScriptableObject
     health = 15000f;
     waveSpeed = 20f;
   }
-
-  public EntityStats ToEntityStats() {
-    var stats = new EntityStats() {
-      health = health,
-    };
-
-    return stats;
-  }
 }

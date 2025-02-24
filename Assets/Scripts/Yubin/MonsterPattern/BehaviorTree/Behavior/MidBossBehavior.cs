@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Ozi.Weapon.Entity;
+using System.Collections.Generic;
 using UnityEngine;
 
 // 중간 보스 행동 실행

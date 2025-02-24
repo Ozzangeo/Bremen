@@ -9,14 +9,4 @@ public class MonsterStats : ScriptableObject
   public float moveSpeed;   // 이동 속도
   public float attackRange; // 공격 범위
   public float patrolRange; // 순찰 범위
-
-    public EntityStats ToEntityStats() {
-        var stats = new EntityStats() {
-            health = health,
-            attack = attackPower,
-            speed = moveSpeed,
-        };
-
-        return stats;
-    }
 }
