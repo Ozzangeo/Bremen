@@ -13,7 +13,7 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
 
   [Header("파동 속도")] public float waveSpeed = 20f; // 파동 속도
 
-  private Renderer monsterRenderer;
+  [Header("머터리얼")] public Renderer monsterRenderer;
   private Coroutine transparencyCoroutine;
   private bool isVisible = false;
   private bool isAttacking = false;
@@ -43,7 +43,7 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
 
   private void Start()
   {
-    monsterRenderer = GetComponent<Renderer>();
+    if(monsterRenderer == null) monsterRenderer = GetComponent<Renderer>();
     SetTransparency(0f);
   }
 

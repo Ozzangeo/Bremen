@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: ddc8f4ca27f18b54e920321dc8ce964e
+timeCreated: 1462563585
+licenseType: Store
+TextScriptImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61829
+  packageName: Quadcopter controller (PC||Mobile||C#||JS)
+  packageVersion: 2.0
+  assetPath: Assets/Drone/ReadMe.txt
+  uploadId: 133328

@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 4dd5fccded1f45d41ab95e29d4cc4170
+timeCreated: 1466265396
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 61829
+  packageName: Quadcopter controller (PC||Mobile||C#||JS)
+  packageVersion: 2.0
+  assetPath: Assets/Drone/DronePrefab 1.prefab
+  uploadId: 133328
