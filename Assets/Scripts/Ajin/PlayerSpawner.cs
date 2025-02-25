@@ -1,7 +1,6 @@
 ﻿using Fusion;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class PlayerSpawner : MonoBehaviour
@@ -38,11 +37,20 @@ public class PlayerSpawner : MonoBehaviour
     // ===== Lobby =====
     public void SpawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {
-        if(runner.IsServer)
+        if (runner.IsServer)
         {
-            if(!spawnedLobby.ContainsKey(player))
+            if (!spawnedLobby.ContainsKey(player))
             {
-                Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
+                // 카메라의 중앙 x 위치 가져오기
+                float cameraCenterX = Camera.main.transform.position.x;
+
+                // x 좌표를 3등분 (-2, 0, 2로 정렬)
+                float offsetX = (player.RawEncoded % 3) * 2 - 2;
+
+                // 새로운 스폰 위치 (Y는 0.3, Z는 -2 고정, X만 카메라 기준)
+                Vector3 spawnPosition = new Vector3(cameraCenterX + offsetX, 0.3f, -2f);
+
+                // 플레이어 오브젝트 생성
                 NetworkObject networkPlayerObject = runner.Spawn(_lobbyPlayerPrefab, spawnPosition, Quaternion.identity, player);
 
                 spawnedLobby[player] = networkPlayerObject;
@@ -50,6 +58,8 @@ public class PlayerSpawner : MonoBehaviour
             }
         }
     }
+
+
 
     public void DespawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {

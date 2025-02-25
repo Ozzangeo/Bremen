@@ -1,8 +1,6 @@
-﻿using ExitGames.Client.Photon.StructWrapping;
-using Fusion;
+﻿using Fusion;
 using Ozi.ChartPlayer;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 
 public class PlayerController : NetworkBehaviour
@@ -36,6 +34,21 @@ public class PlayerController : NetworkBehaviour
                 cameraController = GameObject.Find("CameraController").GetComponent<CameraController>();
             }
             cameraController.SetTarget(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (GameSessionManager.Instance.runner == null)
+        {
+            Debug.LogError("NetworkRunner가 존재하지 않음!");
+            return;
+        }
+
+        if (GameSessionManager.Instance.runner.LocalPlayer == PlayerRef.None)
+        {
+            Debug.LogError("LocalPlayer가 없음. OnInput이 실행될 수 없음!");
+            return;
         }
     }
 

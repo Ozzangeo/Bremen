@@ -1,4 +1,5 @@
 ﻿using Ozi.Weapon.Entity;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,30 +24,14 @@ public class MonsterBehavior : BasicEntityBehaviour
 
   private void Start()
   {
-    players = new List<Transform>();
-    GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+        StartCoroutine(WaitAndPrint());
 
-    foreach (GameObject obj in playerObjects)
-    {
-      players.Add(obj.transform);
-    }
 
-    spawnPosition = transform.position;
-    lastPosition = transform.position;
-    if(treeFactory == null) treeFactory = GetComponent<BehaviorTreeFactory>();
-
-    rootNode = treeFactory.CreateBehaviorTree(transform, players, monsterStats, spawnPosition);
+        
   }
 
   private void Update()
   {
-        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
-
-        foreach (GameObject obj in playerObjects)
-        {
-            players.Add(obj.transform);
-        }
-
         if (rootNode != null)
     {
       rootNode.Evaluate();
@@ -69,4 +54,27 @@ public class MonsterBehavior : BasicEntityBehaviour
       transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
     }
   }
+
+    IEnumerator WaitAndPrint()
+    {
+        // 5초 대기
+        yield return new WaitForSeconds(5f);
+
+        // 5초 후에 실행될 코드
+        Debug.Log("5초가 경과했습니다!");
+
+        players = new List<Transform>();
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject obj in playerObjects)
+        {
+            players.Add(obj.transform);
+        }
+
+        spawnPosition = transform.position;
+        lastPosition = transform.position;
+        if (treeFactory == null) treeFactory = GetComponent<BehaviorTreeFactory>();
+
+        rootNode = treeFactory.CreateBehaviorTree(transform, players, monsterStats, spawnPosition);
+    }
 }
