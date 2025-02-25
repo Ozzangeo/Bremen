@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
 // 가드드 행동 트리를 생성하는 팩토리
@@ -74,6 +75,9 @@ public class GuardBehaviorTreeFactory : BehaviorTreeFactory
       transform.position = Vector3.MoveTowards(transform.position, player.position, dashSpeed * Time.deltaTime);
       yield return null;
     }
+
+    BasicEntityBehaviour basicEntityBehaviour = player.GetComponent<BasicEntityBehaviour>();
+    basicEntityBehaviour.Hit(monsterStats.attackPower);
 
     animator.SetBool("IsAttack", false);
   }

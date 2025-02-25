@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
 [RequireComponent(typeof(MonsterBehavior))]
@@ -185,6 +186,9 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
     Debug.Log("파동");
 
     GameObject wave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
+    MonsterAttackPlayer monsterAttackPlayer = wave.GetComponent<MonsterAttackPlayer>();
+    monsterAttackPlayer.Initialize(monsterStats.attackPower);
+    
     float maxScale = monsterStats.attackRange * 10f;  // 파동 최대 크기
     wave.transform.localScale = new Vector3(wave.transform.position.x, 30f, wave.transform.position.z);
 

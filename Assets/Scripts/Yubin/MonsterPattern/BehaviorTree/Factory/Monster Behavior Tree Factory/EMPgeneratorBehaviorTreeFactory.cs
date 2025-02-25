@@ -58,6 +58,9 @@ public class EMPgeneratorBehaviorTreeFactory : BehaviorTreeFactory
     canWave = false;
 
     currentWave = Instantiate(wavePrefab, transform.position, Quaternion.identity);
+    MonsterAttackPlayer monsterAttackPlayer = currentWave.GetComponent<MonsterAttackPlayer>(); 
+    monsterAttackPlayer.Initialize(monsterStats.attackPower);
+
     float maxScale = monsterStats.attackRange * 10f;  // 파동 최대 크기
     currentWave.transform.localScale = new Vector3(currentWave.transform.position.x, 30f, currentWave.transform.position.z);
 

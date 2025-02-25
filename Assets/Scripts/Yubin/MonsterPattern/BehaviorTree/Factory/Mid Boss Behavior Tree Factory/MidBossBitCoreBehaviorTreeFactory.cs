@@ -60,6 +60,8 @@ public class MidBossBitCoreBehaviorTreeFactory : MidBossBehaviorTreeFactory
   private IEnumerator Wave(MonsterStats monsterStats, Quaternion angle)
   {
     GameObject wave = Instantiate(wavePrefab, transform.position, angle);
+    MonsterAttackPlayer monsterAttackPlayer = wave.GetComponent<MonsterAttackPlayer>(); 
+    monsterAttackPlayer.Initialize(monsterStats.attackPower);
     Vector3 direction = angle * Vector3.forward;
 
     Destroy(wave, 5f);

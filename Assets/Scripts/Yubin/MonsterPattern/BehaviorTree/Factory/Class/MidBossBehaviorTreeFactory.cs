@@ -7,7 +7,7 @@ public class MidBossBehaviorTreeFactory : MonoBehaviour, IMidBossBehaviorTreeFac
   [HideInInspector] public bool isPlayerTarget = false;  // 플레이어 어그로 표시
   public float playerAway = 15f;   // 플레이어 어그로 해제 거리
 
-  Transform player;         // 가장 가까운 타겟 플레이어
+  public Transform player;         // 가장 가까운 타겟 플레이어
   List<Transform> players;  // 플레이어 리스트
 
   public virtual IBehaviorNode CreateBehaviorTree(Transform monster, List<Transform> players, Transform bitCore, MonsterStats monsterStats, Vector3 spawnPosition)

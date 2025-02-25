@@ -25,6 +25,9 @@ public class BossCreateLaser : MonoBehaviour
     if (laser == null) laser = Instantiate(bossStats.laser, transform.position, Quaternion.identity);
     if (pivot == null) pivot = new GameObject("LaserPivot");
 
+    MonsterAttackPlayer monsterAttackPlayer = laser.GetComponent<MonsterAttackPlayer>();
+    monsterAttackPlayer.Initialize(10f);
+
     pivot.transform.position = transform.position;
     laser.transform.SetParent(pivot.transform);
     laser.transform.position = new Vector3(pivot.transform.position.x, pivot.transform.position.y, laserLength / 2f);

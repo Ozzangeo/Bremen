@@ -60,6 +60,8 @@ public class BossDropObject : MonoBehaviour
     // 플레이어 머리 위에 낙하물 생성
     Vector3 dropPosition = new Vector3(markPosition.x, markPosition.y + 30f, markPosition.z);
     GameObject dropObject = Instantiate(bossStats.dropObject, dropPosition, Quaternion.identity);
+    MonsterAttackPlayer monsterAttackPlayer = dropObject.GetComponent<MonsterAttackPlayer>();
+    monsterAttackPlayer.Initialize(30f);
 
     currentObjects.Add(dropObject);
 

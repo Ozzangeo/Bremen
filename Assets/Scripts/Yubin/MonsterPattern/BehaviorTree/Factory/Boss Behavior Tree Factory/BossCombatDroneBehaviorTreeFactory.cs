@@ -39,6 +39,13 @@ public class BossCombatDroneBehaviorTreeFactory : BossBehaviorTreeFactory
 
     Rigidbody bulletRigidbody1 = bullet1.GetComponent<Rigidbody>();
     Rigidbody bulletRigidbody2 = bullet2.GetComponent<Rigidbody>();
+
+    MonsterAttackPlayer monsterAttackPlayer1 = bullet1.GetComponent<MonsterAttackPlayer>();
+    MonsterAttackPlayer monsterAttackPlayer2 = bullet2.GetComponent<MonsterAttackPlayer>();
+
+    monsterAttackPlayer1.Initialize(monsterStats.attackPower);
+    monsterAttackPlayer2.Initialize(monsterStats.attackPower);
+    
     if(bulletRigidbody1 != null && bulletRigidbody2 != null)
     {
       // 발사

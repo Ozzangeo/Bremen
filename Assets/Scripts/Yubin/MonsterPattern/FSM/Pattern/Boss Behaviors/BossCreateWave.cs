@@ -65,7 +65,9 @@ public class BossCreateWave : MonoBehaviour
     Vector3 spawnVector = new Vector3(transform.position.x, transform.position.y + 1f, transform.position.z);
     currentWave = Instantiate(wavePrefab, spawnVector, Quaternion.identity);
     currentWave.transform.localScale = new Vector3(currentWave.transform.position.x, 20f, currentWave.transform.position.z);
-
+    MonsterAttackPlayer monsterAttackPlayer = currentWave.GetComponent<MonsterAttackPlayer>();
+    monsterAttackPlayer.Initialize(10f);
+    
     while(currentWave.transform.localScale.x <= maxScale * 10)
     {
       float scaleIncress = waveSpeed * 2.5f * Time.deltaTime;

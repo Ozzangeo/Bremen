@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 636507624981064661}
   - component: {fileID: 5096722972925024626}
   - component: {fileID: 7895218129910477098}
+  - component: {fileID: 4026834858852275615}
   m_Layer: 0
   m_Name: Boss Laser
   m_TagString: Untagged
@@ -108,3 +109,16 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &4026834858852275615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7126707125972748989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b705fa1e5b2f22498e777b76b888528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
