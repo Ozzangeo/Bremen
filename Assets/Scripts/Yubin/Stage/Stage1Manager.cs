@@ -51,7 +51,7 @@ public class Stage1Manager : MonoBehaviour
 
   void StageClear()
   {
-    Debug.Log("경 스테이지 클리어 축");
+    Debug.Log("클리어 성공");
   }
   
   void OnDrawGizmos()
