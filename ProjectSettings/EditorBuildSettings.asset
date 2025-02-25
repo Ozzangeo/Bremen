@@ -19,6 +19,9 @@ EditorBuildSettings:
     guid: 81c9791eea0d74244bfd180a0ac5ccda
   - enabled: 1
     path: Assets/Scenes/StageScene/2_StageScene.unity
+    guid: 02832f19d1429f2448b8e752a6f3ed72
+  - enabled: 1
+    path: Assets/Scenes/StageScene/3_StageScene.unity
     guid: 98fdbb93ea5737b4e9c8350a360593d2
   - enabled: 1
     path: Assets/Scenes/PhotonTestScene.unity

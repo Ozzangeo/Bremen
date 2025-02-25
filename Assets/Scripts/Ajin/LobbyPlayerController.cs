@@ -87,7 +87,7 @@ public class LobbyPlayerController : NetworkBehaviour
             characterIndex = characterModels.Length - 1;
         }
 
-        PlayerData.Instance.selectedCharacter = characterDatas[characterIndex];
+        //PlayerData.Instance.selectedCharacter = characterDatas[characterIndex];
 
         UpdateCharacterModel();
         UpdateCharacterIndex_RPC(characterIndex);

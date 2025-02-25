@@ -9,6 +9,7 @@ public class PlayerSpawner : MonoBehaviour
     [SerializeField] private GameObject _lobbyPlayerPrefab;
     [SerializeField] private GameObject _playerPrefab;
     public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    private Transform SpawnPoint;
 
     private void Awake()
     {
@@ -16,7 +17,15 @@ public class PlayerSpawner : MonoBehaviour
             Instance = this;
     }
 
-// ===== Lobby =====
+    private void Start()
+    {
+        if(SpawnPoint == null)
+        {
+            SpawnPoint = GameObject.Find("SpawnPoint").transform;
+        }
+    }
+
+    // ===== Lobby =====
     public void SpawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {
         if(runner.IsServer)
@@ -47,7 +56,7 @@ public class PlayerSpawner : MonoBehaviour
         {
             foreach(var player in spawnedCharacters.Keys)
             {
-                Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
+                Vector3 spawnPosition = new Vector3(SpawnPoint.position.x + (player.RawEncoded % 4) * 2, SpawnPoint.position.y + 1, SpawnPoint.position.z);
                 NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
             }
         }

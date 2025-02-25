@@ -109,10 +109,10 @@ public class LobbyManager : NetworkBehaviour
             Debug.LogError(" NetworkRunner가 존재하지 않습니다!");
             return;
         }
-        GameSessionManager.Instance.runner.LoadScene("StageScene"); // 씬 전환 실행
+        GameSessionManager.Instance.runner.LoadScene("StageSelectScene"); // 씬 전환 실행
         if (GameSessionManager.Instance.runner.IsServer)
         {
-            GameSessionManager.Instance.runner.LoadScene("StageScene");
+            GameSessionManager.Instance.runner.LoadScene("StageSelectScene");
         }
         else
         {
@@ -123,6 +123,6 @@ public class LobbyManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void StartGame_RPC()
     {
-        GameSessionManager.Instance.runner.LoadScene("StageScene");
+        GameSessionManager.Instance.runner.LoadScene("StageSelectScene");
     }
 }
