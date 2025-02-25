@@ -109,7 +109,6 @@ public class BehaviorTreeFactory : MonoBehaviour, IBehaviorTreeFactory
   public virtual IBehaviorNode.EBehaviorNodeState Patrol(Transform monster, MonsterStats monsterStats, Vector3 spawnPosition)
   {
     player = ClosestPlayer(monster, players, monsterStats.patrolRange, spawnPosition);
-    Debug.Log(player.transform.position);
     float patrolRange = monsterStats.patrolRange; // 순찰 범위
     float moveSpeed = monsterStats.moveSpeed;     // 이동 속도
 

@@ -49,7 +49,6 @@ public class EarBehaviorTreeFactory : BehaviorTreeFactory
     animator.SetBool("IsAttack", false);
     
     player = ClosestPlayer(monster, players, monsterStats.patrolRange, spawnPosition);
-    Debug.Log(player.transform.position);
     float patrolRange = monsterStats.patrolRange; // 순찰 범위
     float moveSpeed = monsterStats.moveSpeed;     // 이동 속도
 
