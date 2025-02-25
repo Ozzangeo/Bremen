@@ -14,6 +14,12 @@ public class MidBossGuardBehaviorTreeFactory : MidBossBehaviorTreeFactory
   float lastAttackTimePlayer = 0f;  // 마지막 공격 시간 (플레이어)
   float lastAttackTimeBitCore = 0f; // 마지막 공격 시간 (비트코어)
   bool canWave = true;
+  Animator animator;
+
+  void Start()
+  {
+    animator = GetComponent<Animator>();
+  }
   
   // 비트 코어 공격 재정의
   public override IBehaviorNode.EBehaviorNodeState AttackBitCore(Transform bitCore, MonsterStats monsterStats, Transform monster)
@@ -79,11 +85,14 @@ public class MidBossGuardBehaviorTreeFactory : MidBossBehaviorTreeFactory
   // 돌진 코루틴
   private IEnumerator Dash(Transform player, MonsterStats monsterStats)
   {
+    animator.SetBool("IsAttack", true);
+
     while(Vector3.Distance(transform.position, player.position) > 0.5f)
     {
       Debug.Log("돌진");
       transform.position = Vector3.MoveTowards(transform.position, player.position, dashSpeed * Time.deltaTime);
       yield return null;
     }
+    animator.SetBool("IsAttack", false);
   }
 }
