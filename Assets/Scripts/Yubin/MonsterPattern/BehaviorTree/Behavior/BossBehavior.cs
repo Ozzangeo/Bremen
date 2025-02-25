@@ -15,14 +15,11 @@ public class BossBehavior : BasicEntityBehaviour
   private void Start()
   {
     players = new List<Transform>();
-    GameObject[] allObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+    GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
 
-    foreach(GameObject obj in allObjects)
+    foreach (GameObject obj in playerObjects)
     {
-      if(obj.name == "Player" && obj.activeInHierarchy)
-      {
-        players.Add(obj.transform);
-      }
+      players.Add(obj.transform);
     }
 
     spawnPosition = transform.position;

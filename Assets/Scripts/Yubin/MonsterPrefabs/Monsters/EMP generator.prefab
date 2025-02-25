@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5066064944730712163}
   - component: {fileID: 7435107793960357427}
   - component: {fileID: 8754222738878982350}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,9 +125,9 @@ GameObject:
   - component: {fileID: 7073691652456941603}
   - component: {fileID: 4772874149707608333}
   - component: {fileID: 5877987866910993978}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EMP generator
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
