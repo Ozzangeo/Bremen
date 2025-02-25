@@ -1,19 +1,18 @@
 using Fusion;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
-public class EffectableEntity : MonoBehaviour
+public class EffectableEntity : BasicEntityBehaviour
 {
-    [Networked] public int HP { get; set; }
+    [SerializeField] private PlayerController playerController;
+    private StatusManager statusManager;
 
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void UpdateHP_RPC()
+    private void Start()
     {
-        HP = PlayerData.Instance.hp;
-    }
-
-    [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
-    public void UpdateCombo(int combo)
-    {
-
+        //statusManager = GameObject.Find("StatusManager").GetComponent<StatusManager>();
+        //OnStatusChanged += o =>
+        //{
+            
+        //};
     }
 }

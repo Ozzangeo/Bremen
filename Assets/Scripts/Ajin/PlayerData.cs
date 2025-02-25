@@ -11,9 +11,6 @@ public class PlayerData : MonoBehaviour
     public CharacterData selectedCharacter;
     public bool[] isClear = new bool[2];
 
-    public int hp;
-    public float moveSpeed;
-
     private void Awake()
     {
         if (Instance == null)
@@ -25,11 +22,5 @@ public class PlayerData : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void Start()
-    {
-        hp = selectedCharacter.maxHP;
-        moveSpeed = selectedCharacter.moveSpeed;
     }
 }

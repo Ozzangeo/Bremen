@@ -70,13 +70,26 @@ public class PlayerSpawner : MonoBehaviour
         return playerObject;
     }
 
-    public List<NetworkObject> GetAllPlayerObject()
+    public List<PlayerRef> GetAllPlayers()
     {
-        List<NetworkObject> allPlayers = new List<NetworkObject>();
-        foreach (var player in spawnedCharacters.Values)
+        List<PlayerRef> allPlayers = new List<PlayerRef>();
+        foreach (var player in spawnedCharacters.Keys)
         {
             allPlayers.Add(player);
         }
         return allPlayers;
+    }
+
+    public List<PlayerRef> GetOtherPlayer()
+    {
+        List<PlayerRef> otherPlayer = new List<PlayerRef>();
+        foreach (var player in spawnedCharacters.Keys)
+        {
+            if(player != GameSessionManager.Instance.runner.LocalPlayer)
+            {
+                otherPlayer.Add(player);
+            }
+        }
+        return otherPlayer;
     }
 }

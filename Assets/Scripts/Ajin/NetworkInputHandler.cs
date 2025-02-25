@@ -35,7 +35,7 @@ public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
             data.direction += Vector3.right;
         }
 
-        data.isPlaying = Input.GetKey(KeyCode.Q);
+        data.isDash = Input.GetMouseButtonDown(1);
         data.isJumping = Input.GetKeyDown(KeyCode.Space);
 
         input.Set(data);
