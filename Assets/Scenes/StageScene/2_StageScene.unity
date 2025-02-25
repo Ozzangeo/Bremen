@@ -330,6 +330,7 @@ MonoBehaviour:
   x: {x: -93.8, y: 74.5}
   y: {x: -66.2, y: 80.9}
   spawnY: 2
+  bitCore: {fileID: 1286429600}
 --- !u!4 &420622795
 Transform:
   m_ObjectHideFlags: 0
@@ -772,6 +773,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 716873295}
   m_SourcePrefab: {fileID: 100100000, guid: cd93828a0cf973e48b07726edcc42a41, type: 3}
+--- !u!1 &1286429600 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3240409271536214550, guid: 04a66666be6c9e74b8c00318ec2621f3, type: 3}
+  m_PrefabInstance: {fileID: 649112597}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1408477697
 GameObject:
   m_ObjectHideFlags: 0

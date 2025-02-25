@@ -17,6 +17,9 @@ public class Stage2Manager : MonoBehaviour
   public Vector2 y;
   public float spawnY;
 
+  [Header("비트 코어")]
+  public GameObject bitCore;
+
   private List<GameObject> spawnedObjects = new List<GameObject>(); // 생성된 오브젝트 리스트
   private int currentSpawnCount = 0; // 현재 생성된 개수
   bool[] isClear = { false, false, false, false, false };
@@ -30,7 +33,11 @@ public class Stage2Manager : MonoBehaviour
 
   void Update()
   {
-    // 🔹 테스트용 강제 클리어 (T키 입력 시 다음 스테이지 강제 실행)
+    if(bitCore == null)
+    {
+      Debug.Log("클리어 실패");
+    }
+
     if(Input.GetKeyDown(KeyCode.T))
     {
       DebugStageClear();
@@ -40,7 +47,7 @@ public class Stage2Manager : MonoBehaviour
     {
       if(currentStage == 4)
       {
-        Debug.Log("클리어");
+        Debug.Log("클리어 성공");
         return;
       }
 
