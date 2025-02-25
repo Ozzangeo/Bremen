@@ -1,4 +1,5 @@
-﻿using Ozi.ChartPlayer;
+﻿using Ozi.Character;
+using Ozi.ChartPlayer;
 using Ozi.Weapon.Entity;
 using Ozi.Weapon.Entity.Effect;
 using Ozi.Weapon.Entity.Effect.Implement;
@@ -15,6 +16,7 @@ namespace Ozi.Weapon {
         private readonly static Collider[] PhysicsColliders = new Collider[MAX_PHYSICS_COLLIDER_COUNT];
 
         [field: Header("Requires")]
+        [field: SerializeField] public CharacterAnimator Animator { get; protected set; }
         [field: SerializeField] public BremenChartPlayer ChartPlayer { get; protected set; }
         
         [field: Header("Settings")]
@@ -95,6 +97,10 @@ namespace Ozi.Weapon {
                 if (Input.GetKey(PLAY_ATTACK_KEY)) {
                     switch (result) {
                         case BremenNoteResult.Perfect:
+                            if (Animator != null) {
+                                Animator.Animator.Play("Attack 2 Animation");
+                            }
+
                             PlayAttack();
 
                             OnUsePlayAttack?.Invoke();
@@ -108,6 +114,10 @@ namespace Ozi.Weapon {
                 } else {
                     switch (result) {
                         case BremenNoteResult.Perfect:
+                            if (Animator != null) {
+                                Animator.Animator.Play("Attack 1 Animation");
+                            }
+
                             NormalAttack();
 
                             OnUseNormalAttack?.Invoke();

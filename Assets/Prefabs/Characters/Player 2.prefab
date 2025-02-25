@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5020439879943627981}
   - component: {fileID: 7689973843044971147}
+  - component: {fileID: 3496311083798738276}
   - component: {fileID: 7649649383315334862}
   - component: {fileID: 6528754635329902025}
   m_Layer: 0
@@ -49,6 +50,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Animator>k__BackingField: {fileID: 4702384987442235734}
   <Rigidbody>k__BackingField: {fileID: 6528754635329902025}
+--- !u!114 &3496311083798738276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2810801504017130070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 619e7e45ceeeb5149a473458a011969d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <Animator>k__BackingField: {fileID: 7689973843044971147}
+  <ChartPlayer>k__BackingField: {fileID: 0}
+  <Owner>k__BackingField: {fileID: 0}
+  <CumulativeCombo>k__BackingField: 0
 --- !u!136 &7649649383315334862
 CapsuleCollider:
   m_ObjectHideFlags: 0
