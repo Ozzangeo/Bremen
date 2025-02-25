@@ -14,6 +14,7 @@ public class StatusManager : MonoBehaviour
     private List<PlayerRef> players;
     private NetworkObject currentPlayerObject;
     private PlayerController currentPlayerController;
+    private CharacterData characterData;
 
     private void Start()
     {
@@ -27,16 +28,17 @@ public class StatusManager : MonoBehaviour
         {
             currentPlayerObject = PlayerSpawner.Instance.GetPlayerObject(player);
             currentPlayerController = currentPlayerObject.GetComponent<PlayerController>();
+            characterData = Resources.Load<CharacterData>(currentPlayerController.selectCharacter);
 
             if (player == GameSessionManager.Instance.runner.LocalPlayer)
             {
-                playerHPBar.fillAmount = currentPlayerController.hp / currentPlayerController.selectCharacter.maxHP;
+                playerHPBar.fillAmount = currentPlayerController.hp / characterData.maxHP;
                 comboBar.fillAmount = currentPlayerController.combo / 150f;
                 comboText.text =  "HP : " + currentPlayerController.combo.ToString();
             }
             else
             {
-                otherPlayerHp[index].fillAmount = currentPlayerController.hp / currentPlayerController.selectCharacter.maxHP;
+                otherPlayerHp[index].fillAmount = currentPlayerController.hp / characterData.maxHP;
                 index++;
             }
         }

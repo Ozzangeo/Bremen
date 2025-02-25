@@ -7,9 +7,10 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : NetworkBehaviour
 {
-    public CharacterData selectCharacter;
+    public string selectCharacter;
     private NetworkCharacterController _characterController;
     private CameraController cameraController;
+    private CharacterData characterData;
     private bool _canMove = true;
     private float moveSpeed = 5f;
     private float jumpHeigh = 5f;
@@ -27,10 +28,6 @@ public class PlayerController : NetworkBehaviour
     private void Start()
     {
         bremenChartPlayer = GameObject.FindAnyObjectByType<BremenChartPlayer>();
-        Debug.Log($"PlayerData {PlayerData.Instance.selectedCharacter.characterName}");
-        selectCharacter = PlayerData.Instance.selectedCharacter;
-        hp = selectCharacter.maxHP;
-        combo = 0;
 
         if(Object.HasInputAuthority)
         {
@@ -68,6 +65,14 @@ public class PlayerController : NetworkBehaviour
                 }
             }
         }
+    }
+
+    public void SetCharacter()
+    {
+        selectCharacter = PlayerData.Instance.selectedCharacter;
+        characterData = Resources.Load<CharacterData>(selectCharacter);
+        hp = characterData.maxHP;
+        combo = 0;
     }
 
     public void EnableMovement(bool enable)

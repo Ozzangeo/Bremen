@@ -4,6 +4,7 @@ using TMPro;
 using Fusion;
 using Unity.VisualScripting;
 using UnityEditor.U2D.Animation;
+using static Unity.Collections.Unicode;
 
 public class LobbyPlayerController : NetworkBehaviour
 {
@@ -70,8 +71,12 @@ public class LobbyPlayerController : NetworkBehaviour
             LobbyManager.Instance.CheckAllReady();
         }
 
-        PlayerData.Instance.selectedCharacter = characterDatas[characterIndex];
-        Debug.Log($"선택 캐릭 {PlayerData.Instance.selectedCharacter.characterName}");
+        PlayerRef currentPlayer = GameSessionManager.Instance.runner.LocalPlayer;
+        Debug.Log("Current PlayerRef: " + currentPlayer);
+
+        PlayerData.Instance.SetCharacter(characterDatas[characterIndex].characterName);
+        PlayerSpawner.Instance.SetCharacters(currentPlayer, characterDatas[characterIndex].characterName);
+        Debug.Log($"선택 캐릭 {PlayerData.Instance.selectedCharacter}");
     }
 
     private void ChangeCharacter(int offset)
