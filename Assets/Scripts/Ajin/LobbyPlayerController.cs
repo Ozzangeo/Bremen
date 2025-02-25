@@ -3,7 +3,6 @@ using UnityEngine.UI;
 using TMPro;
 using Fusion;
 using Unity.VisualScripting;
-using UnityEditor.U2D.Animation;
 using static Unity.Collections.Unicode;
 
 public class LobbyPlayerController : NetworkBehaviour

@@ -3,8 +3,6 @@ using Fusion.Sockets;
 using System.Collections.Generic;
 using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using TMPro.Examples;
 
 public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -17,6 +15,7 @@ public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
+        Debug.Log("¿Œ«≤¿Œ«≤");
         var data = new NetworkInputData();
 
         if (Input.GetKey(KeyCode.W))

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using System.Linq;
 
 public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 {
@@ -28,6 +27,7 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public async void EnterGame()
     {
+        runner.ProvideInput = true;
         //Debug.Log("EnterGame");
         //GamePlayerSpawner.Instance.SpawnGamePlayer(runner);
     }

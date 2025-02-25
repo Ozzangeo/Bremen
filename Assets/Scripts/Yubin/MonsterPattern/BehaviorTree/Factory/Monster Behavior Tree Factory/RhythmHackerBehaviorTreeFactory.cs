@@ -26,7 +26,7 @@ public class RhythmHackerBehaviorTreeFactory : BehaviorTreeFactory
     // 개별 액션 노드
     IBehaviorNode checkAttackRange = new ActionNode(() => CheckAttackRange(monster, monsterStats));          // 공격 범위 확인
     IBehaviorNode performAttack = new ActionNode(() => PerformAttack(monsterStats, spawnPosition)); // 공격
-    IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, monsterStats, spawnPosition));     // 추적
+        IBehaviorNode chasePlayer = new ActionNode(() => ChasePlayer(monster, monsterStats, spawnPosition));
     IBehaviorNode patrolArea = new ActionNode(() => Patrol(monster, monsterStats, spawnPosition));           // 순찰
     IBehaviorNode returnToSpawn = new ActionNode(() => ReturnToSpawn(monster, spawnPosition, monsterStats));         // 복귀
 

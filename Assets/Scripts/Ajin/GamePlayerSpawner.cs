@@ -35,7 +35,7 @@ public class GamePlayerSpawner : MonoBehaviour
     }
 
     // ===== Game ===== 
-    public void SpawnGamePlayer(NetworkRunner runner)
+    public async void SpawnGamePlayer(NetworkRunner runner)
     {
         Debug.Log("SpawnGamePlayer");
         SpawnPoint = GameObject.Find("SpawnPoint").transform;
@@ -44,15 +44,16 @@ public class GamePlayerSpawner : MonoBehaviour
             foreach (var player in PlayerSpawner.Instance.spawnedGame.Keys)
             {
                 Debug.Log($"{player}!!!");
-                Vector3 spawnPosition = new Vector3(SpawnPoint.position.x + (player.RawEncoded % 4) * 2, SpawnPoint.position.y + 1, SpawnPoint.position.z);
+                Vector3 spawnPosition = new Vector3(SpawnPoint.position.x + (player.RawEncoded % 4) * 2, SpawnPoint.position.y, SpawnPoint.position.z);
                 _characterData = Resources.Load<CharacterData>(PlayerSpawner.Instance.GetPlayerCharacter(player));
-                if(_characterData == null)
-                {
-                    Debug.Log("¾Æ¾¾¹Ý");
-                }
+                NetworkObject playerObject = await runner.SpawnAsync(_characterData.characterPrefab, spawnPosition, Quaternion.identity, player); ;
+                playerObject.AssignInputAuthority(player);
                 _playerController =  _characterData.characterPrefab.GetComponent<PlayerController>();
                 _playerController.SetCharacter();
-                runner.SpawnAsync(_characterData.characterPrefab, spawnPosition, Quaternion.identity, player);
+                if(PlayerSpawner.Instance.GetPlayerObject(player).HasInputAuthority)
+                {
+                    Debug.Log("HasInputAuthority");
+                }
             }
         }
     }
