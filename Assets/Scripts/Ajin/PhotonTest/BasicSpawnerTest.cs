@@ -10,11 +10,11 @@ public class BasicSpawnerTest : MonoBehaviour, INetworkRunnerCallbacks
     [SerializeField] private NetworkPrefabRef _playerPrefab;
     private NetworkRunner _runner;
     //현재 방에 접속 중인 플레이어의 정보와 네트워크 오브젝트를 담는 딕셔너리
-    private Dictionary<PlayerRef, NetworkObject> _spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    private CameraDirectionChecker cameraDirectionChecker;
 
     private void Start()
     {
-        
+        cameraDirectionChecker = GameObject.Find("CameraController").GetComponent<CameraDirectionChecker>();
     }
 
     async void StartGame(GameMode mode)
@@ -58,41 +58,48 @@ public class BasicSpawnerTest : MonoBehaviour, INetworkRunnerCallbacks
         if(runner.IsServer)
         {
             Vector3 spawnPosition = new Vector3((player.RawEncoded % runner.Config.Simulation.PlayerCount) * 3, 1, 0);
-            NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
-            _spawnedCharacters.Add(player, networkPlayerObject);
+            runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
         }
     }
     public void OnPlayerLeft(NetworkRunner runner, PlayerRef player)
     {
-        if(_spawnedCharacters.TryGetValue(player, out NetworkObject networkObject))
-        {
-            runner.Despawn(networkObject);
-            _spawnedCharacters.Remove(player);
-        }
+        
     }
     public void OnInput(NetworkRunner runner, NetworkInput input)
     {
         var data = new NetworkInputData();
 
-        if(Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W))
         {
-            data.direction += Vector3.forward;
+            Vector3 cameraDirection = cameraDirectionChecker.GetNearestDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            data.direction += Vector3.back;
+            Vector3 cameraDirection = cameraDirectionChecker.GetBackDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
         }
         if (Input.GetKey(KeyCode.A))
         {
-            data.direction += Vector3.left;
+            Vector3 cameraDirection = cameraDirectionChecker.GetLeftDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            data.direction += Vector3.right;
+            Vector3 cameraDirection = cameraDirectionChecker.GetRightDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
         }
+
+        data.isDash = Input.GetMouseButtonDown(1);
+        data.isJumping = Input.GetKeyDown(KeyCode.Space);
 
         input.Set(data);
     }
+
     public void OnInputMissing(NetworkRunner runner, PlayerRef player, NetworkInput input) { }
     public void OnShutdown(NetworkRunner runner, ShutdownReason shutdownReason) { }
     public void OnConnectedToServer(NetworkRunner runner) { }

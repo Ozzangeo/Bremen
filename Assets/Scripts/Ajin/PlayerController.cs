@@ -49,6 +49,8 @@ public class PlayerController : NetworkBehaviour
         {
             data.direction.Normalize();
             _characterController.Move(data.direction * moveSpeed * Runner.DeltaTime);
+            // 방향조절
+            transform.forward = data.moveDirection;
 
             // 점프
             if (data.isJumping)
@@ -57,12 +59,12 @@ public class PlayerController : NetworkBehaviour
                 Jump();
             }
 
-            if(data.isDash)
+            if (data.isDash)
             {
-                if(BremenNoteResult.Perfect == bremenChartPlayer.TryProcessNote())
+                if (BremenNoteResult.Perfect == bremenChartPlayer.TryProcessNote())
                 {
                     Debug.Log("대쉬");
-
+                    Dash(data.direction);
                 }
             }
         }
@@ -72,13 +74,18 @@ public class PlayerController : NetworkBehaviour
     {
         _canMove = enable;
     }
-
     private void Jump()
     {
-        _characterController.Move(new Vector3( 0, jumpHeigh, 0) * Runner.DeltaTime);
+        _characterController.Jump();
     }
-    private void Dash()
-    {
 
+    private void Dash(Vector3 direction)
+    {
+        float time = 0;
+        while (time < 1.5f)
+        {
+            _characterController.Move(direction * moveSpeed * 2 * Runner.DeltaTime);
+            time += Time.deltaTime;
+        }
     }
 }
