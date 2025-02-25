@@ -179,9 +179,9 @@ namespace Ozi.ChartEditor.Tile {
             OnCurrentTileUpdate?.Invoke(CurrentTile, !is_raycasted);
         }
 
-        public List<float> ToAngles() {
+        public BremenChartNotes ToNotes() {
             // Must be StartTile is not null in logic
-            if (StartTile.ToAngles(out var notes)) {
+            if (StartTile.ToNotes(out var notes)) {
                 // Succeed
             } else {
                 // Failed
@@ -189,8 +189,8 @@ namespace Ozi.ChartEditor.Tile {
 
             return notes;
         }
-        public void FromNotes(List<float> angles) {
-            if (StartTile.FromAngles(angles, transform)) {
+        public void FromNotes(BremenChartNotes notes) {
+            if (StartTile.FromNotes(notes, transform)) {
                 // Succeed
             } else {
                 // Failed

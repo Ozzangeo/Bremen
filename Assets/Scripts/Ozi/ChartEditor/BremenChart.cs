@@ -9,47 +9,54 @@ namespace Ozi.ChartEditor {
         public int offset = 0;
         public int volume = 100;
         public int pitch = 100;
-        
-        public List<float> angles = new();
+
+        public BremenChartNotes notes = new();
 
         public float SecondsPerBeat => 60.0f / bpm;
 
-        public void Sort() {
-            angles.Sort();
-        }
+        public float ToTimings(out List<float> timings, int length = -1, float offset_seconds = 0.0f) {
+            timings = new List<float>();
 
-        public List<float> ToTimings(float offset_seconds = 0.0f) {
-            var timings = new List<float>();
+            if (length < 0) {
+                length = notes.angles.Count;
+            }
+
+            length = Mathf.Min(length, notes.angles.Count);
 
             float seconds_per_beat = SecondsPerBeat;
             float total_timing = offset * 0.001f + offset_seconds;
-            foreach (var angle in angles) {
-                var timing = (angle / 180.0f) * seconds_per_beat;
+            
+            float speed = 1.0f;
+            bool is_twirl = false;
+
+            for (int i = 0; i < length; i++) {
+                var is_event_allocated = notes.TryGetEvent(i, out var @event);
+
+
+                float angle = notes.angles[i];
+                if (is_twirl) {
+                    angle = 360.0f - angle;
+                }
+
+                var timing = (angle / 180.0f) * seconds_per_beat / speed;
 
                 total_timing += timing;
                 
                 timings.Add(total_timing);
-            }
 
-            return timings;
-        }
-        public float GetSecondsFromTileIndex(int index) {
-            if (index <= 0) {
-                return 0.0f;
-            }
-
-            var min = Mathf.Min(index, angles.Count);
-
-            float seconds_per_beat = SecondsPerBeat;
-            float total_timing = offset * 0.001f;
-            for (int i = 0; i < min; i++) {
-                var angle = angles[i];
-                var timing = (angle / 180.0f) * seconds_per_beat;
-
-                total_timing += timing;
+                if (is_event_allocated) {
+                    speed *= @event.speedRate;
+                }
+                if (is_event_allocated) {
+                    if (@event.isTwirl) {
+                        is_twirl = !is_twirl;
+                    }
+                }
             }
 
             return total_timing;
         }
+
+        public float GetSecondsFromTileIndex(int index) => ToTimings(out _, index);
     }
 }

@@ -7,6 +7,7 @@ namespace Ozi.ChartEditor.Tile {
         [field: SerializeField] public BremenTile Previous { get; private set; }
         [field: SerializeField] public BremenTile Next { get; private set; }
         [field: SerializeField] public SpriteRenderer SpriteRenderer { get; private set; }
+        [field: SerializeField] public SpriteRenderer Twirl { get; private set; }
         
         public int Index { 
             get => _index; 
@@ -17,6 +18,9 @@ namespace Ozi.ChartEditor.Tile {
             } 
         }
         [SerializeField] private int _index;
+
+        [field: SerializeField] public BremenTileEvent Event { get; set; }
+        [field: SerializeField] public bool IsSelected { get; private set; } = false;
 
         public float RelativeAngleAtPrevious {
             get {
@@ -69,6 +73,24 @@ namespace Ozi.ChartEditor.Tile {
             set => transform.position = GetAnglePoint(value);
         }
 
+        private void Update() {
+            Twirl.gameObject.SetActive(Event.isTwirl);
+
+            if (IsSelected) {
+                return;
+            }
+
+            if (Event.speedRate > 1.0f) {
+                SpriteRenderer.color = Color.red;
+            }
+            else if (Event.speedRate < 1.0f) {
+                SpriteRenderer.color = Color.blue;
+            } 
+            else {
+                SpriteRenderer.color = Color.white;
+            }
+        }
+
         public bool Delete() {
             if (Index <= 0) {
                 return false;
@@ -91,7 +113,9 @@ namespace Ozi.ChartEditor.Tile {
         private BremenTile CloneTile(Transform parent = null) {
             var clone_tile = Instantiate(this, parent);
 
-            //clone_tile.name = "Bremen Tile";
+            clone_tile.name = "Bremen Tile";
+            clone_tile.Event = new();
+            clone_tile.IsSelected = false;
             clone_tile.SpriteRenderer.color = Color.white;
 
             return clone_tile;
@@ -134,12 +158,12 @@ namespace Ozi.ChartEditor.Tile {
             return clone_tile;
         }
 
-        public bool ToAngles(out List<float> angles) {
-            angles = new List<float>();
+        public bool ToNotes(out BremenChartNotes notes) {
+            notes = new BremenChartNotes();
             
             try {
                 if (Next != null) {
-                    Next.ChainInsertAngle(angles);
+                    Next.ChainInsertAngle(notes);
                 }
             }
             catch (Exception e) {
@@ -150,17 +174,21 @@ namespace Ozi.ChartEditor.Tile {
 
             return true;
         }
-        public bool FromAngles(List<float> angles, Transform parent = null) {
+        public bool FromNotes(BremenChartNotes notes, Transform parent = null) {
             try {
                 if (Next != null) {
                     Next.ChainDestroyTile();
                 }
 
                 BremenTile previous = this;
-                for (int i = 0; i < angles.Count; i++) {
-                    var angle = angles[i];
+                for (int i = 0; i < notes.angles.Count; i++) {
+                    var angle = notes.angles[i];
 
                     var tile = CloneTile(parent);
+
+                    if (notes.TryGetEvent(i, out var @event)) {
+                        tile.Event = @event;
+                    }
 
                     tile.Previous = previous;
                     previous.Next = tile;
@@ -186,9 +214,13 @@ namespace Ozi.ChartEditor.Tile {
         }
 
         public void Select() {
+            IsSelected = true;
+
             SpriteRenderer.color = Color.green;
         }
         public void Unselect() {
+            IsSelected = false;
+
             SpriteRenderer.color = Color.white;
         }
 
@@ -315,13 +347,16 @@ namespace Ozi.ChartEditor.Tile {
                 }
                 );
 
-        private void ChainInsertAngle(List<float> angles) {
+        private void ChainInsertAngle(BremenChartNotes notes) {
             ChainActioner(
                 this,
                 o => {
                     var angle = o.RelativeAngleAtPrevious;
 
-                    angles.Add(angle);
+                    notes.angles.Add(angle);
+
+                    o.Event.index = o.Index - 1;
+                    notes.events.Add(o.Event);
 
                     return o.Next;
                 }

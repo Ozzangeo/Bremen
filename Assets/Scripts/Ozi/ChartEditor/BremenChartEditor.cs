@@ -69,7 +69,7 @@ namespace Ozi.ChartEditor {
             ResetChart();
         }
         private void OnTileUpdated() {
-            Chart.angles = _tileEditor.ToAngles();
+            Chart.notes = _tileEditor.ToNotes();
         }
 
         public bool PlayChart() {
@@ -186,7 +186,7 @@ namespace Ozi.ChartEditor {
 
             Chart = chart;
 
-            _tileEditor.FromNotes(Chart.angles);
+            _tileEditor.FromNotes(Chart.notes);
 
             Data.WorkSpacePath = Path.GetDirectoryName(path);
             Data.LastOpenedFilePath = path;

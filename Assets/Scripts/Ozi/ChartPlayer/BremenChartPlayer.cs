@@ -31,6 +31,7 @@ namespace Ozi.ChartPlayer {
         [field: Header("Debugs")]
         [field: SerializeField] public int NoteIndex { get; private set; } = 0;
         [field: SerializeField] public int Combo { get; private set; }
+        [field: SerializeField] public float ChartLength { get; private set; }  // Unit: Seconds
         [field: SerializeField] public BremenChart Chart { get; private set; }
         [field: SerializeField] public List<float> Timings { get; private set; }
 
@@ -105,12 +106,14 @@ namespace Ozi.ChartPlayer {
 
             AudioPlayer.Offset = (CHART_START_OFFSET_BEAT * chart.SecondsPerBeat) * pitch;
 
-            Timings = chart.ToTimings();
+            ChartLength = chart.ToTimings(out var timings);
+            Timings = timings;
 
             Chart = chart;
 
             OnLoadedChart?.Invoke(chart);
         }
+        public void LoadChart(BremenChartObject chart_object) => LoadChart(chart_object.Chart, chart_object.Clip);
 
         public void Play(float start_time = 0.0f, bool is_auto_play = false) {
             ResetPlayData();

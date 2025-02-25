@@ -93,7 +93,7 @@ MonoBehaviour:
   <Sprites>k__BackingField:
   - {fileID: 21300000, guid: 0eb71ce6520cc0f4a811109712ec7d4f, type: 3}
   - {fileID: 21300000, guid: 29b9f78e33486574da5f95ddf7deb938, type: 3}
-  <Speed>k__BackingField: 5
+  <Speed>k__BackingField: 2
   <Timing>k__BackingField: 0
   <VisualizeTiming>k__BackingField: 0
   _startPosition: {x: 0, y: 0, z: 0}
