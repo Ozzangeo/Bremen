@@ -121,4 +121,6 @@ public class ManagedAudioSource {
             Index = NextIndex;
         }
     }
+
+    public AudioSource this[int index] => AudioSources[index];
 }

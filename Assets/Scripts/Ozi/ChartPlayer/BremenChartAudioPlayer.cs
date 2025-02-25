@@ -1,70 +1,43 @@
 ﻿using UnityEngine;
 
 namespace Ozi.ChartPlayer {
-    [RequireComponent(typeof(AudioSource))]
     public class BremenChartAudioPlayer : MonoBehaviour {
-        [SerializeField] private AudioSource _source;
-
         [field: SerializeField] public float Offset { get; set; }
         [SerializeField] private float _offsetTime = 0.0f;   // value_length = 0.0f ~ (Offset: float);
+        [field: SerializeField] public int SourceId { get; private set; }
 
-        public AudioClip Clip {
-            get => _source.clip;
-            set {
-                _source.clip = value;
-                _offsetTime = 0.0f;
-
-                _source.Stop();
-            }
-        }
+        public ManagedAudioSource AudioSources => AudioManager.GetAudioSource(PlayType.BGM);
+        public AudioSource AudioSource => AudioSources[SourceId];
 
         public float Time {
-            get => _source.time - _offsetTime;
-            set => _source.time = value;
+            get => AudioSource.time;
+            set => AudioSource.time = value;
         }
-
-        public float Pitch {
-            get => _source.pitch;
-            set => _source.pitch = value;
-        }
-        public float Volume {
-            get => _source.volume;
-            set => _source.volume = value;
-        }
-
-        public bool SourceIsPlaying => _source.isPlaying;
         [field: SerializeField] public bool IsPlaying { get; private set; }
 
-        private void Awake() {
-            if (_source == null) {
-                _source = GetComponent<AudioSource>();
-            }
-        }
         private void Update() {
-            if (SourceIsPlaying
-                || !IsPlaying) {
+            if (!IsPlaying) {
                 return;
             }
 
             if (_offsetTime > 0.0f) {
-                _offsetTime -= UnityEngine.Time.deltaTime * _source.pitch;
+                _offsetTime -= UnityEngine.Time.deltaTime * AudioSource.pitch;
             }
             else {
-                Time = Mathf.Abs(_offsetTime);
+                AudioSource.time += Mathf.Abs(_offsetTime);
                 _offsetTime = 0.0f;
 
-                _source.UnPause();
+                AudioSource.UnPause();
             }
         }
 
-        public void Play(float time = 0.0f) {
-            _source.Play();
-
+        public void Play(AudioClip clip, float volume = 1.0f, float pitch = 1.0f, float time = 0.0f) {
+            SourceId = AudioManager.Play(PlayType.BGM, volume, pitch, clip: clip);
 
             if (time > Offset) {
-                Time = time - Offset;
+                AudioSource.time = time - Offset;
             } else {
-                _source.Pause();
+                AudioSource.Pause();
 
                 _offsetTime = Offset - time;
             }
@@ -72,7 +45,7 @@ namespace Ozi.ChartPlayer {
             IsPlaying = true;
         }
         public void Stop() {
-            _source.Stop();
+            AudioManager.Stop(PlayType.BGM, SourceId);
 
             IsPlaying = false;
         }

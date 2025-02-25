@@ -27,12 +27,13 @@ namespace Ozi.ChartPlayer {
 
         [field: Header("Settings")]
         [field: SerializeField] public bool IsAutoPlay { get; set; } = false;
+        [field: SerializeField] public AudioClip Clip { get; private set; }
+        [field: SerializeField] public BremenChart Chart { get; private set; } 
 
         [field: Header("Debugs")]
         [field: SerializeField] public int NoteIndex { get; private set; } = 0;
         [field: SerializeField] public int Combo { get; private set; }
         [field: SerializeField] public float ChartLength { get; private set; }  // Unit: Seconds
-        [field: SerializeField] public BremenChart Chart { get; private set; }
         [field: SerializeField] public List<float> Timings { get; private set; }
 
         public event Action<int> OnComboAdd;    // combo: int
@@ -99,16 +100,12 @@ namespace Ozi.ChartPlayer {
         }
 
         public void LoadChart(BremenChart chart, AudioClip clip) {
-            var pitch = chart.pitch * 0.01f;
-            AudioPlayer.Clip = clip;
-            AudioPlayer.Pitch = pitch;
-            AudioPlayer.Volume = chart.volume * 0.01f;
-
-            AudioPlayer.Offset = (CHART_START_OFFSET_BEAT * chart.SecondsPerBeat) * pitch;
+            AudioPlayer.Offset = (CHART_START_OFFSET_BEAT * chart.SecondsPerBeat) * (chart.pitch * 0.01f);
 
             ChartLength = chart.ToTimings(out var timings);
             Timings = timings;
 
+            Clip = clip;
             Chart = chart;
 
             OnLoadedChart?.Invoke(chart);
@@ -125,7 +122,7 @@ namespace Ozi.ChartPlayer {
                 NoteIndex++;
             }
 
-            AudioPlayer.Play(start_time);
+            AudioPlayer.Play(Clip, Chart.volume * 0.01f, Chart.pitch * 0.01f, start_time);
 
             OnPlayed?.Invoke(start_time);
         }
