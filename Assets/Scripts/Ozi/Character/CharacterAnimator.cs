@@ -20,8 +20,6 @@ namespace Ozi.Character {
 
         private void Update() {
             if (JumpSelector?.Invoke() is bool jump) {
-                Debug.Log($"Jump {jump}");
-
                 Animator.SetBool(JUMP_VALUE_NAME, jump);
             }
 
