@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 using Fusion;
 using Unity.VisualScripting;
+using UnityEditor.U2D.Animation;
 
 public class LobbyPlayerController : NetworkBehaviour
 {
@@ -19,6 +20,8 @@ public class LobbyPlayerController : NetworkBehaviour
 
     [Networked] public bool isReady { get; set; }
     [Networked] public int characterIndex { get; set; }
+
+    private CharacterData[] characterDatas;
 
     private void Start()
     {
@@ -38,6 +41,8 @@ public class LobbyPlayerController : NetworkBehaviour
         UpdatePlayerNameUI();
         UpdateReady();
         UpdateCharacterModel();
+
+        characterDatas = Resources.LoadAll<CharacterData>("CharacterDatas");
     }
 
     public override void FixedUpdateNetwork()
@@ -81,6 +86,8 @@ public class LobbyPlayerController : NetworkBehaviour
         {
             characterIndex = characterModels.Length - 1;
         }
+
+        PlayerData.Instance.selectedCharacter = characterDatas[characterIndex];
 
         UpdateCharacterModel();
         UpdateCharacterIndex_RPC(characterIndex);

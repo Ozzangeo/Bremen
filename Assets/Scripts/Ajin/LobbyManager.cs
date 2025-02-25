@@ -3,6 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using Fusion;
+using System.Xml;
 
 public class LobbyManager : NetworkBehaviour
 {
@@ -12,6 +13,7 @@ public class LobbyManager : NetworkBehaviour
 
     private void Awake()
     {
+
         if (Instance == null)
             Instance = this;
     }
@@ -41,6 +43,48 @@ public class LobbyManager : NetworkBehaviour
         }
     }
 
+    private bool CanStartGame()
+    {
+        int minPlayersRequired = 3;
+        if (lobbyPlayers.Count < minPlayersRequired)
+        {
+            Debug.Log("게임 시작 불가: 최소 플레이어 수 부족!");
+            return false;
+        }
+
+        if (!lobbyPlayers.All(player => player.isReady))
+        {
+            Debug.Log("게임 시작 불가: 일부 플레이어가 준비되지 않음!");
+            return false;
+        }
+
+        if(!character())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    private bool character()
+    {
+        int[] selectIndex = new int[3];
+        int index = 0;
+        foreach (var player in lobbyPlayers)
+        {
+            selectIndex[index] = player.GetComponent<LobbyPlayerController>().characterIndex;
+            index++;
+        }
+        if (selectIndex[0] == selectIndex[1] || selectIndex[1] == selectIndex[2] || selectIndex[0] == selectIndex[2])
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
     public void RegisterPlayer(LobbyPlayerController player)
     {
         if (!lobbyPlayers.Contains(player))
@@ -65,10 +109,10 @@ public class LobbyManager : NetworkBehaviour
             Debug.LogError(" NetworkRunner가 존재하지 않습니다!");
             return;
         }
-        GameSessionManager.Instance.runner.LoadScene("PhotonTestScene"); // 씬 전환 실행
+        GameSessionManager.Instance.runner.LoadScene("StageScene"); // 씬 전환 실행
         if (GameSessionManager.Instance.runner.IsServer)
         {
-            GameSessionManager.Instance.runner.LoadScene("PhotonTestScene");
+            GameSessionManager.Instance.runner.LoadScene("StageScene");
         }
         else
         {
@@ -79,6 +123,6 @@ public class LobbyManager : NetworkBehaviour
     [Rpc(RpcSources.StateAuthority, RpcTargets.All)]
     private void StartGame_RPC()
     {
-        GameSessionManager.Instance.runner.LoadScene("PhotonTestScene");
+        GameSessionManager.Instance.runner.LoadScene("StageScene");
     }
 }

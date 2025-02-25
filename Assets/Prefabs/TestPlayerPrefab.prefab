@@ -97,6 +97,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7610749013862640617}
   - component: {fileID: 1925859061663521557}
+  - component: {fileID: 2483116694450885692}
   - component: {fileID: 5182505556561312240}
   - component: {fileID: 233760110054647651}
   - component: {fileID: 8804483670759175500}
@@ -136,7 +137,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2393fbcfd8bc7cc4d91b4eba7f8608a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterBody: {fileID: 1966693830431708555}
+  selectCharacter: {fileID: 0}
+  hp: 0
+  combo: 0
+--- !u!114 &2483116694450885692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2792264294237694396}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9413a5beb65acdb4ba422c4b13d4356d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _initStatusData: {fileID: 0}
+  bossStats: {fileID: 0}
+  monsterStats: {fileID: 0}
+  selectedCharacter: {fileID: 0}
+  <Status>k__BackingField:
+    name: 
+    attack: 0
+    defense: 0
+    health: 0
+    max_health: 0
+    speed: 0
+  <Team>k__BackingField: 0
+  playerController: {fileID: 0}
 --- !u!114 &5182505556561312240
 MonoBehaviour:
   m_ObjectHideFlags: 0

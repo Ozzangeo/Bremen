@@ -5,7 +5,7 @@ public class CameraController : MonoBehaviour
     private GameObject targetPlayer;
     private Camera mainCamera;
     private bool hasTarget = false;
-    private float followSpeed = 5f;
+    private float followSpeed = 10f;
 
     private void Start()
     {
