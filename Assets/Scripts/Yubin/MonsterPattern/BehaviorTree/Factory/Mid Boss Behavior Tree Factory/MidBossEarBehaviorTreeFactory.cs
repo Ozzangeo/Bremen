@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
 // 귀(중간 보스) 행동 트리를 생성하는 팩토리
@@ -107,6 +108,9 @@ public class MidBossEarBehaviorTreeFactory : MidBossBehaviorTreeFactory
     Debug.Log("공격");
 
     animator.SetBool("IsAttack", true);
+
+    BasicEntityBehaviour basicEntityBehaviour = player.GetComponent<BasicEntityBehaviour>();
+    basicEntityBehaviour.Hit(monsterStats.attackRange);
 
     yield return new WaitForSeconds(2f);
   }

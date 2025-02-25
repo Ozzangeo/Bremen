@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
 public class MidBossGuardBehaviorTreeFactory : MidBossBehaviorTreeFactory
@@ -93,6 +94,10 @@ public class MidBossGuardBehaviorTreeFactory : MidBossBehaviorTreeFactory
       transform.position = Vector3.MoveTowards(transform.position, player.position, dashSpeed * Time.deltaTime);
       yield return null;
     }
+
+    BasicEntityBehaviour basicEntityBehaviour = player.GetComponent<BasicEntityBehaviour>();
+    basicEntityBehaviour.Hit(monsterStats.attackPower);
+
     animator.SetBool("IsAttack", false);
   }
 }

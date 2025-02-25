@@ -44,6 +44,12 @@ public class CombatDroneBehaviorTreeFactory : BehaviorTreeFactory
     GameObject bullet1 = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
     GameObject bullet2 = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
 
+    MonsterAttackPlayer monsterAttackPlayer1 = bullet1.GetComponent<MonsterAttackPlayer>();
+    MonsterAttackPlayer monsterAttackPlayer2 = bullet2.GetComponent<MonsterAttackPlayer>();
+
+    monsterAttackPlayer1.Initialize(monsterStats.attackPower);
+    monsterAttackPlayer2.Initialize(monsterStats.attackPower);
+
     Rigidbody bulletRigidbody1 = bullet1.GetComponent<Rigidbody>();
     Rigidbody bulletRigidbody2 = bullet2.GetComponent<Rigidbody>();
     if(bulletRigidbody1 != null && bulletRigidbody2 != null)

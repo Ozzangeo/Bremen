@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
 // 눈 행동 트리를 생성하는 팩토리
@@ -49,6 +50,9 @@ public class EyeBehaviorTreeFactory : BehaviorTreeFactory
       transform.position = Vector3.MoveTowards(transform.position, player.position, dashSpeed * Time.deltaTime);
       yield return null;
     }
+
+    BasicEntityBehaviour basicEntityBehaviour = player.GetComponent<BasicEntityBehaviour>();
+    basicEntityBehaviour.Hit(monsterStats.attackPower);
 
     animator.SetBool("IsAttack", false);
   }

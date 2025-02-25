@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4875905267981927602}
   - component: {fileID: 5875682173763433999}
   - component: {fileID: 8858364121693344135}
+  - component: {fileID: -3286732975162091696}
   m_Layer: 0
   m_Name: Combat Drone Bullet
   m_TagString: Untagged
@@ -136,3 +137,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &-3286732975162091696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6485777739131820461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b705fa1e5b2f22498e777b76b888528, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0

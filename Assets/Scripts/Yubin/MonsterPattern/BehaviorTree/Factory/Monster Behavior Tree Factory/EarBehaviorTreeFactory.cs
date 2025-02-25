@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Collections;
+using Ozi.Weapon.Entity;
 using UnityEngine;
 
 // 귀 행동 트리를 생성하는 팩토리
@@ -40,6 +41,8 @@ public class EarBehaviorTreeFactory : BehaviorTreeFactory
   {
     Debug.Log("공격");
     animator.SetBool("IsAttack", true);
+    BasicEntityBehaviour basicEntityBehaviour = player.GetComponent<BasicEntityBehaviour>();
+    basicEntityBehaviour.Hit(monsterStats.attackPower);
 
     yield return null;
   }

@@ -45,6 +45,9 @@ public class DroneBehaviorTreeFactory : BehaviorTreeFactory
     Debug.Log("탄환 발사");
 
     GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
+    MonsterAttackPlayer monsterAttackPlayer = bullet.GetComponent<MonsterAttackPlayer>();
+    monsterAttackPlayer.Initialize(monsterStats.attackPower);
+    
     Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
     if (bulletRigidbody != null)
     {
