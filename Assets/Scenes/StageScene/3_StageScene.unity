@@ -315,9 +315,9 @@ GameObject:
   - component: {fileID: 271611666}
   - component: {fileID: 271611665}
   - component: {fileID: 271611664}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -440,6 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1054387e86120b0429ef6809325b7cca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boss: {fileID: 1193159267}
 --- !u!4 &326134135
 Transform:
   m_ObjectHideFlags: 0
@@ -688,9 +689,9 @@ GameObject:
   - component: {fileID: 1308196821}
   - component: {fileID: 1308196820}
   - component: {fileID: 1308196819}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -796,9 +797,9 @@ GameObject:
   - component: {fileID: 1376418959}
   - component: {fileID: 1376418958}
   - component: {fileID: 1376418957}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

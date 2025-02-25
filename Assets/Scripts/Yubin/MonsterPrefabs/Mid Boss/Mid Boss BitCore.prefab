@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 332403190151948727}
   - component: {fileID: 4775740309264985770}
   - component: {fileID: 4776189574100622835}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mid Boss BitCore
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

@@ -19,9 +19,9 @@ GameObject:
   - component: {fileID: 393522180043202392}
   - component: {fileID: 2338660879902861887}
   - component: {fileID: 1921975933826549991}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Boss
-  m_TagString: Untagged
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -193,6 +193,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39437f959d1896b4e8e37939f25a1a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _initStatusData: {fileID: 0}
+  bossStats: {fileID: 0}
+  monsterStats: {fileID: 0}
+  selectedCharacter: {fileID: 0}
+  <Status>k__BackingField:
+    name: 
+    attack: 0
+    defense: 0
+    health: 0
+    max_health: 0
+    speed: 0
+  <Team>k__BackingField: 0
 --- !u!114 &1921975933826549991
 MonoBehaviour:
   m_ObjectHideFlags: 0
