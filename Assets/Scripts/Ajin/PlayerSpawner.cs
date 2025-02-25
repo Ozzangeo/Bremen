@@ -7,16 +7,33 @@ public class PlayerSpawner : MonoBehaviour
     public static PlayerSpawner Instance;
 
     [SerializeField] private GameObject _lobbyPlayerPrefab;
-    [SerializeField] private GameObject _playerPrefab;
+    [SerializeField] private GameObject _playerPrefab_1;
+    [SerializeField] private GameObject _playerPrefab_2;
+    [SerializeField] private GameObject _playerPrefab_3;
+
     public Dictionary<PlayerRef, NetworkObject> spawnedCharacters = new Dictionary<PlayerRef, NetworkObject>();
+    private Transform SpawnPoint;
+    private PlayerController _playerController;
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
+        {
             Instance = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
-// ===== Lobby =====
+    private void Start()
+    {
+    }
+
+    // ===== Lobby =====
     public void SpawnLobbyPlayer(NetworkRunner runner, PlayerRef player)
     {
         if(runner.IsServer)
@@ -43,12 +60,16 @@ public class PlayerSpawner : MonoBehaviour
     // ===== Game ===== 
     public void SpawnGamePlayer(NetworkRunner runner)
     {
+        Debug.Log("SpawnGamePlayer");
+        SpawnPoint = GameObject.Find("SpawnPoint").transform;
         if (runner.IsServer)
         {
             foreach(var player in spawnedCharacters.Keys)
             {
-                Vector3 spawnPosition = new Vector3((player.RawEncoded % 4) * 2, 1, 0);
-                NetworkObject networkPlayerObject = runner.Spawn(_playerPrefab, spawnPosition, Quaternion.identity, player);
+                Debug.Log($"{player}");
+                Vector3 spawnPosition = new Vector3(SpawnPoint.position.x + (player.RawEncoded % 4) * 2, SpawnPoint.position.y + 1, SpawnPoint.position.z);
+                _playerController = PlayerSpawner.Instance.GetPlayerObject(player).GetComponent<PlayerController>();
+                runner.SpawnAsync(_playerController.selectCharacter.characterPrefab, spawnPosition, Quaternion.identity, player);
             }
         }
     }

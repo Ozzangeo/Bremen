@@ -21,7 +21,7 @@ public class LobbyPlayerController : NetworkBehaviour
     [Networked] public bool isReady { get; set; }
     [Networked] public int characterIndex { get; set; }
 
-    private CharacterData[] characterDatas;
+    [SerializeField] private CharacterData[] characterDatas;
 
     private void Start()
     {
@@ -41,8 +41,6 @@ public class LobbyPlayerController : NetworkBehaviour
         UpdatePlayerNameUI();
         UpdateReady();
         UpdateCharacterModel();
-
-        characterDatas = Resources.LoadAll<CharacterData>("CharacterDatas");
     }
 
     public override void FixedUpdateNetwork()
@@ -71,6 +69,9 @@ public class LobbyPlayerController : NetworkBehaviour
         {
             LobbyManager.Instance.CheckAllReady();
         }
+
+        PlayerData.Instance.selectedCharacter = characterDatas[characterIndex];
+        Debug.Log($"선택 캐릭 {PlayerData.Instance.selectedCharacter.characterName}");
     }
 
     private void ChangeCharacter(int offset)
@@ -86,9 +87,6 @@ public class LobbyPlayerController : NetworkBehaviour
         {
             characterIndex = characterModels.Length - 1;
         }
-
-        PlayerData.Instance.selectedCharacter = characterDatas[characterIndex];
-
         UpdateCharacterModel();
         UpdateCharacterIndex_RPC(characterIndex);
     }
