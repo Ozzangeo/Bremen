@@ -10,7 +10,7 @@ public class PlayerData : MonoBehaviour
     public string playerName;
     public string roomCode;
     public CharacterData selectedCharacter;
-    public bool[] isClear = new bool[2];
+    public bool[] isClear = new bool[3];
 
     private void Awake()
     {

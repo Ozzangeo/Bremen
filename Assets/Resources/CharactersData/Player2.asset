@@ -16,5 +16,5 @@ MonoBehaviour:
   maxHP: 80
   moveSpeed: 8
   comboUnit: 150
-  characterPrefab: {fileID: 0}
-  animatorController: {fileID: 0}
+  characterPrefab: {fileID: 2810801504017130070, guid: cc4d2874ed2748544a196aabded91187, type: 3}
+  animatorController: {fileID: 9100000, guid: 058ff427527e22d4f8d0839e194dccce, type: 2}

@@ -27,6 +27,7 @@ public class PlayerController : NetworkBehaviour
     private void Start()
     {
         bremenChartPlayer = GameObject.FindAnyObjectByType<BremenChartPlayer>();
+        Debug.Log($"PlayerData {PlayerData.Instance.selectedCharacter.characterName}");
         selectCharacter = PlayerData.Instance.selectedCharacter;
         hp = selectCharacter.maxHP;
         combo = 0;
@@ -48,9 +49,8 @@ public class PlayerController : NetworkBehaviour
         if (GetInput(out NetworkInputData data))
         {
             data.direction.Normalize();
-            _characterController.Move(data.direction * moveSpeed * Runner.DeltaTime);
-            // 방향조절
-            transform.forward = data.moveDirection;
+            Vector3 moveDir = new Vector3(data.direction.x, 0, data.direction.z) * moveSpeed * Runner.DeltaTime;
+            _characterController.Move(moveDir);
 
             // 점프
             if (data.isJumping)

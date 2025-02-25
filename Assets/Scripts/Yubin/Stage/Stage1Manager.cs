@@ -8,7 +8,13 @@ public class Stage1Manager : MonoBehaviour
   
   private List<Transform> players = new List<Transform>();
 
-  void Start()
+  private void Awake()
+  {
+    GameSessionManager.Instance.EnterGame();
+    Debug.Log("StageManager");
+  }
+
+    void Start()
   {
     FindPlayers();
   }
