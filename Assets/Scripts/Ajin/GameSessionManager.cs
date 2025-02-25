@@ -28,32 +28,8 @@ public class GameSessionManager : MonoBehaviour, INetworkRunnerCallbacks
 
     public async void EnterGame()
     {
-        Debug.Log("EnterGame");
-
-        if (runner == null)
-        {
-            runner = gameObject.AddComponent<NetworkRunner>();
-            runner.ProvideInput = true;
-        }
-
-        var scene = SceneRef.FromIndex(SceneManager.GetActiveScene().buildIndex);
-        var sceneInfo = new NetworkSceneInfo();
-        if (scene.IsValid)
-        {
-            sceneInfo.AddSceneRef(scene, LoadSceneMode.Additive);
-        }
-
-        // 게임 시작
-        await runner.StartGame(new StartGameArgs()
-        {
-            GameMode = GameMode.Shared,  // 필요에 따라 변경 가능 (Client, Host 등)
-            SessionName = PlayerData.Instance.roomCode,
-            Scene = scene,
-            SceneManager = gameObject.AddComponent<NetworkSceneManagerDefault>()
-        });
-
-        runner.AddCallbacks(this);
-        PlayerSpawner.Instance.SpawnGamePlayer(runner);
+        //Debug.Log("EnterGame");
+        //GamePlayerSpawner.Instance.SpawnGamePlayer(runner);
     }
 
     public async void EnterRoomWithCode(string roomCode, GameMode mode)

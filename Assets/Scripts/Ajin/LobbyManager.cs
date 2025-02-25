@@ -13,7 +13,6 @@ public class LobbyManager : NetworkBehaviour
 
     private void Awake()
     {
-
         if (Instance == null)
             Instance = this;
     }
@@ -25,7 +24,7 @@ public class LobbyManager : NetworkBehaviour
 
     private void Update()
     {
-        if (!Object.HasStateAuthority) return;
+        //if (!Object.HasStateAuthority) return;
 
         lobbyPlayers = FindObjectsOfType<LobbyPlayerController>(true).ToList();
 
