@@ -14,7 +14,7 @@ namespace Ozi.Character {
         public Func<bool> JumpSelector;
 
         private void Awake() {
-            JumpSelector ??= () => Rigidbody.linearVelocity.y > 0.0f;
+            JumpSelector ??= () => Rigidbody.linearVelocity.y > 0.1f;
             SpeedSelector ??= () => Rigidbody.linearVelocity.magnitude;
         }
 
