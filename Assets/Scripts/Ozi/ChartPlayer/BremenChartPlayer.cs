@@ -26,6 +26,9 @@ namespace Ozi.ChartPlayer {
         [field: SerializeField] public BremenChartAudioPlayer AudioPlayer { get; private set; }
 
         [field: Header("Settings")]
+        [field: SerializeField] public BremenChartObject InitChart { get; private set; }
+        [field: SerializeField] public bool IsPlayOnAwake { get; private set; } 
+
         [field: SerializeField] public bool IsAutoPlay { get; set; } = false;
         [field: SerializeField] public AudioClip Clip { get; private set; }
         [field: SerializeField] public BremenChart Chart { get; private set; } 
@@ -42,6 +45,17 @@ namespace Ozi.ChartPlayer {
         public event Action<float> OnPlayed;  // start_time: float
         public event Action OnStoped;
         public event Action OnReseted;
+
+        private void Awake() {
+            if (InitChart != null) {
+                LoadChart(InitChart);
+
+            }
+
+            if (IsPlayOnAwake) {
+                Play(is_loop: true);
+            }
+        }
 
         private void Update() {
             if (NoteIndex >= Timings.Count) {
@@ -85,7 +99,7 @@ namespace Ozi.ChartPlayer {
 
             return BremenNoteResult.None;
         }
-
+        
         private void OnMissNote() {
             Combo = 0;
             NoteIndex++;
@@ -112,7 +126,7 @@ namespace Ozi.ChartPlayer {
         }
         public void LoadChart(BremenChartObject chart_object) => LoadChart(chart_object.Chart, chart_object.Clip);
 
-        public void Play(float start_time = 0.0f, bool is_auto_play = false) {
+        public void Play(float start_time = 0.0f, bool is_auto_play = false, bool? is_loop = null) {
             ResetPlayData();
 
             IsAutoPlay = is_auto_play;
@@ -122,7 +136,7 @@ namespace Ozi.ChartPlayer {
                 NoteIndex++;
             }
 
-            AudioPlayer.Play(Clip, Chart.volume * 0.01f, Chart.pitch * 0.01f, start_time);
+            AudioPlayer.Play(Clip, Chart.volume * 0.01f, Chart.pitch * 0.01f, is_loop, start_time);
 
             OnPlayed?.Invoke(start_time);
         }

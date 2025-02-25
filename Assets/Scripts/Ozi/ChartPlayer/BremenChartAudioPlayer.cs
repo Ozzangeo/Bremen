@@ -31,8 +31,8 @@ namespace Ozi.ChartPlayer {
             }
         }
 
-        public void Play(AudioClip clip, float volume = 1.0f, float pitch = 1.0f, float time = 0.0f) {
-            SourceId = AudioManager.Play(PlayType.BGM, volume, pitch, clip: clip);
+        public void Play(AudioClip clip, float volume = 1.0f, float pitch = 1.0f, bool? is_loop = null, float time = 0.0f) {
+            SourceId = AudioManager.Play(PlayType.BGM, volume, pitch, is_loop, clip);
 
             if (time > Offset) {
                 AudioSource.time = time - Offset;
