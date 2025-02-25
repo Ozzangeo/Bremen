@@ -15,9 +15,9 @@ GameObject:
   - component: {fileID: 1733464077681033694}
   - component: {fileID: 1934165962185283888}
   - component: {fileID: 312201801172173383}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Drone
-  m_TagString: Player
+  m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 122293358289746492}
   - component: {fileID: 8802474369467941496}
   - component: {fileID: 2483539975584722459}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RBP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -281,7 +281,7 @@ GameObject:
   - component: {fileID: 7503785308197101154}
   - component: {fileID: 4776428069969632888}
   - component: {fileID: 1983223348248829756}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: RFP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -390,7 +390,7 @@ GameObject:
   - component: {fileID: 4559232883428136597}
   - component: {fileID: 2132151784102963161}
   - component: {fileID: 5821691128557096590}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LBP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -499,7 +499,7 @@ GameObject:
   - component: {fileID: 5869163347371390158}
   - component: {fileID: 8239822655043776031}
   - component: {fileID: 1443331009575837101}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LFP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -607,7 +607,7 @@ GameObject:
   - component: {fileID: 2561013584619890869}
   - component: {fileID: 7970690794168716515}
   - component: {fileID: 1150739467416702072}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -693,7 +693,7 @@ GameObject:
   - component: {fileID: 1594306841417874905}
   - component: {fileID: 6112005694369501225}
   - component: {fileID: 4635569975858013875}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
