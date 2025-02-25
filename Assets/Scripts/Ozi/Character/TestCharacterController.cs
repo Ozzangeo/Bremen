@@ -13,7 +13,7 @@ namespace Ozi.Character {
             if (Input.GetKey(KeyCode.S)) {
                 forward -= Time.deltaTime;
             }
-            var move = transform.forward * (forward * 350.0f);
+            var move = transform.forward * (forward * 500.0f);
 
             Rigidbody.AddForce(move, ForceMode.Acceleration);
 
