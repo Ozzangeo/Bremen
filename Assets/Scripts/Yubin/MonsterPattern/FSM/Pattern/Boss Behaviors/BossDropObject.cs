@@ -49,7 +49,7 @@ public class BossDropObject : MonoBehaviour
     for(int i = 0; i < n; i++)
     {
     // 예고 위치 표시 후 파괴
-    Vector3 markPosition = new Vector3(player.position.x, player.position.y - 4f, player.position.z);
+    Vector3 markPosition = new Vector3(player.position.x, player.position.y, player.position.z);
     GameObject mark = Instantiate(bossStats.dropObjectMark, markPosition, Quaternion.identity);
 
     currentMarks.Add(mark);

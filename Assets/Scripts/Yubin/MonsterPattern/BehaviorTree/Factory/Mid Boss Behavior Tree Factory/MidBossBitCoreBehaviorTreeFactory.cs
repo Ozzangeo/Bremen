@@ -66,7 +66,7 @@ public class MidBossBitCoreBehaviorTreeFactory : MidBossBehaviorTreeFactory
 
     while(true && wave != null)
     {
-      float scaleIncrease = waveSpeed * 0.5f * Time.deltaTime;
+      float scaleIncrease = waveSpeed * 0.75f * Time.deltaTime;
       wave.transform.localScale += new Vector3(scaleIncrease, 0, 0);
       wave.transform.position += direction * waveMoveSpeed * Time.deltaTime;
       yield return null;
