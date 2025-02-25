@@ -40,7 +40,14 @@ public class MonsterBehavior : BasicEntityBehaviour
 
   private void Update()
   {
-    if(rootNode != null)
+        GameObject[] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+
+        foreach (GameObject obj in playerObjects)
+        {
+            players.Add(obj.transform);
+        }
+
+        if (rootNode != null)
     {
       rootNode.Evaluate();
     }
