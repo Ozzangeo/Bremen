@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -52,11 +52,12 @@ public class BossPattern : MonoBehaviour
 
   void Update()
   {
+    // [Obsolete]
     // 보스 사망
-    if(bossStats.health <= 0)
-    {
-      BossDie();
-    }
+    //if(bossStats.health <= 0)
+    //{
+    //  BossDie();
+    //}
   }
 
   public void BossDie()

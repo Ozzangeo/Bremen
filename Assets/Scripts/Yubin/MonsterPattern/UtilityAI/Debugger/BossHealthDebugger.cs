@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
 public class BossHealthDebugger : MonoBehaviour
@@ -14,6 +14,6 @@ public class BossHealthDebugger : MonoBehaviour
 
   public void OnButtonClick()
   {
-    bossInfoManager.GetDamage(5500);
+    bossInfoManager.Hit(5500);
   }
 }

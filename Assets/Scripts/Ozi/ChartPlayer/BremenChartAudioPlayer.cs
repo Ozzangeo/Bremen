@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms.VisualStyles;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Ozi.ChartPlayer {
     [RequireComponent(typeof(AudioSource))]
