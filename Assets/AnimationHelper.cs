@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class AnimationHelper : MonoBehaviour
 {
-  public float offset;
+  public float offset = 5f;
 
   void LateUpdate()
   {
