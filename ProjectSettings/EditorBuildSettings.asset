@@ -12,6 +12,15 @@ EditorBuildSettings:
     path: Assets/Scenes/LobbyScene.unity
     guid: cd2631a1d5d1c2e44908689e3b6deed2
   - enabled: 1
+    path: Assets/Scenes/StageSelectScene.unity
+    guid: 3f903a898fe364743b58e36c2168e2ba
+  - enabled: 1
+    path: Assets/Scenes/StageScene/1_StageScene.unity
+    guid: 81c9791eea0d74244bfd180a0ac5ccda
+  - enabled: 1
+    path: Assets/Scenes/StageScene/2_StageScene.unity
+    guid: 98fdbb93ea5737b4e9c8350a360593d2
+  - enabled: 1
     path: Assets/Scenes/PhotonTestScene.unity
     guid: 1037c90e6cae268498b9b2521c0e39df
   m_configObjects:

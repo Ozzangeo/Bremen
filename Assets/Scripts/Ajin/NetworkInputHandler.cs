@@ -4,14 +4,15 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using TMPro.Examples;
 
 public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
 {
-    public Camera mainCamera;
+    private CameraDirectionChecker cameraDirectionChecker;
 
     private void Start()
     {
-        mainCamera = Camera.main;        
+        cameraDirectionChecker = GameObject.Find("CameraController").GetComponent<CameraDirectionChecker>();
     }
 
     public void OnInput(NetworkRunner runner, NetworkInput input)
@@ -20,21 +21,32 @@ public class NetworkInputHandler : MonoBehaviour, INetworkRunnerCallbacks
 
         if (Input.GetKey(KeyCode.W))
         {
-            data.direction += Vector3.forward;
+            Vector3 cameraDirection = cameraDirectionChecker.GetNearestDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
+            data.isDash = Input.GetMouseButtonDown(1);
         }
         if (Input.GetKey(KeyCode.S))
         {
-            data.direction += Vector3.back;
+            Vector3 cameraDirection = cameraDirectionChecker.GetBackDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
+            data.isDash = Input.GetMouseButtonDown(1);
         }
         if (Input.GetKey(KeyCode.A))
         {
-            data.direction += Vector3.left;
+            Vector3 cameraDirection = cameraDirectionChecker.GetLeftDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
+            data.isDash = Input.GetMouseButtonDown(1);
         }
         if (Input.GetKey(KeyCode.D))
         {
-            data.direction += Vector3.right;
+            Vector3 cameraDirection = cameraDirectionChecker.GetRightDirection();
+            cameraDirection = cameraDirectionChecker.transform.TransformDirection(cameraDirection);
+            data.direction += cameraDirection;
+            data.isDash = Input.GetMouseButtonDown(1);
         }
-
         data.isDash = Input.GetMouseButtonDown(1);
         data.isJumping = Input.GetKeyDown(KeyCode.Space);
 

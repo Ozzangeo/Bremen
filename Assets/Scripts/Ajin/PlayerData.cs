@@ -1,6 +1,7 @@
 using Fusion;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerData : MonoBehaviour
 {
@@ -22,5 +23,10 @@ public class PlayerData : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    public void SetCharacter(CharacterData characterData)
+    {
+        selectedCharacter = characterData;
     }
 }
