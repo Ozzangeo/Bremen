@@ -11,6 +11,12 @@ public class EyeBehaviorTreeFactory : BehaviorTreeFactory
   [Header("공격 쿨타임")] public float attackRate = 2f;  // 공격 쿨타임
   
   float lastAttackTime = 0f;  // 마지막 공격 시간
+  Animator animator;
+
+  void Start()
+  {
+    animator = GetComponent<Animator>();
+  }
 
   // 공격 실행 재정의
   public override IBehaviorNode.EBehaviorNodeState PerformAttack(MonsterStats monsterStats, Vector3 spawnPosition)
@@ -35,11 +41,15 @@ public class EyeBehaviorTreeFactory : BehaviorTreeFactory
   // 돌진 코루틴
   private IEnumerator Dash(Transform player, MonsterStats monsterStats)
   {
+    animator.SetBool("IsAttack", true);
+
     while(Vector3.Distance(transform.position, player.position) > 0.5f)
     {
       Debug.Log("돌진");
       transform.position = Vector3.MoveTowards(transform.position, player.position, dashSpeed * Time.deltaTime);
       yield return null;
     }
+
+    animator.SetBool("IsAttack", false);
   }
 }
