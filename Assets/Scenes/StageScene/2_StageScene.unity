@@ -786,6 +786,10 @@ PrefabInstance:
       propertyPath: <InitChart>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: 9a3a919fbc477544299fa200dbad80c9, type: 2}
+    - target: {fileID: 830014890636133696, guid: 392a5843e5f73bf468229318cbed79c2, type: 3}
+      propertyPath: <IsPlayOnAwake>k__BackingField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2674813570290119218, guid: 392a5843e5f73bf468229318cbed79c2, type: 3}
       propertyPath: m_Pivot.x
       value: 0

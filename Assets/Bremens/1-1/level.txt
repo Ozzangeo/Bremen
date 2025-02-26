@@ -1,9 +1,9 @@
-{
+﻿{
     "songFilename": "1-1.mp3",
     "bpm": 130.0,
     "offset": 1520,
     "volume": 100,
-    "pitch": 50,
+    "pitch": 100,
 "notes": {
     "angles": [
         180.0,
